@@ -1,3 +1,5 @@
+// Tabla Acceso
+
 package tablas;
 
 import general.DatosComunes;
