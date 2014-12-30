@@ -1,15 +1,22 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package test;
 
 import general.DatosComunes;
 
 import javax.swing.UIManager;
 
-import consultasMantenimientos.ConManBancos;
-
-
-
-public class TestConManBancos {
-	public static void main(String[] args) {
+import consultasMantenimientos.ConManZonas;
+import javax.swing.JFrame;
+/**
+ *
+ * @author Txus
+ */
+public class TestConManZonas {
+    public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new DatosComunes("MV");
 		
@@ -24,6 +31,6 @@ public class TestConManBancos {
         
 		// true -> Consulta
 		// false  -> Mantenimiento
-		new ConManBancos(false);
+		new ConManZonas(new JFrame(), true);
 	}
 }
