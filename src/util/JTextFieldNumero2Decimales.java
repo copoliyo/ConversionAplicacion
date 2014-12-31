@@ -20,7 +20,7 @@ public class JTextFieldNumero2Decimales extends JTextField implements KeyListene
 	private String valorString = "";
 	private double valorDoubleFocusGained = 0.0;
 
-	// Es en el constructor de la clase donde tenemos que añadir los Listeners.
+	// Es en el constructor de la clase donde tenemos que aï¿½adir los Listeners.
 	public JTextFieldNumero2Decimales(){
 		this.addKeyListener(this);
 		this.addActionListener(this);
@@ -140,7 +140,7 @@ public class JTextFieldNumero2Decimales extends JTextField implements KeyListene
 		// Leemos la tecla
 		char caracter = arg0.getKeyChar();
 		
-		// Si es algo distinto de un número,el caracter de borrado, el tabulador, el punto
+		// Si es algo distinto de un nï¿½mero,el caracter de borrado, el tabulador, el punto
 		// o la tecla Intro, lo ignoramos.
 		if(((caracter < '0') ||	(caracter > '9')) &&
 				(caracter != KeyEvent.VK_BACK_SPACE && 
