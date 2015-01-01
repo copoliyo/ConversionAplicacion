@@ -5,13 +5,11 @@ import general.MysqlConnect;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 
 import javax.swing.JOptionPane;
 
 import util.Cadena;
-
-import com.mysql.jdbc.ResultSet;
-
 
 public class ZonaCliente {
 	private String empresa;
