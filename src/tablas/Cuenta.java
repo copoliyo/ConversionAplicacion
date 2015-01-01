@@ -81,7 +81,7 @@ public class Cuenta {
 	}	
 		
 	
-	// Con este método leemos una cuenta pasando tan sólo una consulta SQL
+	// Con este mñtodo leemos una cuenta pasando tan sñlo una consulta SQL
 	public void read(String strSql){
 
 		ResultSet rsSql = null;
@@ -92,7 +92,7 @@ public class Cuenta {
 		if(BaseDatos.countRows(strSql) != 0){
 			try {
 				rsSql = m.query(strSql);				
-				// Como ya tenemos el ResultSet se lo pasamos al mérodo 'read(ResultSet rs)'.
+				// Como ya tenemos el ResultSet se lo pasamos al mñrodo 'read(ResultSet rs)'.
 				if(rsSql.next()){
 					this.read(rsSql);
 					// Cerramos para evitar gastar memoria
@@ -108,7 +108,7 @@ public class Cuenta {
 	}
 	
 	// Leemos una cuenta pasando la cuenta y el centro
-	// Si la hemos leído bien, devolvemos TRUE, en caso de problemas FALSE
+	// Si la hemos leñdo bien, devolvemos TRUE, en caso de problemas FALSE
 	public boolean read(String strCuenta, int centro){
 		boolean lecturaOk = false;
 	
@@ -125,7 +125,7 @@ public class Cuenta {
 		if(BaseDatos.countRows(strSqlCuenta) != 0){
 			try {
 				rsSql = m.query(strSqlCuenta);				
-				// Como ya tenemos el ResultSet se lo pasamos al mérodo 'read(ResultSet rs)'.
+				// Como ya tenemos el ResultSet se lo pasamos al mñrodo 'read(ResultSet rs)'.
 				if(rsSql.next()){
 					this.read(rsSql);
 					lecturaOk = true;
@@ -156,7 +156,7 @@ public class Cuenta {
 		return existe;
 	}
 	
-	// Método estático para saber si una cuenta tiene saldo para evitar borrarla por equivocacion
+	// Mñtodo estñtico para saber si una cuenta tiene saldo para evitar borrarla por equivocacion
 	public static boolean cuentaConSaldo(String strCuenta, int centro){
 		
 		double dSaldo = 0.0;
@@ -176,7 +176,7 @@ public class Cuenta {
 		if(BaseDatos.countRows(strSqlCuenta) != 0){
 			try {
 				rsSql = m.query(strSqlCuenta);				
-				// Como ya tenemos el ResultSet se lo pasamos al método 'read(ResultSet rs)'.
+				// Como ya tenemos el ResultSet se lo pasamos al mñtodo 'read(ResultSet rs)'.
 				if(rsSql.next()){
 					cuentaSaldo.read(rsSql);
 					dSaldo = cuentaSaldo.getSaldo();
@@ -197,7 +197,7 @@ public class Cuenta {
 		return tieneSaldo;
 	}
 	
-	// Como se va a utilizar muchísimo, vamos a crear un método sólo para consultar el saldo
+	// Como se va a utilizar muchñsimo, vamos a crear un mñtodo sñlo para consultar el saldo
 	public double getSaldoCuenta(String strCuenta, int centro){
 		
 		double dSaldo = 0.0;
@@ -214,7 +214,7 @@ public class Cuenta {
 		if(BaseDatos.countRows(strSqlCuenta) != 0){
 			try {
 				rsSql = m.query(strSqlCuenta);				
-				// Como ya tenemos el ResultSet se lo pasamos al método 'read(ResultSet rs)'.
+				// Como ya tenemos el ResultSet se lo pasamos al mñtodo 'read(ResultSet rs)'.
 				if(rsSql.next()){
 					this.read(rsSql);
 					dSaldo = this.getSaldo();
@@ -253,7 +253,7 @@ public class Cuenta {
 		if(BaseDatos.countRows(strSqlCuenta) != 0){
 			try {
 				rsSql = m.query(strSqlCuenta);				
-				// Como ya tenemos el ResultSet se lo pasamos al método 'read(ResultSet rs)'.
+				// Como ya tenemos el ResultSet se lo pasamos al mñtodo 'read(ResultSet rs)'.
 				if(rsSql.next()){
 					dDebe = rsSql.getDouble(1);					
 				}
@@ -277,7 +277,7 @@ public class Cuenta {
 		if(BaseDatos.countRows(strSqlCuenta) != 0){
 			try {
 				rsSql = m.query(strSqlCuenta);				
-				// Como ya tenemos el ResultSet se lo pasamos al método 'read(ResultSet rs)'.
+				// Como ya tenemos el ResultSet se lo pasamos al mñtodo 'read(ResultSet rs)'.
 				if(rsSql.next()){
 					dHaber = rsSql.getDouble(1);					
 				}
@@ -296,7 +296,7 @@ public class Cuenta {
 		return dSaldo;
 	}
 	
-	// Devolvemos 'true' si no hay errores, 'false' si hay alguna excepción.
+	// Devolvemos 'true' si no hay errores, 'false' si hay alguna excepciñn.
 	public boolean write(){
 		boolean escrituraCorrecta = true;
 		boolean falloCuentasSuperiores = false;
@@ -369,7 +369,7 @@ public class Cuenta {
 	
 	
 	// Borramos una CUENTA de un CENTRO concreto.
-	// Devolvemos el número de registros borrados o -1 si hay error
+	// Devolvemos el nñmero de registros borrados o -1 si hay error
 	public static int delete(String strCuenta, int centro){
 		int registrosBorrados = 0;
 		

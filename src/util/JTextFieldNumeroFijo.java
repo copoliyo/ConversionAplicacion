@@ -11,9 +11,9 @@ import javax.swing.JTextField;
 
 public class JTextFieldNumeroFijo extends JTextField implements KeyListener, ActionListener, FocusListener {
 	private int longitudMaxima = 0;
-	// Pasamos un parámetro para indicar la longitud máxima de los datos que
+	// Pasamos un parï¿½metro para indicar la longitud mï¿½xima de los datos que
 	// puede albergar el JTextField.
-	// Es en el constructor de la clase donde tenemos que añadir los Listeners.
+	// Es en el constructor de la clase donde tenemos que aï¿½adir los Listeners.
 	public JTextFieldNumeroFijo(int longitud){
 		this.longitudMaxima = longitud;
 		this.addKeyListener(this);
@@ -46,7 +46,7 @@ public class JTextFieldNumeroFijo extends JTextField implements KeyListener, Act
 		// Leemos la tecla
 		char caracter = arg0.getKeyChar();
 				
-		// Si es algo distinto de un número,el caracter de borrado, el tabulador, el punto
+		// Si es algo distinto de un nï¿½mero,el caracter de borrado, el tabulador, el punto
 		// o la tecla Intro, lo ignoramos.
 		if(((caracter < '0') ||	(caracter > '9')) &&
 				(caracter != KeyEvent.VK_BACK_SPACE && 

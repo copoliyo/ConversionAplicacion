@@ -4,17 +4,11 @@ import general.DatosComunes;
 
 import javax.swing.UIManager;
 
-import consultasMantenimientos.ConManClientes;
-import consultasMantenimientos.ConManProveedor;
-
-import tablas.Cuenta;
-import util.Apariencia;
+import consultasMantenimientos.ConManBancos;
 
 
-public class TestConManClientes {
-	/**
-	 * @param args
-	 */
+
+public class TestConManBancos {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new DatosComunes("MV");
@@ -25,11 +19,15 @@ public class TestConManClientes {
             UIManager.setLookAndFeel("org.jvnet.substance.skin.Substance"+"Sahara"+"LookAndFeel");        	    	
         } catch(Exception e)
         {
+<<<<<<< Updated upstream
             System.out.println("Falló la carga del tema");
+=======
+            System.out.println("FallÃ³ la carga del tema");
+>>>>>>> Stashed changes
         } 
         
 		// true -> Consulta
 		// false  -> Mantenimiento
-		new ConManClientes(true);
+		new ConManBancos(false);
 	}
 }

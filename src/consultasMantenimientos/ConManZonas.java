@@ -7,12 +7,15 @@ package consultasMantenimientos;
 
 import general.DatosComunes;
 import general.MysqlConnect;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import indices.IndiceZonasCliente;
 import java.awt.event.ActionEvent;
 import util.EscapeDialog;
 import java.sql.ResultSet;
 import javax.swing.JFrame;
 import tablas.ZonaCliente;
+import util.BaseDatos;
 
 
 /**
@@ -29,8 +32,8 @@ public class ConManZonas extends EscapeDialog {
 	
 	private static IndiceZonasCliente izc = null;
 	
-	static ResultSet rs = null;
-	static MysqlConnect m = null;
+	public static ResultSet rs = null;
+	public static MysqlConnect m = null;
         
         public ZonaCliente zona = new ZonaCliente();
         
@@ -240,6 +243,85 @@ public class ConManZonas extends EscapeDialog {
 	jtfnfCodigo.setText("0");
         jtffNombre.setText("");
         jtfnfCentro.setText(String.valueOf(DatosComunes.centroCont));						
+	}
+    
+    private void cargaInicial(){
+		// Carga inicial en el primer Proveedor
+		if(jtfnfCodigo.getText().length() == 0)
+			jtfnfCodigo.setText("0");
+		
+		String strSql = "SELECT * FROM ZONCLI WHERE EMPRESA = '" + 
+         DatosComunes.eEmpresa + 
+         "' AND ZONCLI_ZONA >= " + jtfnfCodigo.getText();
+		
+		if(DatosComunes.centroCont != 0)
+			strSql += " AND ZONCLI_CENTRO = " + DatosComunes.centroCont;
+		
+        strSql += " LIMIT 1";
+		
+		cargaDatos(strSql);			
+	}
+	
+	private void cargaDatos(String strSql){		
+		int numeroDeFilas = 0;
+		String descripcionZona = "";				
+		
+		numeroDeFilas = BaseDatos.countRows(strSql);
+		if(numeroDeFilas > 0){
+			try {
+				borrarPantalla();				
+				rs = m.query(strSql);
+				
+				// Recorremos el recodSet para ir rellenando la tabla de marcas
+				if (rs.next() == true) {
+					zona.read(rs);
+
+					// Vamos a averiguar la descripción del Banco y de la Sucursal
+					IndiceZonasCliente indiceZonas = new IndiceZonasCliente();
+					String strSqlIndiceBancos = "SELECT * FROM BCOIND WHERE " +
+							"EMPRESA = '" + DatosComunes.eEmpresa + "' AND " +
+							"BCOIND_BANCO = " + zona.getBanco() + " " +
+							"ORDER BY BCOIND_BANCO, BCOIND_SUCURSAL LIMIT 1";
+					indiceZonas.read(strSqlIndiceBancos);
+					lDescripcionBanco.setText(indiceZonas.getDescripcion());
+					// Ahora la sucursal
+					strSqlIndiceBancos = "SELECT * FROM BCOIND WHERE " +
+					"EMPRESA = '" + DatosComunes.eEmpresa + "' AND " +
+					"BCOIND_BANCO = " + zona.getBanco() + " AND " +
+					"BCOIND_SUCURSAL = '" + util.Cadena.enteroCerosIzquierda(Integer.valueOf(zona.getNumeroSucursal()), 4) + 
+					"' LIMIT 1";
+					indiceBancos.read(strSqlIndiceBancos);
+					lDescripcionSucursal.setText(indiceBancos.getDescripcion());
+					
+					
+					
+					jtfnfCodigo.setText(String.valueOf(zona.getBanco()));
+					jtfnfCentro.setText(String.valueOf(zona.getCentro()));
+					jtfnfBanco.setText(String.valueOf(Cadena.enteroCerosIzquierda(zona.getBanco(), 4)));										
+					jtfnfSucursal.setText(String.valueOf(Cadena.enteroCerosIzquierda(zona.getNumeroSucursal(), 4)));			
+					jtfnfDigitosControl.setText(String.valueOf(Cadena.enteroCerosIzquierda(zona.getDigitoControl(), 2)));
+					jtfnfCuenta.setText(String.valueOf(Cadena.enteroCerosIzquierda(Long.valueOf(zona.getCuenta()), 10)));
+					jtffContacto.setText(zona.getContacto());
+					jtffTelefono.setText(zona.getTelefono());
+					jtffFax.setText(zona.getFax());
+					jtffEmail.setText(zona.getEmail());
+					jtfn2dConcedido.setText(String.valueOf(zona.getConcedido()));
+					jtfn2dRiesgo.setText(String.valueOf(zona.getTotalRiesgo()));
+					jtfn2dDisponible.setText(String.valueOf(zona.getConcedido() - zona.getTotalRiesgo()));
+					
+					// Para saber si el banco esta ACTIVO, tenemos que mirar en su cuenta contable
+					Cuenta cuenta = new Cuenta();
+					cuenta.read("572" + "00" + Cadena.enteroCerosIzquierda(zona.getBanco(), 4), DatosComunes.centroCont);
+					if(cuenta.getActivo() == 1)
+						jcbActivado.setSelected(true);
+					else
+						jcbActivado.setSelected(false);
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 	}
     
     private void salir(){
