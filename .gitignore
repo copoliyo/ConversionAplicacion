@@ -1,6 +1,9 @@
+*.gitignore
 # Directories #
 /build/
 /bin/
+/build/
+/nbproject/
 target/
  
 # OS Files #
@@ -53,6 +56,8 @@ tmp/**/*
 *.bak
 *.swp
 *~.nib
+*.xml
+*.mf
 local.properties
 .classpath
 .settings/
@@ -69,3 +74,5 @@ local.properties
  
 # PDT-specific
 .buildpath
+/nbproject/private/
+/dist/
