@@ -75,7 +75,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                       <Component id="jlCodigo" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jtfnfCodigo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jtfnfCodigo" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                       <Component id="jbBuscar" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                   </Group>
                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
@@ -86,7 +86,7 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jlNombre" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jtffNombre" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jtffNombre" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -134,6 +134,9 @@
           <Image iconType="3" name="/Imagenes/BUSCAR.gif"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbBuscarActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jlCentro">
       <Properties>
@@ -199,6 +202,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Estad&#xed;sticas"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbEstadisticasActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbBorrar">
       <Properties>
@@ -225,6 +231,9 @@
           <Image iconType="3" name="/Imagenes/Atras.gif"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbAtrasActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbAdelante">
       <Properties>
@@ -235,6 +244,9 @@
           <Image iconType="3" name="/Imagenes/Adelante.gif"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbAdelanteActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

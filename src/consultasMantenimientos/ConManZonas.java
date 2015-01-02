@@ -7,6 +7,7 @@ package consultasMantenimientos;
 
 import general.DatosComunes;
 import general.MysqlConnect;
+import indices.IndiceAcumuladosEstadisticos;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import indices.IndiceZonasCliente;
@@ -16,7 +17,7 @@ import java.sql.ResultSet;
 import javax.swing.JFrame;
 import tablas.ZonaCliente;
 import util.BaseDatos;
-
+import indices.IndiceZonasCliente;
 
 /**
  *
@@ -24,23 +25,27 @@ import util.BaseDatos;
  */
 public class ConManZonas extends EscapeDialog {
     // Con esta variable definimos si estamos en una consulta (TRUE) o en
-	// un mantenimiento (FALSE). Nos servirá para tener un sólo programa
-	// para algunas Consultas/Mantenimientos que pueden compartir las 
-	// mismas pantallas.
-	private static boolean consulta;
-	private static boolean enCreacion = false;
-	
-	private static IndiceZonasCliente izc = null;
-	
-	public static ResultSet rs = null;
-	public static MysqlConnect m = null;
-        
-        public ZonaCliente zona = new ZonaCliente();
-        
-        // Definiciones de componentes de pantalla
-	public JFrame frameMenu = null;
+    // un mantenimiento (FALSE). Nos servirá para tener un sólo programa
+    // para algunas Consultas/Mantenimientos que pueden compartir las 
+    // mismas pantallas.
+
+    private static boolean consulta;
+    private static boolean enCreacion = false;
+
+    IndiceZonasCliente indiceZonasCliente = null;
+    private static IndiceZonasCliente izc = null;
+
+    public static ResultSet rs = null;
+    public static MysqlConnect m = null;
+
+    public ZonaCliente zona = new ZonaCliente();
+
+    // Definiciones de componentes de pantalla
+    public JFrame frameMenu = null;
+
     /**
      * Creates new form ConManZonas
+     *
      * @param parent
      * @param modal
      */
@@ -49,27 +54,27 @@ public class ConManZonas extends EscapeDialog {
         initComponents();
     }
 
-    public ConManZonas(boolean consultaOmantenimiento){
-		ConManZonas.consulta = consultaOmantenimiento;
-		//this.consulta = false;
-		m = MysqlConnect.getDbCon();
-		initComponents();
-                borrarPantalla();
-                cargaInicial();
-                this.setVisible(true);
+    public ConManZonas(boolean consultaOmantenimiento) {
+        ConManZonas.consulta = consultaOmantenimiento;
+        //this.consulta = false;
+        m = MysqlConnect.getDbCon();
+        initComponents();
+        borrarPantalla();
+        cargaInicial();
+        this.setVisible(true);
     }
-    
-    public ConManZonas(JFrame parentFrame, boolean consultaOmantenimiento){
-                frameMenu = parentFrame;
-		ConManZonas.consulta = consultaOmantenimiento;
-		//this.consulta = false;
-		m = MysqlConnect.getDbCon();
-		initComponents();
-                borrarPantalla();
-                cargaInicial();
-                this.setVisible(true);
+
+    public ConManZonas(JFrame parentFrame, boolean consultaOmantenimiento) {
+        frameMenu = parentFrame;
+        ConManZonas.consulta = consultaOmantenimiento;
+        //this.consulta = false;
+        m = MysqlConnect.getDbCon();
+        initComponents();
+        borrarPantalla();
+        cargaInicial();
+        this.setVisible(true);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -105,6 +110,11 @@ public class ConManZonas extends EscapeDialog {
 
         jbBuscar.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BUSCAR.gif"))); // NOI18N
+        jbBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBuscarActionPerformed(evt);
+            }
+        });
 
         jlCentro.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlCentro.setText("Centro");
@@ -129,6 +139,11 @@ public class ConManZonas extends EscapeDialog {
 
         jbEstadisticas.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbEstadisticas.setText("Estadísticas");
+        jbEstadisticas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbEstadisticasActionPerformed(evt);
+            }
+        });
 
         jbBorrar.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbBorrar.setText("Borrar");
@@ -138,9 +153,19 @@ public class ConManZonas extends EscapeDialog {
 
         jbAtras.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Atras.gif"))); // NOI18N
+        jbAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAtrasActionPerformed(evt);
+            }
+        });
 
         jbAdelante.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbAdelante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Adelante.gif"))); // NOI18N
+        jbAdelante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAdelanteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -188,7 +213,7 @@ public class ConManZonas extends EscapeDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jlCodigo)
-                        .addComponent(jtfnfCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jtfnfCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jbBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jlCentro)
@@ -196,7 +221,7 @@ public class ConManZonas extends EscapeDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlNombre)
-                    .addComponent(jtffNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jtffNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -215,24 +240,72 @@ public class ConManZonas extends EscapeDialog {
 
     private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
         // Si pinchamos en el botón 'Salir', 'tiramos' la pantalla
-	//frameMenu.setEnabled(true);
-	//pantalla.dispose();
-	salir();
+        //frameMenu.setEnabled(true);
+        //pantalla.dispose();
+        salir();
     }//GEN-LAST:event_jbSalirActionPerformed
 
-    
+    private void jbBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarActionPerformed
+        if (indiceZonasCliente == null) {
+            indiceZonasCliente = new IndiceZonasCliente();
+        } else {
+            indiceZonasCliente.muestra();
+        }
+        jtfnfCodigo.setText(String.valueOf(indiceZonasCliente.getZonaCliente()));
+        cargaDatos();
+    }//GEN-LAST:event_jbBuscarActionPerformed
 
-    private void borrarPantalla(){	
-	
-        if(consulta){           
+    private void jbAdelanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAdelanteActionPerformed
+        // Si hay un espacio, entendemos código 0
+        if(jtfnfCodigo.getText().length() == 0)
+            jtfnfCodigo.setText("0");
+        
+        String strSql = "SELECT * FROM ZONCLI WHERE EMPRESA = '"
+                + DatosComunes.eEmpresa
+                + "' AND ZONCLI_ZONA > " + jtfnfCodigo.getText();
+
+        if (DatosComunes.centroCont != 0) {
+            strSql += " AND ZONCLI_CENTRO = " + DatosComunes.centroCont + " LIMIT 1";
+        }
+        
+        cargaDatos(strSql);      
+        
+    }//GEN-LAST:event_jbAdelanteActionPerformed
+
+    private void jbAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAtrasActionPerformed
+        // Si hay un espacio, entendemos código 0
+        if(jtfnfCodigo.getText().length() == 0)
+            jtfnfCodigo.setText("0");
+        
+        String strSql = "SELECT * FROM ZONCLI WHERE EMPRESA = '"
+                + DatosComunes.eEmpresa
+                + "' AND ZONCLI_ZONA < " + jtfnfCodigo.getText();
+
+        if (DatosComunes.centroCont != 0) {
+            strSql += " AND ZONCLI_CENTRO = " + DatosComunes.centroCont + 
+                    " ORDER BY ZONCLI_ZONA DESC LIMIT 1";
+        }
+        
+        cargaDatos(strSql);
+    }//GEN-LAST:event_jbAtrasActionPerformed
+
+    private void jbEstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEstadisticasActionPerformed
+        // Primer argumento Cuenta = "01"
+        // Tercer argumento 2 porque son Proveedores/Acreedores       
+        new IndiceAcumuladosEstadisticos("01", jtffNombre.getText().trim(), 5);
+    }//GEN-LAST:event_jbEstadisticasActionPerformed
+
+    private void borrarPantalla() {
+
+        if (consulta) {
             jtffNombre.setEnabled(false);
             jtfnfCentro.setEnabled(false);
             jbBorrar.setVisible(false);
             jbGrabar.setVisible(false);
             jbEstadisticas.setVisible(true);
             jbPresupuesto.setVisible(false);
-            
-        }else{
+
+        } else {
             jtffNombre.setEnabled(true);
             jtfnfCentro.setEnabled(true);
             jbBorrar.setVisible(true);
@@ -240,60 +313,76 @@ public class ConManZonas extends EscapeDialog {
             jbEstadisticas.setVisible(true);
             jbPresupuesto.setVisible(true);
         }
-	jtfnfCodigo.setText("0");
+        jtfnfCodigo.setText("0");
         jtffNombre.setText("");
-        jtfnfCentro.setText(String.valueOf(DatosComunes.centroCont));						
-	}
-    
-    private void cargaInicial(){
-		// Carga inicial en el primer Proveedor
-		if(jtfnfCodigo.getText().length() == 0)
-			jtfnfCodigo.setText("0");
-		
-		String strSql = "SELECT * FROM ZONCLI WHERE EMPRESA = '" + 
-         DatosComunes.eEmpresa + 
-         "' AND ZONCLI_ZONA >= " + jtfnfCodigo.getText();
-		
-		if(DatosComunes.centroCont != 0)
-			strSql += " AND ZONCLI_CENTRO = " + DatosComunes.centroCont;
-		
+        jtfnfCentro.setText(String.valueOf(DatosComunes.centroCont));
+    }
+
+    private void cargaInicial() {
+        // Carga inicial en el primer Proveedor
+        if (jtfnfCodigo.getText().length() == 0) {
+            jtfnfCodigo.setText("0");
+        }
+
+        String strSql = "SELECT * FROM ZONCLI WHERE EMPRESA = '"
+                + DatosComunes.eEmpresa
+                + "' AND ZONCLI_ZONA >= " + jtfnfCodigo.getText();
+
+        if (DatosComunes.centroCont != 0) {
+            strSql += " AND ZONCLI_CENTRO = " + DatosComunes.centroCont;
+        }
+
         strSql += " LIMIT 1";
-		
-		cargaDatos(strSql);			
-	}
-	
-	private void cargaDatos(String strSql){		
-		int numeroDeFilas = 0;
-		String descripcionZona = "";				
-		
-		numeroDeFilas = BaseDatos.countRows(strSql);
-		if(numeroDeFilas > 0){
-			try {
-				borrarPantalla();				
-				rs = m.query(strSql);
-				
-				// Recorremos el recodSet para ir rellenando la tabla de marcas
-				if (rs.next() == true) {
-					zona.read(rs);
+
+        cargaDatos(strSql);
+    }
+    
+    private void cargaDatos()
+    {
+        String strSql = "SELECT * FROM ZONCLI WHERE EMPRESA = '"
+                + DatosComunes.eEmpresa
+                + "' AND ZONCLI_ZONA >= " + jtfnfCodigo.getText();
+
+        if (DatosComunes.centroCont != 0) {
+            strSql += " AND ZONCLI_CENTRO = " + DatosComunes.centroCont;
+        }
+
+        strSql += " LIMIT 1";
+
+        cargaDatos(strSql);        
+    }
+
+    private void cargaDatos(String strSql) {
+        int numeroDeFilas = 0;
+        String descripcionZona = "";
+
+        numeroDeFilas = BaseDatos.countRows(strSql);
+        if (numeroDeFilas > 0) {
+            try {
+                borrarPantalla();
+                rs = m.query(strSql);
+
+                // Recorremos el recodSet para ir rellenando la tabla de marcas
+                if (rs.next() == true) {
+                    zona.read(rs);
 
 					// Vamos a averiguar la descripción del Banco y de la Sucursal
-					//IndiceZonasCliente indiceZonas = new IndiceZonasCliente();
-																			
-					jtfnfCodigo.setText(String.valueOf(zona.getZona()));
-					jtfnfCentro.setText(String.valueOf(zona.getCentro()));
-					jtffNombre.setText(zona.getNombre());
-					
-				}
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-	}
-    
-    private void salir(){
-		this.dispose();
-		frameMenu.setEnabled(true);		
+                    //IndiceZonasCliente indiceZonas = new IndiceZonasCliente();
+                    jtfnfCodigo.setText(String.valueOf(zona.getZona()));
+                    jtfnfCentro.setText(String.valueOf(zona.getCentro()));
+                    jtffNombre.setText(zona.getNombre());
+
+                }
+            } catch (SQLException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    private void salir() {
+        this.dispose();
+        frameMenu.setEnabled(true);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jbAdelante;
