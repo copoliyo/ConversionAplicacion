@@ -3,8 +3,6 @@ package indices;
 import general.DatosComunes;
 import general.MysqlConnect;
 
-import indices.IndiceFacturasRecibidas.Columna;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -37,6 +35,9 @@ import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+//import javax.swing.table.DefaultTableCellRenderer;
+//import javax.swing.table.DefaultTableModel;
+//import javax.swing.table.TableColumn;
 
 import tablas.Cuenta;
 import tablas.DebeHaber;
@@ -46,6 +47,7 @@ import tablas.Nota;
 import util.Apariencia;
 import util.BaseDatos;
 import util.Cadena;
+
 import util.EscapeDialog;
 import util.Fecha;
 import util.JTextFieldFecha;
@@ -261,7 +263,7 @@ public class IndiceAcumuladosEstadisticos {
         BENEFICIO_AÑO_ANTERIOR(7),
         BENEFICIO_PORCENTAJE_SOBRE_VENTAS_AÑO_ANTERIOR(8),
         PRESUPUESTO(9),
-        PORCENTAJE_SOBRE_PRESUPUESTO(9);
+        PORCENTAJE_SOBRE_PRESUPUESTO(10);
 
         private int value;
 
@@ -423,7 +425,7 @@ public class IndiceAcumuladosEstadisticos {
         pantalla.add(lZonaDerecha);
 
         TableColumn columna = new TableColumn();
-		// Dependiendo de que estadísticas tenemos que visualizar, montaremos
+        // Dependiendo de que estadísticas tenemos que visualizar, montaremos
         // una pantalla u otra.
         switch (extensionOtroFichero) {
             // Clientes
@@ -448,7 +450,7 @@ public class IndiceAcumuladosEstadisticos {
                 jtEstadistico = new JTable(modeloTabla);
                 jtEstadistico.setFont(Apariencia.cambiaFuente(Font.PLAIN, 13));
 
-				//TableColumn columna = new TableColumn();
+                //TableColumn columna = new TableColumn();
                 // Establecemos el ancho
                 jtEstadistico.getColumn("Mes").setMaxWidth(80);
                 jtEstadistico.getColumn("V.Año").setMaxWidth(70);
@@ -466,7 +468,7 @@ public class IndiceAcumuladosEstadisticos {
 
                 jtEstadistico.setRowHeight(25);
 
-				// Hacemos que la comluna del saldo se alinee a la derecha y
+                // Hacemos que la comluna del saldo se alinee a la derecha y
                 // que salga en rojo si es negativa.
                 tcr2 = new TableCellRenderer();
                 jtEstadistico.getColumn("V.Año").setCellRenderer(tcr2);
@@ -519,7 +521,7 @@ public class IndiceAcumuladosEstadisticos {
 
                 jtEstadistico.setRowHeight(25);
 
-				// Hacemos que la comluna del saldo se alinee a la derecha y
+                // Hacemos que la comluna del saldo se alinee a la derecha y
                 // que salga en rojo si es negativa.
                 tcr2 = new TableCellRenderer();
                 jtEstadistico.getColumn("C.Año").setCellRenderer(tcr2);
@@ -533,6 +535,62 @@ public class IndiceAcumuladosEstadisticos {
                 jtEstadistico.getColumn("F.Año").setCellRenderer(tcr2);
                 jtEstadistico.getColumn("F.%/A").setCellRenderer(tcr2);
                 jtEstadistico.getColumn("F.Año Ant.").setCellRenderer(tcr2);
+                break;
+                // Clientes
+            case 5:
+                lZonaIzquierda.setText("Ventas__________");
+                lZonaCentro.setText("Beneficio____________");
+                lZonaDerecha.setText("Presupuesto_________");
+                modeloTabla.addColumn("Mes");
+                modeloTabla.addColumn("V.Año");
+                modeloTabla.addColumn("V.%/A");
+                modeloTabla.addColumn("V.Año Ant.");
+                modeloTabla.addColumn("B.Año");
+                modeloTabla.addColumn("B.%/V");
+                modeloTabla.addColumn("B.%/A");
+                modeloTabla.addColumn("B.Año Ant.");
+                modeloTabla.addColumn("B.%/V Ant.");
+                modeloTabla.addColumn("I.%/V");
+                modeloTabla.addColumn("I.Año");
+                modeloTabla.addColumn("I.%/A");
+                modeloTabla.addColumn("I.Año Ant.");
+
+                jtEstadistico = new JTable(modeloTabla);
+                jtEstadistico.setFont(Apariencia.cambiaFuente(Font.PLAIN, 13));
+
+                //TableColumn columna = new TableColumn();
+                // Establecemos el ancho
+                jtEstadistico.getColumn("Mes").setMaxWidth(80);
+                jtEstadistico.getColumn("V.Año").setMaxWidth(70);
+                jtEstadistico.getColumn("V.%/A").setMaxWidth(40);
+                jtEstadistico.getColumn("V.Año Ant.").setMaxWidth(70);
+                jtEstadistico.getColumn("B.Año").setMaxWidth(70);
+                jtEstadistico.getColumn("B.%/V").setMaxWidth(50);
+                jtEstadistico.getColumn("B.%/A").setMaxWidth(40);
+                jtEstadistico.getColumn("B.Año Ant.").setMaxWidth(70);
+                jtEstadistico.getColumn("B.%/V Ant.").setMaxWidth(40);
+                jtEstadistico.getColumn("I.%/V").setMaxWidth(40);
+                jtEstadistico.getColumn("I.Año").setMaxWidth(70);
+                jtEstadistico.getColumn("I.%/A").setMaxWidth(40);
+                jtEstadistico.getColumn("I.Año Ant.").setMaxWidth(70);
+
+                jtEstadistico.setRowHeight(25);
+
+                // Hacemos que la comluna del saldo se alinee a la derecha y
+                // que salga en rojo si es negativa.
+                tcr2 = new TableCellRenderer();
+                jtEstadistico.getColumn("V.Año").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("V.%/A").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("V.Año Ant.").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("B.Año").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("B.%/V").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("B.%/A").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("B.Año Ant.").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("B.%/V Ant.").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("I.%/V").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("I.Año").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("I.%/A").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("I.Año Ant.").setCellRenderer(tcr2);
                 break;
         }
 
@@ -589,7 +647,7 @@ public class IndiceAcumuladosEstadisticos {
                 break;
             case 5:
                 cargaDatosZonasCliente();
-                break;            
+                break;
         }
 
         pantalla.setVisible(true);
@@ -1302,7 +1360,7 @@ public class IndiceAcumuladosEstadisticos {
         m = MysqlConnect.getDbCon();
 
         for (int i = 0; i < nombreMes.length; i++) {
-            fila[ColumnaClientes.MES.value] = nombreMes[i];
+            fila[ColumnaZonasCliente.MES.value] = nombreMes[i];
             fila[1] = "";
             fila[2] = "";
             fila[3] = "";
@@ -1326,12 +1384,12 @@ public class IndiceAcumuladosEstadisticos {
         strSql = "SELECT * FROM CACEST WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
                 + " CACEST_FICHERO = " + extensionOtroFichero + " AND "
                 + " CACEST_CLAVE = '" + strCuenta + "' AND "
-                + " CACEST_ANY = " + (año - 1);
+                + " CACEST_ANY = " + (año - 1);               
 
         dAcumuladoVentasTotalAñoAnterior = 0.0;
         dAcumuladoVentasMesAñoAnterior = 0.0;
         dAcumuladoBeneficioTotalAñoAnterior = 0.0;
-        dAcumuladoBeneficioMesAñoAnterior = 0.0;                
+        dAcumuladoBeneficioMesAñoAnterior = 0.0;
 
         numeroRegistros = BaseDatos.countRows(strSql);
         if (numeroRegistros != 0) {
@@ -1350,21 +1408,21 @@ public class IndiceAcumuladosEstadisticos {
                      if(estadistica.getMes() <= mes)
                      dAcumuladoFacturadoMesAñoAnterior += estadistica.getAcumulado(0);
                      }*/
-                    if ((int) estadistica.getAcumulado(1) != 0) {
-                        modeloTabla.setValueAt(Cadena.formatoDobleEntero(estadistica.getAcumulado(1)), estadistica.getMes() - 1, ColumnaZonasCliente.VENTAS_AÑO_ANTERIOR.value);
-                        dAcumuladoVentasTotalAñoAnterior += estadistica.getAcumulado(1);
+                    if ((int) estadistica.getAcumulado(0) != 0) {
+                        modeloTabla.setValueAt(Cadena.formatoDobleEntero(estadistica.getAcumulado(0)), estadistica.getMes() - 1, ColumnaZonasCliente.VENTAS_AÑO_ANTERIOR.value);
+                        dAcumuladoVentasTotalAñoAnterior += estadistica.getAcumulado(0);
                         if (estadistica.getMes() <= mes) {
-                            dAcumuladoVentasMesAñoAnterior += estadistica.getAcumulado(1);
+                            dAcumuladoVentasMesAñoAnterior += estadistica.getAcumulado(0);
                         }
                     }
 
-                    if ((int) estadistica.getAcumulado(5) != 0) {
-                        modeloTabla.setValueAt((int) estadistica.getAcumulado(5), estadistica.getMes() - 1, ColumnaZonasCliente.BENEFICIO_AÑO_ANTERIOR.value);
-                        dAcumuladoBeneficioTotalAñoAnterior += estadistica.getAcumulado(5);
+                    if ((int) estadistica.getAcumulado(4) != 0) {
+                        modeloTabla.setValueAt((int) estadistica.getAcumulado(4), estadistica.getMes() - 1, ColumnaZonasCliente.BENEFICIO_AÑO_ANTERIOR.value);
+                        dAcumuladoBeneficioTotalAñoAnterior += estadistica.getAcumulado(4);
                         if (estadistica.getMes() <= mes) {
-                            dAcumuladoBeneficioMesAñoAnterior += estadistica.getAcumulado(5);
+                            dAcumuladoBeneficioMesAñoAnterior += estadistica.getAcumulado(4);
                         }
-                    }                                        
+                    }
                 }
                 rs.close();
             } catch (SQLException e) {
@@ -1404,26 +1462,26 @@ public class IndiceAcumuladosEstadisticos {
                      if(estadistica.getMes() <= mes)
                      dAcumuladoFacturadoMesAño += estadistica.getAcumulado(0);
                      }*/
-                    if ((int) estadistica.getAcumulado(1) != 0) {
-                        modeloTabla.setValueAt(Cadena.formatoDobleEntero(estadistica.getAcumulado(1)), estadistica.getMes() - 1, ColumnaZonasCliente.VENTAS_AÑO.value);
-                        dAcumuladoVentasTotalAño += estadistica.getAcumulado(1);
+                    if ((int) estadistica.getAcumulado(0) != 0) {
+                        modeloTabla.setValueAt(Cadena.formatoDobleEntero(estadistica.getAcumulado(0)), estadistica.getMes() - 1, ColumnaZonasCliente.VENTAS_AÑO.value);
+                        dAcumuladoVentasTotalAño += estadistica.getAcumulado(0);
                         if (estadistica.getMes() <= mes) {
-                            dAcumuladoVentasMesAño += estadistica.getAcumulado(1);
+                            dAcumuladoVentasMesAño += estadistica.getAcumulado(0);
                         }
                     }
-                    
+
+                    if ((int) estadistica.getAcumulado(4) != 0) {
+                        modeloTabla.setValueAt((int) estadistica.getAcumulado(4), estadistica.getMes() - 1, ColumnaZonasCliente.BENEFICIO_AÑO.value);
+                        dAcumuladoBeneficioTotalAño += estadistica.getAcumulado(4);
+                        if (estadistica.getMes() <= mes) {
+                            dAcumuladoBeneficioMesAño += estadistica.getAcumulado(4);
+                        }
+                    }
                     if ((int) estadistica.getAcumulado(5) != 0) {
-                        modeloTabla.setValueAt((int) estadistica.getAcumulado(5), estadistica.getMes() - 1, ColumnaZonasCliente.BENEFICIO_AÑO.value);
-                        dAcumuladoBeneficioTotalAño += estadistica.getAcumulado(5);
+                        modeloTabla.setValueAt((int) estadistica.getAcumulado(5), estadistica.getMes() - 1, ColumnaZonasCliente.PRESUPUESTO.value);
+                        dAcumuladoPresupuestoTotalAño += estadistica.getAcumulado(5);
                         if (estadistica.getMes() <= mes) {
-                            dAcumuladoBeneficioMesAño += estadistica.getAcumulado(5);
-                        }
-                    }
-                    if ((int) estadistica.getAcumulado(6) != 0) {
-                        modeloTabla.setValueAt((int) estadistica.getAcumulado(6), estadistica.getMes() - 1, ColumnaZonasCliente.PRESUPUESTO.value);
-                        dAcumuladoPresupuestoTotalAño += estadistica.getAcumulado(6);
-                        if (estadistica.getMes() <= mes) {
-                            dAcumuladoPresupuestoMesAño += estadistica.getAcumulado(6);
+                            dAcumuladoPresupuestoMesAño += estadistica.getAcumulado(5);
                         }
                     }
                 }
@@ -1433,169 +1491,169 @@ public class IndiceAcumuladosEstadisticos {
                 e.printStackTrace();
                 Apariencia.mensajeInformativo(5, "Error en lectura fichero de EstadisticaContable<BR>Consulta Acumulados Contables");
             }
-        }
 
-        // Ponemos los acumulados Totales de año
-        modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoVentasTotalAño), 12, ColumnaZonasCliente.VENTAS_AÑO.value);
-        modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoVentasTotalAñoAnterior), 12, ColumnaZonasCliente.VENTAS_AÑO_ANTERIOR.value);
+            // Ponemos los acumulados Totales de año
+            modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoVentasTotalAño), 12, ColumnaZonasCliente.VENTAS_AÑO.value);
+            modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoVentasTotalAñoAnterior), 12, ColumnaZonasCliente.VENTAS_AÑO_ANTERIOR.value);
 
-        modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoBeneficioTotalAño), 12, ColumnaZonasCliente.BENEFICIO_AÑO.value);
-        modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoBeneficioTotalAñoAnterior), 12, ColumnaZonasCliente.BENEFICIO_AÑO_ANTERIOR.value);
-        
-        modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoPresupuestoTotalAño), 12, ColumnaZonasCliente.PRESUPUESTO.value);        
+            modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoBeneficioTotalAño), 12, ColumnaZonasCliente.BENEFICIO_AÑO.value);
+            modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoBeneficioTotalAñoAnterior), 12, ColumnaZonasCliente.BENEFICIO_AÑO_ANTERIOR.value);
 
-        // Ponemos los acumulados Totales de mes
-        modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoVentasMesAño), 13, ColumnaZonasCliente.VENTAS_AÑO.value);
-        modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoVentasMesAñoAnterior), 13, ColumnaZonasCliente.VENTAS_AÑO_ANTERIOR.value);
+            modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoPresupuestoTotalAño), 12, ColumnaZonasCliente.PRESUPUESTO.value);
 
-        modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoBeneficioMesAño), 13, ColumnaZonasCliente.BENEFICIO_AÑO.value);
-        modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoBeneficioMesAñoAnterior), 13, ColumnaZonasCliente.BENEFICIO_AÑO_ANTERIOR.value);
+            // Ponemos los acumulados Totales de mes
+            modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoVentasMesAño), 13, ColumnaZonasCliente.VENTAS_AÑO.value);
+            modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoVentasMesAñoAnterior), 13, ColumnaZonasCliente.VENTAS_AÑO_ANTERIOR.value);
 
-        modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoPresupuestoMesAño), 13, ColumnaZonasCliente.PRESUPUESTO.value);        
+            modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoBeneficioMesAño), 13, ColumnaZonasCliente.BENEFICIO_AÑO.value);
+            modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoBeneficioMesAñoAnterior), 13, ColumnaZonasCliente.BENEFICIO_AÑO_ANTERIOR.value);
 
-        // Calculamos los % en Ventas
-        int porcent = 0, iAño = 0, iAñoAnt = 0;
-        for (int i = 0; i < 14; i++) {
-            if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO.value)).length() > 0) {
-                iAño = Integer.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO.value)).replaceAll("\\.", ""));
-            } else {
-                iAño = 0;
+            modeloTabla.setValueAt(Cadena.formatoDobleEntero(dAcumuladoPresupuestoMesAño), 13, ColumnaZonasCliente.PRESUPUESTO.value);
+
+            // Calculamos los % en Ventas
+            int porcent = 0, iAño = 0, iAñoAnt = 0;
+            for (int i = 0; i < 14; i++) {
+                if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO.value)).length() > 0) {
+                    iAño = Integer.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO.value)).replaceAll("\\.", ""));
+                } else {
+                    iAño = 0;
+                }
+
+                if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO_ANTERIOR.value)).length() > 0) {
+                    iAñoAnt = Integer.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO_ANTERIOR.value)).replaceAll("\\.", ""));
+                } else {
+                    iAñoAnt = 0;
+                }
+
+                if (iAño == 0 || iAñoAnt == 0) {
+                    porcent = 0;
+                } else {
+                    porcent = (iAño * 100) / iAñoAnt;
+                }
+
+                if (porcent > 999) {
+                    porcent = 999;
+                }
+
+                if (porcent != 0) {
+                    modeloTabla.setValueAt(porcent, i, ColumnaZonasCliente.VENTAS_PORCENTAJE_SOBRE_AÑO.value);
+                }
             }
 
-            if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO_ANTERIOR.value)).length() > 0) {
-                iAñoAnt = Integer.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO_ANTERIOR.value)).replaceAll("\\.", ""));
-            } else {
-                iAñoAnt = 0;
-            }
+            // Calculamos los % en Beneficio
+            porcent = 0;
+            iAño = 0;
+            iAñoAnt = 0;
+            for (int i = 0; i < 14; i++) {
+                if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.BENEFICIO_AÑO.value)).length() > 0) {
+                    iAño = Integer.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.BENEFICIO_AÑO.value)).replaceAll("\\.", ""));
+                } else {
+                    iAño = 0;
+                }
 
-            if (iAño == 0 || iAñoAnt == 0) {
-                porcent = 0;
-            } else {
-                porcent = (iAño * 100) / iAñoAnt;
-            }
+                if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.BENEFICIO_AÑO_ANTERIOR.value)).length() > 0) {
+                    iAñoAnt = Integer.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.BENEFICIO_AÑO_ANTERIOR.value)).replaceAll("\\.", ""));
+                } else {
+                    iAñoAnt = 0;
+                }
 
-            if (porcent > 999) {
-                porcent = 999;
-            }
+                if (iAño == 0 || iAñoAnt == 0) {
+                    porcent = 0;
+                } else {
+                    porcent = (iAño * 100) / iAñoAnt;
+                }
 
-            if (porcent != 0) {
-                modeloTabla.setValueAt(porcent, i, ColumnaZonasCliente.VENTAS_PORCENTAJE_SOBRE_AÑO.value);
-            }
-        }
+                if (porcent > 999) {
+                    porcent = 999;
+                }
 
-        // Calculamos los % en Beneficio
-        porcent = 0;
-        iAño = 0;
-        iAñoAnt = 0;
-        for (int i = 0; i < 14; i++) {
-            if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.BENEFICIO_AÑO.value)).length() > 0) {
-                iAño = Integer.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.BENEFICIO_AÑO.value)).replaceAll("\\.", ""));
-            } else {
-                iAño = 0;
-            }
+                if (porcent != 0) {
+                    modeloTabla.setValueAt(porcent, i, ColumnaZonasCliente.BENEFICIO_PORCENTAJE_SOBRE_AÑO.value);
+                }
 
-            if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.BENEFICIO_AÑO_ANTERIOR.value)).length() > 0) {
-                iAñoAnt = Integer.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.BENEFICIO_AÑO_ANTERIOR.value)).replaceAll("\\.", ""));
-            } else {
-                iAñoAnt = 0;
-            }
+                // Calculo porcentaje beneficio
+                double dPorcent = 0.0;
+                double dVentas = 0.0;
+                double dBeneficio = 0.0;
 
-            if (iAño == 0 || iAñoAnt == 0) {
-                porcent = 0;
-            } else {
-                porcent = (iAño * 100) / iAñoAnt;
-            }
+                if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO.value)).length() > 0) {
+                    dVentas = Double.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO.value)).replaceAll("\\.", ""));
+                } else {
+                    dVentas = 0.0;
+                }
 
-            if (porcent > 999) {
-                porcent = 999;
-            }
+                if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.BENEFICIO_AÑO.value)).length() > 0) {
+                    dBeneficio = Double.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.BENEFICIO_AÑO.value)).replaceAll("\\.", ""));
+                } else {
+                    dBeneficio = 0.0;
+                }
 
-            if (porcent != 0) {
-                modeloTabla.setValueAt(porcent, i, ColumnaZonasCliente.BENEFICIO_PORCENTAJE_SOBRE_AÑO.value);
-            }
+                if (dVentas == 0.0 || dBeneficio == 0.0) {
+                    dPorcent = 0.0;
+                } else {
+                    dPorcent = (dBeneficio * 100.0) / dVentas;
+                    if (dPorcent > 999.9) {
+                        dPorcent = 999.0;
+                    }
 
-            // Calculo porcentaje beneficio
-            double dPorcent = 0.0;
-            double dVentas = 0.0;
-            double dBeneficio = 0.0;
+                    modeloTabla.setValueAt(Cadena.formatoConComaDecimal(dPorcent), i, ColumnaZonasCliente.BENEFICIO_PORCENTAJE_SOBRE_VENTAS.value);
+                }
 
-            if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO.value)).length() > 0) {
-                dVentas = Double.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO.value)).replaceAll("\\.", ""));
-            } else {
+                // Calculo porcentaje beneficio AÑO ANTERIOR
+                dPorcent = 0.0;
                 dVentas = 0.0;
-            }
-
-            if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.BENEFICIO_AÑO.value)).length() > 0) {
-                dBeneficio = Double.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.BENEFICIO_AÑO.value)).replaceAll("\\.", ""));
-            } else {
                 dBeneficio = 0.0;
-            }
 
-            if (dVentas == 0.0 || dBeneficio == 0.0) {
-                dPorcent = 0.0;
-            } else {
-                dPorcent = (dBeneficio * 100.0) / dVentas;
-                if (dPorcent > 999.9) {
-                    dPorcent = 999.0;
+                if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO_ANTERIOR.value)).length() > 0) {
+                    dVentas = Double.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO_ANTERIOR.value)).replaceAll("\\.", ""));
+                } else {
+                    dVentas = 0.0;
                 }
 
-                modeloTabla.setValueAt(Cadena.formatoConComaDecimal(dPorcent), i, ColumnaZonasCliente.BENEFICIO_PORCENTAJE_SOBRE_VENTAS.value);
-            }
+                if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.BENEFICIO_AÑO_ANTERIOR.value)).length() > 0) {
+                    dBeneficio = Double.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.BENEFICIO_AÑO_ANTERIOR.value)).replaceAll("\\.", ""));
+                } else {
+                    dBeneficio = 0.0;
+                }
 
-            // Calculo porcentaje beneficio AÑO ANTERIOR
-            dPorcent = 0.0;
-            dVentas = 0.0;
-            dBeneficio = 0.0;
+                if (dVentas == 0.0 || dBeneficio == 0.0) {
+                    dPorcent = 0.0;
+                } else {
+                    dPorcent = (dBeneficio * 100.0) / dVentas;
+                    if (dPorcent > 999.9) {
+                        dPorcent = 999.0;
+                    }
 
-            if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO_ANTERIOR.value)).length() > 0) {
-                dVentas = Double.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO_ANTERIOR.value)).replaceAll("\\.", ""));
-            } else {
+                    modeloTabla.setValueAt(Cadena.formatoConComaDecimal(dPorcent), i, ColumnaZonasCliente.BENEFICIO_PORCENTAJE_SOBRE_VENTAS_AÑO_ANTERIOR.value);
+                }
+
+                // Calculo porcentaje Presupuestado sobre Ventas
+                dPorcent = 0.0;
                 dVentas = 0.0;
-            }
+                double dPresupuestado = 0.0;
 
-            if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.BENEFICIO_AÑO_ANTERIOR.value)).length() > 0) {
-                dBeneficio = Double.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.BENEFICIO_AÑO_ANTERIOR.value)).replaceAll("\\.", ""));
-            } else {
-                dBeneficio = 0.0;
-            }
-
-            if (dVentas == 0.0 || dBeneficio == 0.0) {
-                dPorcent = 0.0;
-            } else {
-                dPorcent = (dBeneficio * 100.0) / dVentas;
-                if (dPorcent > 999.9) {
-                    dPorcent = 999.0;
+                if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO.value)).length() > 0) {
+                    dVentas = Double.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO.value)).replaceAll("\\.", ""));
+                } else {
+                    dVentas = 0.0;
                 }
 
-                modeloTabla.setValueAt(Cadena.formatoConComaDecimal(dPorcent), i, ColumnaZonasCliente.BENEFICIO_PORCENTAJE_SOBRE_VENTAS_AÑO_ANTERIOR.value);
-            }
-
-            // Calculo porcentaje Presupuestado sobre Ventas
-            dPorcent = 0.0;
-            dVentas = 0.0;
-            double dPresupuestado = 0.0;
-
-            if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO.value)).length() > 0) {
-                dVentas = Double.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.VENTAS_AÑO.value)).replaceAll("\\.", ""));
-            } else {
-                dVentas = 0.0;
-            }
-
-            if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.PRESUPUESTO.value)).length() > 0) {
-                dPresupuestado = Double.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.PRESUPUESTO.value)).replaceAll("\\.", ""));
-            } else {
-                dPresupuestado = 0.0;
-            }
-
-            if (dVentas == 0.0 || dPresupuestado == 0.0) {
-                dPorcent = 0.0;
-            } else {
-                dPorcent = (dPresupuestado * 100.0) / dVentas;
-                if (dPorcent > 999.9) {
-                    dPorcent = 999.0;
+                if (String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.PRESUPUESTO.value)).length() > 0) {
+                    dPresupuestado = Double.valueOf(String.valueOf(modeloTabla.getValueAt(i, ColumnaZonasCliente.PRESUPUESTO.value)).replaceAll("\\.", ""));
+                } else {
+                    dPresupuestado = 0.0;
                 }
 
-                modeloTabla.setValueAt(Cadena.formatoConComaDecimal(dPorcent), i, ColumnaZonasCliente.PORCENTAJE_SOBRE_PRESUPUESTO.value);
+                if (dVentas == 0.0 || dPresupuestado == 0.0) {
+                    dPorcent = 0.0;
+                } else {
+                    dPorcent = (dPresupuestado * 100.0) / dVentas;
+                    if (dPorcent > 999.9) {
+                        dPorcent = 999.0;
+                    }
+
+                    modeloTabla.setValueAt(Cadena.formatoConComaDecimal(dPorcent), i, ColumnaZonasCliente.PORCENTAJE_SOBRE_PRESUPUESTO.value);
+                }
             }
 
         }
@@ -1605,7 +1663,7 @@ public class IndiceAcumuladosEstadisticos {
 		// Vaciamos la tabla
         //int a = modeloTabla.getRowCount() - 1;
 
-		//for (int i = a; i >= 0; i--)
+        //for (int i = a; i >= 0; i--)
         //	modeloTabla.removeRow(i);
         modeloTabla.setRowCount(0);
     }
@@ -1627,7 +1685,7 @@ public class IndiceAcumuladosEstadisticos {
                 // Zonas Cliente
                 case 5:
                     cargaDatosZonasCliente();
-                    break;    
+                    break;
             }
         }
     }
