@@ -23,6 +23,6 @@ public class TestConManRepresentantes {
         
 		// true -> Consulta
 		// false  -> Mantenimiento
-		new ConManRepresentantes(false);
+		new ConManRepresentantes(true);
 	}
 }
