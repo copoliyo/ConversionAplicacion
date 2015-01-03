@@ -825,56 +825,63 @@ public class ConManRepresentantes {
 	
 	// Necesitamos borrar tanta el representante como la cuenta contable asociada
 	// 417 XX XX
-	class BotonBorrarListener implements ActionListener{
-		@Override
-		public void actionPerformed(ActionEvent arg0) {	
-			enCreacion = false;
-			boolean existeCuentaContable = false;
-			boolean cuentaContableConSaldo = false;
-			int centro = DatosComunes.centroCont;
-			String cuentaRepresentante = "417" + Cadena.enteroCerosIzquierda(Integer.valueOf(jtfnfCodigo.getText().trim()), 4);
-			if(centro == 0 && jtfnfCentro.getText().trim().length() == 0)
-				centro = 1;
-			if(centro == 0 && jtfnfCentro.getText().trim() == "0")
-				centro = 1;
-			if(centro == 0 && Integer.valueOf(jtfnfCentro.getText().trim()) > 0)
-				centro = Integer.valueOf(jtfnfCentro.getText().trim());
-			
-			String strSql = "SELECT * FROM REPRES WHERE EMPRESA = '" + 
-	         DatosComunes.eEmpresa + 
-	         "' AND REPRES_REPRE = " + Integer.valueOf(jtfnfCodigo.getText().trim());
-			
-			if(DatosComunes.centroCont != 0)
-				strSql += " AND REPRES_CENTRO = " + centro;				
+	class BotonBorrarListener implements ActionListener {
 
-			// Comprobramos si existe el representante
-			if(BaseDatos.countRows(strSql) > 0){
-				// Comprobamos si existe la cuenta contable 417 XX XX donde XX XX = codigo representante
-				if(Cuenta.existeCuenta(cuentaRepresentante, centro)){
-					existeCuentaContable = true;					
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+            enCreacion = false;
+            boolean existeCuentaContable;
+            existeCuentaContable = false;
+            boolean cuentaContableConSaldo = false;
+            int centro = DatosComunes.centroCont;
+            String cuentaRepresentante = "417" + Cadena.enteroCerosIzquierda(Integer.valueOf(jtfnfCodigo.getText().trim()), 4);
+            if (centro == 0 && jtfnfCentro.getText().trim().length() == 0) {
+                centro = 1;
+            }
+            if (centro == 0 && jtfnfCentro.getText().trim() == "0") {
+                centro = 1;
+            }
+            if (centro == 0 && Integer.valueOf(jtfnfCentro.getText().trim()) > 0) {
+                centro = Integer.valueOf(jtfnfCentro.getText().trim());
+            }
+
+            String strSql = "SELECT * FROM REPRES WHERE EMPRESA = '"
+                    + DatosComunes.eEmpresa
+                    + "' AND REPRES_REPRE = " + Integer.valueOf(jtfnfCodigo.getText().trim());
+
+            if (DatosComunes.centroCont != 0) {
+                strSql += " AND REPRES_CENTRO = " + centro;
+            }
+
+            // Comprobramos si existe el representante
+            if (BaseDatos.countRows(strSql) > 0) {
+                // Comprobamos si existe la cuenta contable 417 XX XX donde XX XX = codigo representante
+                if (Cuenta.existeCuenta(cuentaRepresentante, centro)) {
+                    existeCuentaContable = true;
 					// Si existe la cuenta, tenemos que ver si tiene saldo, se es
-					// así, NO SE PUEDE BORRAR.
-					cuentaContableConSaldo = Cuenta.cuentaConSaldo(cuentaRepresentante, centro);
-					if(cuentaContableConSaldo)
-						Apariencia.mensajeInformativo(5, "Cuenta contable " + cuentaRepresentante + " tiene saldo!!!<BR>No se puede borrar ni el representante ni la cuenta contable asociada");
-					else{
-						// Tenemos que borrar el REPRESENTANTE y la CUENTA
-						if(Cuenta.delete(cuentaRepresentante, centro) == 1){
-							Apariencia.mensajeInformativo(5, "Cuenta contable " + cuentaRepresentante + " borrada correctamente.");
-							if(representante.delete() == 1)
-								Apariencia.mensajeInformativo(5, "Representante " + representante.getApellidosRazonSocial() + " borrado correctamente.");
-						}						
-					}										
-				}else{
-					Apariencia.mensajeInformativo(5, "No existe la cuenta contable de este representante.<BR>Revisarlo!!!");
-				}					
-			}else{
-				JOptionPane.showMessageDialog(null, "<html><font size='4'><strong>" + 
-						"No se puede borrar ese representante porque no existe!!!" + 
-				"</strong></font></html>");
-			}			
-		}		
-	}
+                    // así, NO SE PUEDE BORRAR.
+                    cuentaContableConSaldo = Cuenta.cuentaConSaldo(cuentaRepresentante, centro);
+                    if (cuentaContableConSaldo) {
+                        Apariencia.mensajeInformativo(5, "Cuenta contable " + cuentaRepresentante + " tiene saldo!!!<BR>No se puede borrar ni el representante ni la cuenta contable asociada");
+                    } else {
+                        // Tenemos que borrar el REPRESENTANTE y la CUENTA
+                        if (Cuenta.delete(cuentaRepresentante, centro) == 1) {
+                            Apariencia.mensajeInformativo(5, "Cuenta contable " + cuentaRepresentante + " borrada correctamente.");
+                            if (representante.delete() == 1) {
+                                Apariencia.mensajeInformativo(5, "Representante " + representante.getApellidosRazonSocial() + " borrado correctamente.");
+                            }
+                        }
+                    }
+                } else {
+                    Apariencia.mensajeInformativo(5, "No existe la cuenta contable de este representante.<BR>Revisarlo!!!");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "<html><font size='4'><strong>"
+                        + "No se puede borrar ese representante porque no existe!!!"
+                        + "</strong></font></html>");
+            }
+        }
+    }
 	
 	
 	class BotonGrabarListener implements ActionListener{
