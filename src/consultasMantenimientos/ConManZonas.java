@@ -18,6 +18,9 @@ import javax.swing.JFrame;
 import tablas.ZonaCliente;
 import util.BaseDatos;
 import indices.IndiceZonasCliente;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import util.Apariencia;
 
 /**
  *
@@ -42,6 +45,7 @@ public class ConManZonas extends EscapeDialog {
 
     // Definiciones de componentes de pantalla
     public JFrame frameMenu = null;
+
 
     /**
      * Creates new form ConManZonas
@@ -107,6 +111,12 @@ public class ConManZonas extends EscapeDialog {
 
         jtfnfCodigo.setColumns(2);
         jtfnfCodigo.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtfnfCodigo.setName("jtfnfCodigo"); // NOI18N
+        jtfnfCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfnfCodigoActionPerformed(evt);
+            }
+        });
 
         jbBuscar.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BUSCAR.gif"))); // NOI18N
@@ -147,6 +157,11 @@ public class ConManZonas extends EscapeDialog {
 
         jbBorrar.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbBorrar.setText("Borrar");
+        jbBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBorrarActionPerformed(evt);
+            }
+        });
 
         jbGrabar.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbGrabar.setText("Grabar");
@@ -257,9 +272,10 @@ public class ConManZonas extends EscapeDialog {
 
     private void jbAdelanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAdelanteActionPerformed
         // Si hay un espacio, entendemos código 0
-        if(jtfnfCodigo.getText().length() == 0)
+        if (jtfnfCodigo.getText().length() == 0) {
             jtfnfCodigo.setText("0");
-        
+        }
+
         String strSql = "SELECT * FROM ZONCLI WHERE EMPRESA = '"
                 + DatosComunes.eEmpresa
                 + "' AND ZONCLI_ZONA > " + jtfnfCodigo.getText();
@@ -267,25 +283,26 @@ public class ConManZonas extends EscapeDialog {
         if (DatosComunes.centroCont != 0) {
             strSql += " AND ZONCLI_CENTRO = " + DatosComunes.centroCont + " LIMIT 1";
         }
-        
-        cargaDatos(strSql);      
-        
+
+        cargaDatos(strSql);
+
     }//GEN-LAST:event_jbAdelanteActionPerformed
 
     private void jbAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAtrasActionPerformed
         // Si hay un espacio, entendemos código 0
-        if(jtfnfCodigo.getText().length() == 0)
+        if (jtfnfCodigo.getText().length() == 0) {
             jtfnfCodigo.setText("0");
-        
+        }
+
         String strSql = "SELECT * FROM ZONCLI WHERE EMPRESA = '"
                 + DatosComunes.eEmpresa
                 + "' AND ZONCLI_ZONA < " + jtfnfCodigo.getText();
 
         if (DatosComunes.centroCont != 0) {
-            strSql += " AND ZONCLI_CENTRO = " + DatosComunes.centroCont + 
-                    " ORDER BY ZONCLI_ZONA DESC LIMIT 1";
+            strSql += " AND ZONCLI_CENTRO = " + DatosComunes.centroCont
+                    + " ORDER BY ZONCLI_ZONA DESC LIMIT 1";
         }
-        
+
         cargaDatos(strSql);
     }//GEN-LAST:event_jbAtrasActionPerformed
 
@@ -294,6 +311,62 @@ public class ConManZonas extends EscapeDialog {
         // Tercer argumento 2 porque son Proveedores/Acreedores       
         new IndiceAcumuladosEstadisticos("01", jtffNombre.getText().trim(), 5);
     }//GEN-LAST:event_jbEstadisticasActionPerformed
+
+    private void jbBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBorrarActionPerformed
+        enCreacion = false;
+        int registrosBorrados;
+        boolean existeZona = false;
+        int centro = DatosComunes.centroCont;
+
+        if (centro == 0 && jtfnfCentro.getText().trim().length() == 0) {
+            centro = 1;
+        }
+        if (centro == 0 && jtfnfCentro.getText().trim() == "0") {
+            centro = 1;
+        }
+        if (centro == 0 && Integer.valueOf(jtfnfCentro.getText().trim()) > 0) {
+            centro = Integer.valueOf(jtfnfCentro.getText().trim());
+        }
+
+        String strSql = "SELECT * FROM ZONCLI WHERE EMPRESA = '"
+                + DatosComunes.eEmpresa
+                + "' AND ZONCLI_ZONA = " + Integer.valueOf(jtfnfCodigo.getText().trim());
+
+        if (DatosComunes.centroCont != 0) {
+            strSql += " AND ZONCLI_CENTRO = " + centro;
+        }
+
+        // Comprobramos si existe la zona
+        if (BaseDatos.countRows(strSql) > 0) {
+            String sqlDelete = "DELETE FROM ZONCLI WHERE "
+                    + "EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                    + "ZONCLI_ZONA = " + centro + " AND "
+                    + "ZONCLI_CENTRO = " + centro;
+
+            try {
+                Statement ps = MysqlConnect.db.conn.createStatement();
+             
+                registrosBorrados = ps.executeUpdate(sqlDelete);
+                
+                if (registrosBorrados > 0)
+                     JOptionPane.showMessageDialog(null,
+                            "Zona Borrada!!!");
+            } catch (SQLException e) {
+                registrosBorrados = -1;
+                if (DatosComunes.enDebug) {
+                    JOptionPane.showMessageDialog(null,
+                            "Error en borrado fichero de Zona!!!");
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            Apariencia.mensajeInformativo(5, "No existe la Zona.<BR>Revisarlo!!!");
+        }
+    }//GEN-LAST:event_jbBorrarActionPerformed
+
+    private void jtfnfCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnfCodigoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtfnfCodigoActionPerformed
 
     private void borrarPantalla() {
 
@@ -336,9 +409,8 @@ public class ConManZonas extends EscapeDialog {
 
         cargaDatos(strSql);
     }
-    
-    private void cargaDatos()
-    {
+
+    private void cargaDatos() {
         String strSql = "SELECT * FROM ZONCLI WHERE EMPRESA = '"
                 + DatosComunes.eEmpresa
                 + "' AND ZONCLI_ZONA >= " + jtfnfCodigo.getText();
@@ -349,7 +421,7 @@ public class ConManZonas extends EscapeDialog {
 
         strSql += " LIMIT 1";
 
-        cargaDatos(strSql);        
+        cargaDatos(strSql);
     }
 
     private void cargaDatos(String strSql) {
@@ -366,7 +438,7 @@ public class ConManZonas extends EscapeDialog {
                 if (rs.next() == true) {
                     zona.read(rs);
 
-					// Vamos a averiguar la descripción del Banco y de la Sucursal
+                    // Vamos a averiguar la descripción del Banco y de la Sucursal
                     //IndiceZonasCliente indiceZonas = new IndiceZonasCliente();
                     jtfnfCodigo.setText(String.valueOf(zona.getZona()));
                     jtfnfCentro.setText(String.valueOf(zona.getCentro()));

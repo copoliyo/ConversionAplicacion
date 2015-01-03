@@ -31,6 +31,6 @@ public class TestConManZonas {
         
 		// true -> Consulta
 		// false  -> Mantenimiento
-		new ConManZonas(new JFrame(), true);
+		new ConManZonas(new JFrame(), false);
 	}
 }
