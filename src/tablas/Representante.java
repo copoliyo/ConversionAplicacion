@@ -7,8 +7,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
+import util.BaseDatos;
 
 import util.Cadena;
 
@@ -38,6 +41,9 @@ public class Representante {
 	private int activo;
 	private String firmaElectronica;
 	private int permitePedidosWeb;
+        
+        static ResultSet rs = null;
+	static MysqlConnect m = null;
 
 	public Representante(){
 		empresa = DatosComunes.eEmpresa;
@@ -63,6 +69,8 @@ public class Representante {
 		activo = 0;
 		firmaElectronica = "";
 		permitePedidosWeb = 0;
+                
+                m = MysqlConnect.getDbCon();
 	}
 
 	public Representante(ResultSet rs){
@@ -133,6 +141,48 @@ public class Representante {
 		}
 	}
 
+        /**
+         * Devuelve on objeto de tipo Representante a partir de una serie
+         * de parámetros.
+         * 
+         * Si no se puede encontrar el representante con los parámetros dados,
+         * se devuelve NULL
+         * 
+         * @param empresa dos letras identificativas de la empresa
+         * @param centro centro en el que hacemos la lectura
+         * @param codigoRepresentante numero del representante a leer
+         * @return objeto de tipo Representante o NULL si no se encuentra         
+         */
+        public Representante read(String empresa, int centro, int codigoRepresentante){
+            int numeroDeFilas = 0;
+            
+            String strSql = "SELECT * FROM REPRES WHERE EMPRESA = '" + empresa + 
+                            "' AND REPRES_CENTRO = " + centro +
+                            " AND REPRES_REPRE = " + codigoRepresentante + " LIMIT 1";
+            
+            numeroDeFilas = BaseDatos.countRows(strSql);
+            if(numeroDeFilas > 0){
+                try {
+                    rs = m.query(strSql);
+                    
+                    if (rs.next() == true){
+			read(rs);
+                    }else{
+                        return null;
+                    }
+                        
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(Representante.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();                    
+                }
+            }else{
+                return null;                
+            }
+            
+            return this;
+        }
+        
 	public boolean write(){
 		boolean escrituraCorrecta = true;
 		PreparedStatement ps = null;
