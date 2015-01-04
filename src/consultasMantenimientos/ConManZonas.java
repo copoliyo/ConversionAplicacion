@@ -20,7 +20,9 @@ import util.BaseDatos;
 import indices.IndiceZonasCliente;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import tablas.Representante;
 import util.Apariencia;
+import util.Cadena;
 
 /**
  *
@@ -102,6 +104,10 @@ public class ConManZonas extends EscapeDialog {
         jbGrabar = new javax.swing.JButton();
         jbAtras = new javax.swing.JButton();
         jbAdelante = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jtfnfRepresentante = new util.JTextFieldNumeroFijo(4);
+        jLabel2 = new javax.swing.JLabel();
+        jlNombreRepresentante = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Mantenimiento Zonas Comerciales");
@@ -165,6 +171,11 @@ public class ConManZonas extends EscapeDialog {
 
         jbGrabar.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbGrabar.setText("Grabar");
+        jbGrabar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbGrabarActionPerformed(evt);
+            }
+        });
 
         jbAtras.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Atras.gif"))); // NOI18N
@@ -182,6 +193,18 @@ public class ConManZonas extends EscapeDialog {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jLabel1.setText("Representante");
+
+        jtfnfRepresentante.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtfnfRepresentante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfnfRepresentanteActionPerformed(evt);
+            }
+        });
+
+        jlNombreRepresentante.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -193,7 +216,7 @@ public class ConManZonas extends EscapeDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jlCodigo)
                             .addComponent(jlNombre))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(65, 65, 65)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jtfnfCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -205,21 +228,33 @@ public class ConManZonas extends EscapeDialog {
                                 .addComponent(jtfnfCentro, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jtffNombre))
                         .addGap(46, 46, 46))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jbEstadisticas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jbPresupuesto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(22, 22, 22)
-                        .addComponent(jbBorrar)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jbEstadisticas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jbPresupuesto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jtfnfRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbGrabar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbAdelante, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jlNombreRepresentante, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jbBorrar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbGrabar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                                .addComponent(jbAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbAdelante, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(21, 21, 21))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -233,11 +268,18 @@ public class ConManZonas extends EscapeDialog {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jlCentro)
                         .addComponent(jtfnfCentro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jtffNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlNombre))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlNombre)
-                    .addComponent(jtffNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jtfnfRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2))
+                    .addComponent(jlNombreRepresentante, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -368,11 +410,42 @@ public class ConManZonas extends EscapeDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_jtfnfCodigoActionPerformed
 
+    private void jbGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGrabarActionPerformed
+        boolean zonaGrabada = true;
+
+        int centro = DatosComunes.centroCont;
+
+        if (centro == 0 && jtfnfCentro.getText().trim().length() == 0) {
+            centro = 1;
+        }
+        if (centro == 0 && jtfnfCentro.getText().trim() == "0") {
+            centro = 1;
+        }
+        if (centro == 0 && Integer.valueOf(jtfnfCentro.getText().trim()) > 0) {
+            centro = Integer.valueOf(jtfnfCentro.getText().trim());
+        }
+        
+        zona.setCentro(centro);
+        zona.setEmpresa(DatosComunes.eEmpresa);
+        zona.setNombre(jtffNombre.getText().trim());
+        zona.setZona(Integer.valueOf(jtfnfCodigo.getText().trim()));
+        zona.setRepresentante(Integer.valueOf(jtfnfRepresentante.getText().trim()));
+        zona.write();
+    }//GEN-LAST:event_jbGrabarActionPerformed
+
+    private void jtfnfRepresentanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnfRepresentanteActionPerformed
+        Representante representante = new Representante();
+        if(representante.read(DatosComunes.eEmpresa, zona.getCentro(), Integer.valueOf(jtfnfRepresentante.getText().trim())) == null)
+             Apariencia.mensajeInformativo(5, "No existe el Representante.<BR>Revisarlo!!!");        
+        jlNombreRepresentante.setText(representante.getApellidosRazonSocial());
+    }//GEN-LAST:event_jtfnfRepresentanteActionPerformed
+
     private void borrarPantalla() {
 
         if (consulta) {
             jtffNombre.setEnabled(false);
             jtfnfCentro.setEnabled(false);
+            jtfnfRepresentante.setEnabled(false);
             jbBorrar.setVisible(false);
             jbGrabar.setVisible(false);
             jbEstadisticas.setVisible(true);
@@ -381,6 +454,7 @@ public class ConManZonas extends EscapeDialog {
         } else {
             jtffNombre.setEnabled(true);
             jtfnfCentro.setEnabled(true);
+            jtfnfRepresentante.setEnabled(true);
             jbBorrar.setVisible(true);
             jbGrabar.setVisible(true);
             jbEstadisticas.setVisible(true);
@@ -389,6 +463,7 @@ public class ConManZonas extends EscapeDialog {
         jtfnfCodigo.setText("0");
         jtffNombre.setText("");
         jtfnfCentro.setText(String.valueOf(DatosComunes.centroCont));
+        jtfnfRepresentante.setText("");
     }
 
     private void cargaInicial() {
@@ -426,7 +501,6 @@ public class ConManZonas extends EscapeDialog {
 
     private void cargaDatos(String strSql) {
         int numeroDeFilas = 0;
-        String descripcionZona = "";
 
         numeroDeFilas = BaseDatos.countRows(strSql);
         if (numeroDeFilas > 0) {
@@ -443,6 +517,12 @@ public class ConManZonas extends EscapeDialog {
                     jtfnfCodigo.setText(String.valueOf(zona.getZona()));
                     jtfnfCentro.setText(String.valueOf(zona.getCentro()));
                     jtffNombre.setText(zona.getNombre());
+                    jtfnfRepresentante.setText(String.valueOf(zona.getRepresentante()));
+                                        
+                    Representante representante = new Representante();
+                    representante.read(DatosComunes.eEmpresa, zona.getCentro(), zona.getRepresentante());
+                    jlNombreRepresentante.setText(representante.getApellidosRazonSocial());
+                    
 
                 }
             } catch (SQLException e1) {
@@ -457,6 +537,8 @@ public class ConManZonas extends EscapeDialog {
         frameMenu.setEnabled(true);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JButton jbAdelante;
     private javax.swing.JButton jbAtras;
     private javax.swing.JButton jbBorrar;
@@ -468,8 +550,10 @@ public class ConManZonas extends EscapeDialog {
     private javax.swing.JLabel jlCentro;
     private javax.swing.JLabel jlCodigo;
     private javax.swing.JLabel jlNombre;
+    private javax.swing.JLabel jlNombreRepresentante;
     private javax.swing.JTextField jtffNombre;
     private javax.swing.JTextField jtfnfCentro;
     private javax.swing.JTextField jtfnfCodigo;
+    private javax.swing.JTextField jtfnfRepresentante;
     // End of variables declaration//GEN-END:variables
 }
