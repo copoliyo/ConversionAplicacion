@@ -340,7 +340,7 @@ public class ConManZonas extends EscapeDialog {
         if (BaseDatos.countRows(strSql) > 0) {
             String sqlDelete = "DELETE FROM ZONCLI WHERE "
                     + "EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
-                    + "ZONCLI_ZONA = " + centro + " AND "
+                    + "ZONCLI_ZONA = " + Integer.valueOf(jtfnfCodigo.getText().trim()) + " AND "
                     + "ZONCLI_CENTRO = " + centro;
 
             try {
