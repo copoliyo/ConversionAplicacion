@@ -8,21 +8,17 @@ package consultasMantenimientos;
 import general.DatosComunes;
 import general.MysqlConnect;
 import indices.IndiceAcumuladosEstadisticos;
+import indices.IndiceZonasCliente;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import indices.IndiceZonasCliente;
-import java.awt.event.ActionEvent;
-import util.EscapeDialog;
-import java.sql.ResultSet;
-import javax.swing.JFrame;
-import tablas.ZonaCliente;
-import util.BaseDatos;
-import indices.IndiceZonasCliente;
 import java.sql.Statement;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import tablas.Representante;
+import tablas.ZonaCliente;
 import util.Apariencia;
-import util.Cadena;
+import util.BaseDatos;
+import util.EscapeDialog;
 
 /**
  *
@@ -94,7 +90,7 @@ public class ConManZonas extends EscapeDialog {
         jtfnfCodigo = new util.JTextFieldNumeroFijo(2);
         jbBuscar = new javax.swing.JButton();
         jlCentro = new javax.swing.JLabel();
-        jtfnfCentro = new util.JTextFieldNumeroFijo(2);
+        jtfnfCentro = new util.JTextFieldNumeroFijo(3);
         jlNombre = new javax.swing.JLabel();
         jtffNombre = new util.JTextFieldFijo(30);
         jbSalir = new javax.swing.JButton();
@@ -217,16 +213,13 @@ public class ConManZonas extends EscapeDialog {
                             .addComponent(jlCodigo)
                             .addComponent(jlNombre))
                         .addGap(65, 65, 65)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jtfnfCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jbBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jlCentro)
-                                .addGap(18, 18, 18)
-                                .addComponent(jtfnfCentro, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jtffNombre))
+                        .addComponent(jtfnfCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jlCentro)
+                        .addGap(18, 18, 18)
+                        .addComponent(jtfnfCentro, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(46, 46, 46))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -254,7 +247,10 @@ public class ConManZonas extends EscapeDialog {
                                 .addComponent(jbAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jbAdelante, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(21, 21, 21))))))
+                                .addGap(21, 21, 21))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(126, 126, 126)
+                        .addComponent(jtffNombre))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -268,10 +264,10 @@ public class ConManZonas extends EscapeDialog {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jlCentro)
                         .addComponent(jtfnfCentro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jtffNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlNombre))
+                .addGap(17, 17, 17)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jlNombre)
+                    .addComponent(jtffNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
