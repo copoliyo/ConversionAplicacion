@@ -23,9 +23,14 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jbSalir" min="-2" pref="30" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="jlNombre" min="-2" max="-2" attributes="0"/>
@@ -33,14 +38,10 @@
                       </Group>
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jbSalir" min="-2" pref="36" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                  </Group>
               </Group>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="jtffNombre" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
                       <Component id="jbPresupuesto" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jbBorrar" min="-2" pref="83" max="-2" attributes="0"/>
@@ -51,7 +52,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jbAdelante" min="-2" pref="30" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <Component id="jtfnfTipo" min="-2" pref="45" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jbBuscarTipo" min="-2" pref="29" max="-2" attributes="0"/>
@@ -60,9 +61,8 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jtfnfCentro" min="-2" pref="49" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jtffNombre" alignment="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace pref="18" max="32767" attributes="0"/>
+              <EmptySpace pref="19" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -77,21 +77,21 @@
                   <Component id="jlCentro" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jtfnfCentro" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jlNombre" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jtffNombre" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jbSalir" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jbPresupuesto" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jbBorrar" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jbGrabar" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jbAdelante" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jbAtras" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jbSalir" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
+                  <Component id="jbPresupuesto" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                  <Component id="jbBorrar" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                  <Component id="jbGrabar" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                  <Component id="jbAdelante" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
+                  <Component id="jbAtras" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="24" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
