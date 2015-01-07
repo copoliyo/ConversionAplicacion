@@ -5,11 +5,19 @@
  */
 package consultasMantenimientos;
 
+import general.DatosComunes;
 import general.MysqlConnect;
+import indices.IndiceAcumuladosEstadisticos;
 import indices.IndiceTiposCliente;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import tablas.Representante;
 import tablas.TipoCliente;
+import util.Apariencia;
+import util.BaseDatos;
 import util.EscapeDialog;
 
 /**
@@ -31,7 +39,7 @@ public class ConManTipos extends EscapeDialog {
     public static ResultSet rs = null;
     public static MysqlConnect m = null;
 
-    public TipoCliente zona = new TipoCliente();
+    public TipoCliente tipo = new TipoCliente();
 
     // Definiciones de componentes de pantalla
     public JFrame frameMenu = null;
@@ -49,8 +57,8 @@ public class ConManTipos extends EscapeDialog {
         //this.consulta = false;
         m = MysqlConnect.getDbCon();
         initComponents();
-        //borrarPantalla();
-        //cargaInicial();
+        borrarPantalla();
+        cargaInicial();
         this.setVisible(true);
     }
     
@@ -60,8 +68,8 @@ public class ConManTipos extends EscapeDialog {
         //this.consulta = false;
         m = MysqlConnect.getDbCon();
         initComponents();
-        //borrarPantalla();
-        //cargaInicial();
+        borrarPantalla();
+        cargaInicial();
         this.setVisible(true);
     }
     
@@ -87,6 +95,10 @@ public class ConManTipos extends EscapeDialog {
         jbGrabar = new javax.swing.JButton();
         jbAtras = new javax.swing.JButton();
         jbAdelante = new javax.swing.JButton();
+        jbEstadisticas = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jtfnfRepresentante = new util.JTextFieldNumeroFijo(4);
+        jlNombreRepresentante = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -97,11 +109,21 @@ public class ConManTipos extends EscapeDialog {
 
         jbBuscarTipo.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbBuscarTipo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BUSCAR.gif"))); // NOI18N
+        jbBuscarTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBuscarTipoActionPerformed(evt);
+            }
+        });
 
         jlCentro.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlCentro.setText("Centro");
 
         jtfnfCentro.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtfnfCentro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfnfCentroActionPerformed(evt);
+            }
+        });
 
         jlNombre.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlNombre.setText("Nombre");
@@ -110,87 +132,292 @@ public class ConManTipos extends EscapeDialog {
 
         jbSalir.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/SALIR.gif"))); // NOI18N
+        jbSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSalirActionPerformed(evt);
+            }
+        });
 
         jbPresupuesto.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbPresupuesto.setText("Presupuesto");
 
         jbBorrar.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbBorrar.setText("Borrar");
+        jbBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBorrarActionPerformed(evt);
+            }
+        });
 
         jbGrabar.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbGrabar.setText("Grabar");
+        jbGrabar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbGrabarActionPerformed(evt);
+            }
+        });
 
         jbAtras.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Atras.gif"))); // NOI18N
+        jbAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAtrasActionPerformed(evt);
+            }
+        });
 
         jbAdelante.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbAdelante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Adelante.gif"))); // NOI18N
+        jbAdelante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAdelanteActionPerformed(evt);
+            }
+        });
+
+        jbEstadisticas.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jbEstadisticas.setText("Estadísticas");
+        jbEstadisticas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbEstadisticasActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jLabel1.setText("Representante");
+
+        jtfnfRepresentante.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtfnfRepresentante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfnfRepresentanteActionPerformed(evt);
+            }
+        });
+
+        jlNombreRepresentante.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jlNombre)
-                            .addComponent(jlTipo))
-                        .addGap(18, 18, 18)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jtffNombre)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jbPresupuesto)
+                        .addComponent(jlTipo)
+                        .addGap(100, 100, 100)
+                        .addComponent(jtfnfTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jbBuscarTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jlCentro, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(jtfnfCentro, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(87, 87, 87))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jbBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbPresupuesto)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbGrabar, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbEstadisticas, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jbBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbGrabar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbAdelante, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jtfnfTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jbBuscarTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jlCentro, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jlNombre))
                         .addGap(18, 18, 18)
-                        .addComponent(jtfnfCentro, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(19, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jtffNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jtfnfRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addComponent(jlNombreRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlTipo)
-                    .addComponent(jtfnfTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbBuscarTipo)
-                    .addComponent(jlCentro)
-                    .addComponent(jtfnfCentro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jlTipo)
+                        .addComponent(jtfnfTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jlCentro)
+                        .addComponent(jtfnfCentro, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jbBuscarTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlNombre)
-                    .addComponent(jtffNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jtffNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jtfnfRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlNombreRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbPresupuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbGrabar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbAdelante, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(24, Short.MAX_VALUE))
+                    .addComponent(jbAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jbPresupuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbGrabar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbEstadisticas, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jtfnfCentroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnfCentroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtfnfCentroActionPerformed
+
+    private void jbBuscarTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarTipoActionPerformed
+        if (indiceTiposCliente == null) {
+            indiceTiposCliente = new IndiceTiposCliente();
+        } else {
+            indiceTiposCliente.muestra();
+        }
+        jtfnfTipo.setText(String.valueOf(indiceTiposCliente.getTipoCliente()));
+        cargaDatos();
+    }//GEN-LAST:event_jbBuscarTipoActionPerformed
+
+    private void jbAdelanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAdelanteActionPerformed
+        // Si hay un espacio, entendemos código 0
+        if (jtfnfTipo.getText().length() == 0) {
+            jtfnfTipo.setText("0");
+        }
+
+        String strSql = "SELECT * FROM TIPCLI WHERE EMPRESA = '"
+                + DatosComunes.eEmpresa
+                + "' AND TIPCLI_TIPO > " + jtfnfTipo.getText();
+
+        if (DatosComunes.centroCont != 0) {
+            strSql += " AND TIPCLI_CENTRO = " + DatosComunes.centroCont + " LIMIT 1";
+        }
+
+        cargaDatos(strSql);
+    }//GEN-LAST:event_jbAdelanteActionPerformed
+
+    private void jbAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAtrasActionPerformed
+        // Si hay un espacio, entendemos código 0
+        if (jtfnfTipo.getText().length() == 0) {
+            jtfnfTipo.setText("0");
+        }
+
+        String strSql = "SELECT * FROM TIPCLI WHERE EMPRESA = '"
+                + DatosComunes.eEmpresa
+                + "' AND TIPCLI_TIPO < " + jtfnfTipo.getText();
+
+        if (DatosComunes.centroCont != 0) {
+            strSql += " AND TIPCLI_CENTRO = " + DatosComunes.centroCont
+                    + " ORDER BY TIPCLI_TIPO DESC LIMIT 1";
+        }
+
+        cargaDatos(strSql);
+    }//GEN-LAST:event_jbAtrasActionPerformed
+
+    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
+        salir();
+    }//GEN-LAST:event_jbSalirActionPerformed
+
+    private void jbGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGrabarActionPerformed
+        boolean tipoGrabado = true;
+
+        int centro = DatosComunes.centroCont;
+
+        if (centro == 0 && jtfnfCentro.getText().trim().length() == 0) {
+            centro = 1;
+        }
+        if (centro == 0 && jtfnfCentro.getText().trim() == "0") {
+            centro = 1;
+        }
+        if (centro == 0 && Integer.valueOf(jtfnfCentro.getText().trim()) > 0) {
+            centro = Integer.valueOf(jtfnfCentro.getText().trim());
+        }
+        
+        tipo.setCentro(centro);
+        tipo.setEmpresa(DatosComunes.eEmpresa);
+        tipo.setDescripcion(jtffNombre.getText().trim());
+        tipo.setTipo(Integer.valueOf(jtfnfTipo.getText().trim()));
+        tipo.setRepresentante(Integer.valueOf(jtfnfRepresentante.getText().trim()));
+        tipo.write();
+    }//GEN-LAST:event_jbGrabarActionPerformed
+
+    private void jbBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBorrarActionPerformed
+        enCreacion = false;
+        int registrosBorrados;
+        boolean existeTipo = false;
+        int centro = DatosComunes.centroCont;
+
+        if (centro == 0 && jtfnfCentro.getText().trim().length() == 0) {
+            centro = 1;
+        }
+        if (centro == 0 && jtfnfCentro.getText().trim() == "0") {
+            centro = 1;
+        }
+        if (centro == 0 && Integer.valueOf(jtfnfCentro.getText().trim()) > 0) {
+            centro = Integer.valueOf(jtfnfCentro.getText().trim());
+        }
+
+        String strSql = "SELECT * FROM TIPCLI WHERE EMPRESA = '"
+                + DatosComunes.eEmpresa
+                + "' AND TIPCLI_TIPO = " + Integer.valueOf(jtfnfTipo.getText().trim());
+
+        if (DatosComunes.centroCont != 0) {
+            strSql += " AND TIPCLI_CENTRO = " + centro;
+        }
+
+        // Comprobramos si existe la zona
+        if (BaseDatos.countRows(strSql) > 0) {
+            String sqlDelete = "DELETE FROM TIPCLI WHERE "
+                    + "EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                    + "TIPCLI_TIPO = " + Integer.valueOf(jtfnfTipo.getText().trim()) + " AND "
+                    + "TIPCLI_CENTRO = " + centro;
+
+            try {
+                Statement ps = MysqlConnect.db.conn.createStatement();
+             
+                registrosBorrados = ps.executeUpdate(sqlDelete);
+                
+                if (registrosBorrados > 0){
+                    JOptionPane.showMessageDialog(null,
+                            "Tipo Borrado!!!");
+                    borrarPantalla();
+                    cargaInicial();
+                }
+            } catch (SQLException e) {
+                registrosBorrados = -1;
+                if (DatosComunes.enDebug) {
+                    JOptionPane.showMessageDialog(null,
+                            "Error en borrado fichero de Tipo Cliente!!!");
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            Apariencia.mensajeInformativo(5, "No existe el Tipo de Cliente.<BR>Revisarlo!!!");
+        }
+    }//GEN-LAST:event_jbBorrarActionPerformed
+
+    private void jtfnfRepresentanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnfRepresentanteActionPerformed
+        Representante representante = new Representante();
+        if(representante.read(DatosComunes.eEmpresa, tipo.getCentro(), Integer.valueOf(jtfnfRepresentante.getText().trim())) == null)
+             Apariencia.mensajeInformativo(5, "No existe el Representante.<BR>Revisarlo!!!");        
+        jlNombreRepresentante.setText(representante.getApellidosRazonSocial());
+    }//GEN-LAST:event_jtfnfRepresentanteActionPerformed
+
+    private void jbEstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEstadisticasActionPerformed
+        // Primer argumento Cuenta = "01"
+        // Tercer argumento 4 porque son Tipos de Cliente               
+        new IndiceAcumuladosEstadisticos("01", jtffNombre.getText().trim(), 4);
+    }//GEN-LAST:event_jbEstadisticasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -234,19 +461,117 @@ public class ConManTipos extends EscapeDialog {
         });
     }
 
+    private void borrarPantalla() {
+
+        if (consulta) {
+            jtffNombre.setEnabled(false);
+            jtfnfCentro.setEnabled(false);            
+            jbBorrar.setVisible(false);
+            jbGrabar.setVisible(false);
+            jbEstadisticas.setVisible(true);
+            jbPresupuesto.setVisible(false);
+
+        } else {
+            jtffNombre.setEnabled(true);
+            jtfnfCentro.setEnabled(true);            
+            jbBorrar.setVisible(true);
+            jbGrabar.setVisible(true);
+            jbEstadisticas.setVisible(true);
+            jbPresupuesto.setVisible(true);
+        }
+        jtfnfTipo.setText("0");
+        jtffNombre.setText("");
+        jtfnfCentro.setText(String.valueOf(DatosComunes.centroCont));       
+    }
+
+    private void cargaInicial() {
+        // Carga inicial en el primer Proveedor
+        if (jtfnfTipo.getText().length() == 0) {
+            jtfnfTipo.setText("0");
+        }
+
+        String strSql = "SELECT * FROM TIPCLI WHERE EMPRESA = '"
+                + DatosComunes.eEmpresa
+                + "' AND TIPCLI_TIPO >= " + jtfnfTipo.getText();
+
+        if (DatosComunes.centroCont != 0) {
+            strSql += " AND TIPCLI_CENTRO = " + DatosComunes.centroCont;
+        }
+
+        strSql += " LIMIT 1";
+
+        cargaDatos(strSql);
+    }
+
+    private void cargaDatos() {
+        String strSql = "SELECT * FROM TIPCLI WHERE EMPRESA = '"
+                + DatosComunes.eEmpresa
+                + "' AND TIPCLI_TIPO >= " + jtfnfTipo.getText();
+
+        if (DatosComunes.centroCont != 0) {
+            strSql += " AND TIPCLI_CENTRO = " + DatosComunes.centroCont;
+        }
+
+        strSql += " LIMIT 1";
+
+        cargaDatos(strSql);
+    }
+
+    private void cargaDatos(String strSql) {
+        int numeroDeFilas = 0;
+
+        numeroDeFilas = BaseDatos.countRows(strSql);
+        if (numeroDeFilas > 0) {
+            try {
+                borrarPantalla();
+                rs = m.query(strSql);
+
+                // Recorremos el recodSet
+                if (rs.next() == true) {
+                    tipo.read(rs);
+
+                    
+                    //IndiceTiposCliente indiceTipos = new IndiceTiposCliente();
+                    jtfnfTipo.setText(String.valueOf(tipo.getTipo()));
+                    jtfnfCentro.setText(String.valueOf(tipo.getCentro()));
+                    jtffNombre.setText(tipo.getDescripcion());
+                    jtfnfRepresentante.setText(String.valueOf(tipo.getRepresentante()));
+                                        
+                    Representante representante = new Representante();
+                    representante.read(DatosComunes.eEmpresa, tipo.getCentro(), tipo.getRepresentante());
+                    jlNombreRepresentante.setText(representante.getApellidosRazonSocial());
+                    
+
+                }
+            } catch (SQLException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    private void salir() {
+        this.dispose();
+        frameMenu.setEnabled(true);
+    }    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JButton jbAdelante;
     private javax.swing.JButton jbAtras;
     private javax.swing.JButton jbBorrar;
     private javax.swing.JButton jbBuscarTipo;
+    private javax.swing.JButton jbEstadisticas;
     private javax.swing.JButton jbGrabar;
     private javax.swing.JButton jbPresupuesto;
     private javax.swing.JButton jbSalir;
     private javax.swing.JLabel jlCentro;
     private javax.swing.JLabel jlNombre;
+    private javax.swing.JLabel jlNombreRepresentante;
     private javax.swing.JLabel jlTipo;
     private javax.swing.JTextField jtffNombre;
     private javax.swing.JTextField jtfnfCentro;
+    private javax.swing.JTextField jtfnfRepresentante;
     private javax.swing.JTextField jtfnfTipo;
     // End of variables declaration//GEN-END:variables
 }
