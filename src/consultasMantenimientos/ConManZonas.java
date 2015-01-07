@@ -346,7 +346,7 @@ public class ConManZonas extends EscapeDialog {
 
     private void jbEstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEstadisticasActionPerformed
         // Primer argumento Cuenta = "01"
-        // Tercer argumento 2 porque son Proveedores/Acreedores       
+        // Tercer argumento 5 porque son Zonas de Cliente
         new IndiceAcumuladosEstadisticos("01", jtffNombre.getText().trim(), 5);
     }//GEN-LAST:event_jbEstadisticasActionPerformed
 
@@ -386,9 +386,12 @@ public class ConManZonas extends EscapeDialog {
              
                 registrosBorrados = ps.executeUpdate(sqlDelete);
                 
-                if (registrosBorrados > 0)
-                     JOptionPane.showMessageDialog(null,
+                if (registrosBorrados > 0){
+                    JOptionPane.showMessageDialog(null,
                             "Zona Borrada!!!");
+                    borrarPantalla();
+                    cargaInicial();
+                }
             } catch (SQLException e) {
                 registrosBorrados = -1;
                 if (DatosComunes.enDebug) {
