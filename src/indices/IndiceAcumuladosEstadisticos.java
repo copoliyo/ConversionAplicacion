@@ -536,7 +536,63 @@ public class IndiceAcumuladosEstadisticos {
                 jtEstadistico.getColumn("F.%/A").setCellRenderer(tcr2);
                 jtEstadistico.getColumn("F.Año Ant.").setCellRenderer(tcr2);
                 break;
-                // Clientes
+            // Tipos de cliente
+            case 4:
+                lZonaIzquierda.setText("Ventas__________");
+                lZonaCentro.setText("Beneficio____________");
+                lZonaDerecha.setText("Presupuesto_________");
+                modeloTabla.addColumn("Mes");
+                modeloTabla.addColumn("V.Año");
+                modeloTabla.addColumn("V.%/A");
+                modeloTabla.addColumn("V.Año Ant.");
+                modeloTabla.addColumn("B.Año");
+                modeloTabla.addColumn("B.%/V");
+                modeloTabla.addColumn("B.%/A");
+                modeloTabla.addColumn("B.Año Ant.");
+                modeloTabla.addColumn("B.%/V Ant.");
+                modeloTabla.addColumn("I.%/V");
+                modeloTabla.addColumn("I.Año");
+                modeloTabla.addColumn("I.%/A");
+                modeloTabla.addColumn("I.Año Ant.");
+
+                jtEstadistico = new JTable(modeloTabla);
+                jtEstadistico.setFont(Apariencia.cambiaFuente(Font.PLAIN, 13));
+
+                //TableColumn columna = new TableColumn();
+                // Establecemos el ancho
+                jtEstadistico.getColumn("Mes").setMaxWidth(80);
+                jtEstadistico.getColumn("V.Año").setMaxWidth(70);
+                jtEstadistico.getColumn("V.%/A").setMaxWidth(40);
+                jtEstadistico.getColumn("V.Año Ant.").setMaxWidth(70);
+                jtEstadistico.getColumn("B.Año").setMaxWidth(70);
+                jtEstadistico.getColumn("B.%/V").setMaxWidth(50);
+                jtEstadistico.getColumn("B.%/A").setMaxWidth(40);
+                jtEstadistico.getColumn("B.Año Ant.").setMaxWidth(70);
+                jtEstadistico.getColumn("B.%/V Ant.").setMaxWidth(40);
+                jtEstadistico.getColumn("I.%/V").setMaxWidth(40);
+                jtEstadistico.getColumn("I.Año").setMaxWidth(70);
+                jtEstadistico.getColumn("I.%/A").setMaxWidth(40);
+                jtEstadistico.getColumn("I.Año Ant.").setMaxWidth(70);
+
+                jtEstadistico.setRowHeight(25);
+
+                // Hacemos que la comluna del saldo se alinee a la derecha y
+                // que salga en rojo si es negativa.
+                tcr2 = new TableCellRenderer();
+                jtEstadistico.getColumn("V.Año").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("V.%/A").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("V.Año Ant.").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("B.Año").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("B.%/V").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("B.%/A").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("B.Año Ant.").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("B.%/V Ant.").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("I.%/V").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("I.Año").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("I.%/A").setCellRenderer(tcr2);
+                jtEstadistico.getColumn("I.Año Ant.").setCellRenderer(tcr2);
+                break;    
+            // Zonas de Cliente
             case 5:
                 lZonaIzquierda.setText("Ventas__________");
                 lZonaCentro.setText("Beneficio____________");
@@ -645,8 +701,11 @@ public class IndiceAcumuladosEstadisticos {
             case 2:
                 cargaDatosProveedorAcreedor();
                 break;
+            // Tipos Clientes
+            case 4:
+            // Zonas Clientes
             case 5:
-                cargaDatosZonasCliente();
+                cargaDatosZonasTiposCliente();
                 break;
         }
 
@@ -1332,7 +1391,7 @@ public class IndiceAcumuladosEstadisticos {
         }
     }
 
-    public void cargaDatosZonasCliente() {
+    public void cargaDatosZonasTiposCliente() {
         borrarTabla();
 
         Object fila[] = {"", "", "", "", "", "", "", "", "", "", "", "", ""};
@@ -1682,9 +1741,11 @@ public class IndiceAcumuladosEstadisticos {
                 case 2:
                     cargaDatosProveedorAcreedor();
                     break;
+                // Tipos Clientes
+                case 4:
                 // Zonas Cliente
                 case 5:
-                    cargaDatosZonasCliente();
+                    cargaDatosZonasTiposCliente();
                     break;
             }
         }
@@ -1704,9 +1765,11 @@ public class IndiceAcumuladosEstadisticos {
                 case 2:
                     cargaDatosProveedorAcreedor();
                     break;
+                // Tipos Clientes
+                case 4:
                 // Zonas Cliente
                 case 5:
-                    cargaDatosZonasCliente();
+                    cargaDatosZonasTiposCliente();
                     break;
             }
         }
