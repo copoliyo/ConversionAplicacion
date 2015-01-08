@@ -28,7 +28,7 @@ import util.Apariencia;
 import util.BaseDatos;
 import util.EscapeDialog;
 
-import com.mysql.jdbc.ResultSet;
+import java.sql.ResultSet;
 
 public class IndiceRutasCliente {
 	EscapeDialog pantalla;
