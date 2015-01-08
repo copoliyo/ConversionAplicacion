@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 
 import util.Cadena;
 
-import com.mysql.jdbc.ResultSet;
+import java.sql.ResultSet;
 
 
 public class MovimientoImporte {

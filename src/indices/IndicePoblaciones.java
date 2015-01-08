@@ -41,7 +41,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import com.mysql.jdbc.ResultSet;
+import java.sql.ResultSet;
 
 import tablas.CpPais;
 import tablas.CpPoblacion;
