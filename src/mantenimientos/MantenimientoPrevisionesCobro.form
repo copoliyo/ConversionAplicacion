@@ -777,6 +777,9 @@
           <Image iconType="3" name="/Imagenes/SALIR.gif"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbSalirActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbDeduccionAbonos">
       <Properties>

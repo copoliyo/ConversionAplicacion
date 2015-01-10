@@ -6,8 +6,12 @@
 package test;
 
 import general.DatosComunes;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import mantenimientos.MantenimientoPrevisionesCobro;
 
 /**
@@ -22,13 +26,34 @@ public class TestMantenimientoPrevisionesCobro {
 		// TODO Auto-generated method stub
 		new DatosComunes("MV");
 		// SOLO HAY QUE UTILIZARLO UNA VEZ!!!!!!!!!!
-		try
+	/*	try
         {
             UIManager.setLookAndFeel("org.jvnet.substance.skin.Substance"+"Sahara"+"LookAndFeel");        	    	
         } catch(Exception e)
         {
             System.out.println("Falló la carga del tema");
         } 
-		MantenimientoPrevisionesCobro mpc = new MantenimientoPrevisionesCobro(new JFrame(), false);
-	}
+		MantenimientoPrevisionesCobro mpc = new MantenimientoPrevisionesCobro(new JFrame());
+	}*/
+        
+         try {
+                    try {
+                        UIManager.setLookAndFeel("org.jvnet.substance.skin.Substance"+"Sahara"+"LookAndFeel");
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InstantiationException ex) {
+                        Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+        } catch (UnsupportedLookAndFeelException e) {
+            System.out.println(e);
+        }
+         
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+               new MantenimientoPrevisionesCobro(new JFrame());
+            }
+        });
+    }
 }

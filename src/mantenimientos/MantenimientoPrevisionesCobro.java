@@ -5,18 +5,45 @@
  */
 package mantenimientos;
 
+import general.MysqlConnect;
+import java.sql.ResultSet;
+import javax.swing.JFrame;
+
 /**
  *
  * @author Txus
  */
 public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
+    // Con esta variable definimos si estamos en una consulta (TRUE) o en
+    // un mantenimiento (FALSE). Nos servirá para tener un sólo programa
+    // para algunas Consultas/Mantenimientos que pueden compartir las 
+    // mismas pantallas.
 
+    private static boolean consulta;
+    private static boolean enCreacion = false;
+
+    public static ResultSet rs = null;
+    public static MysqlConnect m = null;
+   
+
+    // Definiciones de componentes de pantalla
+    public JFrame frameMenu = null;
+    
+    
+    
     /**
      * Creates new form MantenimientoPrevisionesCobro
      */
     public MantenimientoPrevisionesCobro(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+    }
+    
+    public MantenimientoPrevisionesCobro(JFrame parentFrame) {
+        frameMenu = parentFrame;
+        initComponents();
+        //borrarPantalla();
+        //cargaInicial();
         this.setVisible(true);
     }
 
@@ -387,6 +414,11 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
 
         jbSalir.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/SALIR.gif"))); // NOI18N
+        jbSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSalirActionPerformed(evt);
+            }
+        });
 
         jbDeduccionAbonos.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbDeduccionAbonos.setText("Deducc.Abonos");
@@ -488,47 +520,14 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_jbBuscarRepresentanteActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MantenimientoPrevisionesCobro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MantenimientoPrevisionesCobro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MantenimientoPrevisionesCobro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MantenimientoPrevisionesCobro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
+        salir();
+    }//GEN-LAST:event_jbSalirActionPerformed
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                MantenimientoPrevisionesCobro dialog = new MantenimientoPrevisionesCobro(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+    private void salir() {
+        this.dispose();
+        frameMenu.setEnabled(true);
+    }    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanelDatosDomiciliacion;
