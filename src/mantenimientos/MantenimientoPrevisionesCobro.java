@@ -13,7 +13,9 @@ import javax.swing.JFrame;
 import tablas.Cuenta;
 import tablas.EfectoCobrar;
 import tablas.Representante;
+import util.Apariencia;
 import util.BaseDatos;
+import util.JTextFieldFecha;
 
 /**
  *
@@ -49,6 +51,7 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
     }
     
     public MantenimientoPrevisionesCobro(JFrame parentFrame) {
+        super();
         frameMenu = parentFrame;
         initComponents();
         borrarPantalla();
@@ -117,6 +120,7 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         jbGrabar = new javax.swing.JButton();
         jbAtras = new javax.swing.JButton();
         jbAdelante = new javax.swing.JButton();
+        jbNuevo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Mantenimiento Previsiones de Cobro");
@@ -125,6 +129,11 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         jlVencimiento.setText("Vencimiento");
 
         jtffVencimiento.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtffVencimiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtffVencimientoActionPerformed(evt);
+            }
+        });
 
         jbBuscarFechaVencimiento.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbBuscarFechaVencimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BUSCAR.gif"))); // NOI18N
@@ -207,7 +216,7 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
 
         jtfnfRepresentante.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
 
-        jPanelDatosDomiciliacion.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Domicialición", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("MS Reference Sans Serif", 1, 14), new java.awt.Color(0, 0, 255))); // NOI18N
+        jPanelDatosDomiciliacion.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Domiciliación", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("MS Reference Sans Serif", 1, 14), new java.awt.Color(0, 0, 255))); // NOI18N
 
         jlBancoDomiciliacion.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlBancoDomiciliacion.setText("Banco");
@@ -333,7 +342,7 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
                                 .addComponent(jPanelDatosDomiciliacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
-                                .addGap(11, 11, 11)
+                                .addGap(141, 141, 141)
                                 .addComponent(jlNombreCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addContainerGap())))
                     .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
@@ -375,12 +384,13 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
             jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlCliente)
-                    .addComponent(jbBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtfnfCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jlNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jlCliente)
+                        .addComponent(jbBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jtfnfCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(17, 17, 17)
                 .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
                         .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -453,6 +463,11 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
 
         jbGrabar.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbGrabar.setText("Grabar");
+        jbGrabar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbGrabarActionPerformed(evt);
+            }
+        });
 
         jbAtras.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Atras.gif"))); // NOI18N
@@ -467,6 +482,13 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         jbAdelante.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbAdelanteActionPerformed(evt);
+            }
+        });
+
+        jbNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Nuevo.gif"))); // NOI18N
+        jbNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbNuevoActionPerformed(evt);
             }
         });
 
@@ -485,7 +507,9 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
                                 .addComponent(jbBuscarFechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(4, 4, 4)
                                 .addComponent(jtffVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(59, 59, 59)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(40, 40, 40)
                                 .addComponent(jlEfecto)
                                 .addGap(18, 18, 18)
                                 .addComponent(jtfnfEfecto, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -518,19 +542,24 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jtffVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jlEfecto)
-                        .addComponent(jtfnfEfecto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jlSituacion)
-                        .addComponent(jcbxSituacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jlCentro)
-                        .addComponent(jtfnfCentro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jlVencimiento)
-                    .addComponent(jbBuscarFechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jtffVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jlEfecto)
+                                .addComponent(jtfnfEfecto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jlSituacion)
+                                .addComponent(jcbxSituacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jlCentro)
+                                .addComponent(jtfnfCentro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jlVencimiento)
+                            .addComponent(jbBuscarFechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jbNuevo)))
+                .addGap(18, 18, 18)
                 .addComponent(jPanelDatosPrevision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -542,7 +571,7 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
                         .addComponent(jbDepuracionRiesgo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jbDeduccionAbonos, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -561,18 +590,19 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
 	int numeroEfecto = Integer.valueOf(jtfnfEfecto.getText());
         
         String strSql = "SELECT * FROM EFECOB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' ";
-              strSql += "AND EFECOB_CENTRO = " + jtfnfCentro.getText().trim() + " ";
+              //strSql += "AND EFECOB_CENTRO = " + jtfnfCentro.getText().trim() + " ";
               strSql += "AND EFECOB_VENCIM = " + fechaVencimiento + " ";
               strSql += "AND EFECOB_EFECTO > " + numeroEfecto + " ";
               strSql += "ORDER BY EFECOB_VENCIM, EFECOB_EFECTO LIMIT 1";
               
         if(BaseDatos.countRows(strSql) == 0){
             strSql = "SELECT * FROM EFECOB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' ";
-            strSql += "AND EFECOB_CENTRO = " + jtfnfCentro.getText().trim() + " ";
+            //strSql += "AND EFECOB_CENTRO = " + jtfnfCentro.getText().trim() + " ";
             strSql += "AND EFECOB_VENCIM > " + fechaVencimiento + " ";
             strSql += "ORDER BY EFECOB_VENCIM, EFECOB_EFECTO LIMIT 1";
         }
-              
+             
+        //Apariencia.mensajeInformativo(5, strSql);
         if(BaseDatos.countRows(strSql) > 0)
             cargaDatos(strSql);
         
@@ -583,18 +613,19 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
 	int numeroEfecto = Integer.valueOf(jtfnfEfecto.getText());
         
         String strSql = "SELECT * FROM EFECOB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' ";
-              strSql += "AND EFECOB_CENTRO = " + jtfnfCentro.getText().trim() + " ";
+              //strSql += "AND EFECOB_CENTRO = " + jtfnfCentro.getText().trim() + " ";
               strSql += "AND EFECOB_VENCIM = " + fechaVencimiento + " ";
               strSql += "AND EFECOB_EFECTO < " + numeroEfecto + " ";
               strSql += "ORDER BY EFECOB_VENCIM DESC, EFECOB_EFECTO DESC LIMIT 1";
               
         if(BaseDatos.countRows(strSql) == 0){
             strSql = "SELECT * FROM EFECOB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' ";
-            strSql += "AND EFECOB_CENTRO = " + jtfnfCentro.getText().trim() + " ";
+            //strSql += "AND EFECOB_CENTRO = " + jtfnfCentro.getText().trim() + " ";
             strSql += "AND EFECOB_VENCIM < " + fechaVencimiento + " ";
             strSql += "ORDER BY EFECOB_VENCIM DESC, EFECOB_EFECTO DESC LIMIT 1";
         }
               
+        //Apariencia.mensajeInformativo(5, strSql);
         if(BaseDatos.countRows(strSql) > 0)
             cargaDatos(strSql);
     }//GEN-LAST:event_jbAtrasActionPerformed
@@ -611,6 +642,28 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         //cargaPorFechaYnumeroVencimiento(efectoCobrar.getVencimiento(), efectoCobrar.getEfecto());
 
     }//GEN-LAST:event_jbBuscarFechaVencimientoActionPerformed
+
+    private void jbNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNuevoActionPerformed
+        enCreacion = true;
+        borrarPantalla();
+    }//GEN-LAST:event_jbNuevoActionPerformed
+
+    private void jbGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGrabarActionPerformed
+        enCreacion = false;
+    }//GEN-LAST:event_jbGrabarActionPerformed
+
+    private void jtffVencimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtffVencimientoActionPerformed
+        
+        int fechaVencimiento, efecto;
+        
+        jtffVencimiento.getf
+        // Si tenemos una fecha en la fecha de Vencimiento y un número de efecto distinto de 0
+        if(jtffVencimiento.getText().trim().length() > 0 &&
+           Integer.valueOf(jtfnfEfecto.getText()) > 0){
+
+            
+        }
+    }//GEN-LAST:event_jtffVencimientoActionPerformed
 
     private void salir() {
         this.dispose();
@@ -703,6 +756,7 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
     private javax.swing.JButton jbDeduccionAbonos;
     private javax.swing.JButton jbDepuracionRiesgo;
     private javax.swing.JButton jbGrabar;
+    private javax.swing.JButton jbNuevo;
     private javax.swing.JButton jbSalir;
     private javax.swing.JCheckBox jcbReciboEmitido;
     private javax.swing.JComboBox jcbxSituacion;
@@ -728,7 +782,7 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
     private javax.swing.JTextField jtffFechaCobro;
     private javax.swing.JTextField jtffFechaFactura;
     private javax.swing.JTextField jtffFechaRemesa;
-    private javax.swing.JTextField jtffVencimiento;
+    public javax.swing.JTextField jtffVencimiento;
     private javax.swing.JTextField jtfnf2dImporte;
     private javax.swing.JTextField jtfnfBancoDomiciliacion;
     private javax.swing.JTextField jtfnfBancoNegociacion;

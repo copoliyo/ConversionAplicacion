@@ -482,8 +482,7 @@ public class MantenimientoPrevisionesPago {
 	class BotonBorrarListener implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
-
+		public void actionPerformed(ActionEvent e) {                        
 			int centro = DatosComunes.centroCont;
 			int fechaEfecto = util.Cadena.cadenaAfecha(jtffeVencimiento.getText());
 			int numeroEfecto = Integer.valueOf(jtfnfEfecto.getText());

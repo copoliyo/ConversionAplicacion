@@ -15,18 +15,34 @@ import javax.swing.JTextField;
  * */
  
 
-public class JTextFieldFecha extends JTextField implements KeyListener, ActionListener, FocusListener{
+public class JTextFieldFecha extends javax.swing.JTextField implements KeyListener, ActionListener, FocusListener{
 	
 	private String strFechaAAAAMMDD = "";
 	private int fechaAAAAMMDD = 0;
 
 	
 	// Es en el constructor de la clase donde tenemos que añadir los Listeners.
-	public JTextFieldFecha(){
+	public JTextFieldFecha(){               
 		this.addKeyListener(this);
 		this.addActionListener(this);
 		this.addFocusListener(this);
 	}
+        
+        public void setTextoAyuda(String textoAyuda, int tamaño){
+		this.setToolTipText("<html><font size='" + 
+				            tamaño +
+				            "'><strong>" + 
+				            textoAyuda + 
+				            "</strong></font></html>");
+	}
+	
+	public String getStrFechaAAAAMMDD() {
+		return strFechaAAAAMMDD;
+	}
+	public int getFechaAAAAMMDD() {
+		return fechaAAAAMMDD;
+	}
+        
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (Fecha.fechaValida(this.getText())){		
@@ -105,18 +121,5 @@ public class JTextFieldFecha extends JTextField implements KeyListener, ActionLi
 			this.requestFocus(true);
 	}
 
-	public void setTextoAyuda(String textoAyuda, int tamaño){
-		this.setToolTipText("<html><font size='" + 
-				            tamaño +
-				            "'><strong>" + 
-				            textoAyuda + 
-				            "</strong></font></html>");
-	}
 	
-	public String getStrFechaAAAAMMDD() {
-		return strFechaAAAAMMDD;
-	}
-	public int getFechaAAAAMMDD() {
-		return fechaAAAAMMDD;
-	}
 }
