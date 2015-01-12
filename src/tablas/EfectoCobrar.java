@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
+import util.Apariencia;
+import util.BaseDatos;
 
 import util.Cadena;
 
@@ -134,6 +136,32 @@ public class EfectoCobrar {
 			"Error en lectura fichero de EfectoCobrar!!!");
 			if(DatosComunes.enDebug)
 				e.printStackTrace();
+		}
+	}
+        
+        // Con este método leemos una cuenta pasando tan sólo una consulta SQL
+	public void read(String strSql){
+
+		ResultSet rsSql = null;
+		MysqlConnect m = null;
+
+		m = MysqlConnect.getDbCon();
+
+		if(BaseDatos.countRows(strSql) != 0){
+			try {
+				rsSql = m.query(strSql);				
+				// Como ya tenemos el ResultSet se lo pasamos al mérodo 'read(ResultSet rs)'.
+				if(rsSql.next()){
+					this.read(rsSql);
+					// Cerramos para evitar gastar memoria
+					rsSql.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				if(DatosComunes.enDebug)
+					e.printStackTrace();
+				Apariencia.mensajeInformativo(5, "Error en lectura fichero de Efecto a Cobrar");				
+			}
 		}
 	}
 
