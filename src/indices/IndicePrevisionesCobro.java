@@ -73,6 +73,8 @@ public class IndicePrevisionesCobro {
 	TableCellRenderer tcr2;
 	boolean consultaTotal = false;
 	double dSaldo = 0.0;
+        
+        private static EfectoCobrar efectoCobrar = new EfectoCobrar();
 	
 	ResultSet rs = null;
 	MysqlConnect m = null;
@@ -273,9 +275,15 @@ public class IndicePrevisionesCobro {
 		
 		// Necesitamos saber las que no tienen fecha de Cobro, esto es, que están pendientes
 		// OJO a la clausula ORDER!!!!!A
-		String strSql = "SELECT * FROM EFECOB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND " +
-				        " EFECOB_CENTRO = " + DatosComunes.centroCont + " AND ";
-		
+		String strSql = "SELECT * FROM EFECOB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND ";
+                
+                /* El indice del programa original pasa del CENTRO????
+                if(DatosComunes.centroCont != 0)
+                    strSql = strSql + " EFECOB_CENTRO = " + DatosComunes.centroCont + " AND ";
+                else
+                    strSql = strSql + " AND ";
+                */                         
+                    
 		if(strCuenta.length() > 0)
 			strSql += " EFECOB_CUENTA = '" + strCuenta + "' AND ";
 		
@@ -375,7 +383,7 @@ public class IndicePrevisionesCobro {
 						modeloTabla.addRow(fila);
 						numeroFilas++;
 					}else{
-						if(fechaVencimiento > fechaFiltro){
+						if(fechaVencimiento >= fechaFiltro){
 							modeloTabla.addRow(fila);
 							numeroFilas++;
 						}
@@ -422,5 +430,21 @@ public class IndicePrevisionesCobro {
 			cargaPrevisionesCobro();
 		}
 		
+	}
+        
+        public EfectoCobrar getEfectoCobrar(){
+		try {
+			rs.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		pantalla.dispose();
+		return efectoCobrar;
+	}
+        
+        
+        public void muestra(){
+		pantalla.setVisible(true);
 	}
 }
