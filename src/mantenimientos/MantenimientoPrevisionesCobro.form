@@ -42,10 +42,10 @@
                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                               <Component id="jlSituacion" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jcbSituacion" min="-2" pref="104" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                              <Component id="jcbxSituacion" min="-2" pref="135" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                               <Component id="jlCentro" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jtfnfCentro" min="-2" pref="34" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jPanelDatosPrevision" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -82,7 +82,7 @@
                       <Component id="jlEfecto" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jtfnfEfecto" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jlSituacion" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jcbSituacion" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jcbxSituacion" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jlCentro" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jtfnfCentro" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -136,6 +136,9 @@
           <Image iconType="3" name="/Imagenes/BUSCAR.gif"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbBuscarFechaVencimientoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jlEfecto">
       <Properties>
@@ -163,7 +166,7 @@
         <Property name="text" type="java.lang.String" value="Situaci&#xf3;n"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JComboBox" name="jcbSituacion">
+    <Component class="javax.swing.JComboBox" name="jcbxSituacion">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="MS Reference Sans Serif" size="14" style="1"/>
@@ -232,21 +235,23 @@
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="jtfnfCliente" min="-2" pref="82" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                                  <Component id="jlNombreCliente" max="32767" attributes="0"/>
-                                  <EmptySpace min="-2" pref="389" max="-2" attributes="0"/>
+                              <Component id="jtfnfCliente" alignment="0" min="-2" pref="106" max="-2" attributes="0"/>
+                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="jtfnf2dImporte" alignment="0" pref="88" max="32767" attributes="0"/>
+                                  <Component id="jtffFechaFactura" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jtfnfFactura" alignment="0" max="32767" attributes="0"/>
                               </Group>
+                          </Group>
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="jtffFechaFactura" pref="82" max="32767" attributes="0"/>
-                                      <Component id="jtfnfFactura" max="32767" attributes="0"/>
-                                      <Component id="jtfnf2dImporte" max="32767" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
                                   <Component id="jPanelDatosDomiciliacion" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                                  <Component id="jlNombreCliente" max="32767" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -284,12 +289,16 @@
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jtfnfRemesaDia" min="-2" pref="36" max="-2" attributes="0"/>
-                                      <Component id="jtfnfRepresentante" min="-2" pref="36" max="-2" attributes="0"/>
-                                      <Component id="jtffFechaRemesa" alignment="0" min="-2" pref="80" max="-2" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <Component id="jtfnfRepresentante" min="-2" pref="36" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jlNombreRepresentante" min="-2" pref="179" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Component id="jtffFechaRemesa" alignment="0" min="-2" pref="91" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace pref="518" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -303,7 +312,7 @@
                       <Component id="jlCliente" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jbBuscarCliente" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                       <Component id="jtfnfCliente" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                      <Component id="jlNombreCliente" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="jlNombreCliente" alignment="0" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -354,12 +363,13 @@
                               <Component id="jtfnfRemesaDia" alignment="0" min="-2" pref="25" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jlRepresentante" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jbBuscarRepresentante" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="jtfnfRepresentante" alignment="0" min="-2" pref="25" max="-2" attributes="0"/>
+                              <Component id="jtfnfRepresentante" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jlNombreRepresentante" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -766,6 +776,13 @@
             </Property>
           </Properties>
         </Component>
+        <Component class="javax.swing.JLabel" name="jlNombreRepresentante">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="MS Reference Sans Serif" size="14" style="1"/>
+            </Property>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JButton" name="jbSalir">
@@ -822,6 +839,9 @@
           <Image iconType="3" name="/Imagenes/Atras.gif"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbAtrasActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbAdelante">
       <Properties>
@@ -832,6 +852,9 @@
           <Image iconType="3" name="/Imagenes/Adelante.gif"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbAdelanteActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
