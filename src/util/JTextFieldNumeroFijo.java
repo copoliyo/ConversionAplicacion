@@ -11,6 +11,12 @@ import javax.swing.JTextField;
 
 public class JTextFieldNumeroFijo extends JTextField implements KeyListener, ActionListener, FocusListener {
 	private int longitudMaxima = 0;
+        
+        public JTextFieldNumeroFijo(){	
+		this.addKeyListener(this);
+		this.addActionListener(this);
+		this.addFocusListener(this);
+	}
 	// Pasamos un par�metro para indicar la longitud m�xima de los datos que
 	// puede albergar el JTextField.
 	// Es en el constructor de la clase donde tenemos que a�adir los Listeners.
