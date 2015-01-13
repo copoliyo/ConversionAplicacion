@@ -117,7 +117,7 @@ public class MantenimientoPrevisionesPago {
 		jtffeVencimiento.setBounds(150, 15, 90, 25);
 		jtffeVencimiento.addActionListener(new FechaVencimientoListener());
 		jtffeVencimiento.setFont(Apariencia.cambiaFuente());
-		pantalla.add(jtffeVencimiento);
+		pantalla.add(jtffeVencimiento);              
 					
 		lEfecto = new JLabel("Efecto");
 		lEfecto.setBounds(280, 15, 60, 20);

@@ -33,9 +33,9 @@
                               <Component id="jlVencimiento" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jbBuscarFechaVencimiento" min="-2" pref="30" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                              <Component id="jtffVencimiento" min="-2" pref="90" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                              <Component id="jtffVencimiento" min="-2" pref="88" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jbNuevo" min="-2" pref="39" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               <Component id="jlEfecto" min="-2" max="-2" attributes="0"/>
@@ -82,7 +82,6 @@
                       <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jtffVencimiento" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jlEfecto" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jtfnfEfecto" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jlSituacion" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -92,6 +91,7 @@
                           </Group>
                           <Component id="jlVencimiento" min="-2" max="-2" attributes="0"/>
                           <Component id="jbBuscarFechaVencimiento" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="jtffVencimiento" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
@@ -127,21 +127,6 @@
         <Property name="text" type="java.lang.String" value="Vencimiento"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="jtffVencimiento">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="MS Reference Sans Serif" size="14" style="1"/>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtffVencimientoActionPerformed"/>
-      </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldFecha()"/>
-        <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="MantenimientoPrevisionesCobro_jtffVencimiento"/>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-      </AuxValues>
-    </Component>
     <Component class="javax.swing.JButton" name="jbBuscarFechaVencimiento">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -169,6 +154,9 @@
           <Font name="MS Reference Sans Serif" size="14" style="1"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtfnfEfectoActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldNumeroFijo(4)"/>
       </AuxValues>
@@ -252,8 +240,8 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jtfnfCliente" alignment="0" min="-2" pref="106" max="-2" attributes="0"/>
                               <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="jtfnf2dImporte" alignment="0" pref="88" max="32767" attributes="0"/>
                                   <Component id="jtffFechaFactura" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jtfnf2dImporte" alignment="0" max="32767" attributes="0"/>
                                   <Component id="jtfnfFactura" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
@@ -274,14 +262,14 @@
                           <Component id="jlRemesaDia" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jcbReciboEmitido" min="-2" max="-2" attributes="0"/>
-                              <Group type="102" attributes="0">
+                              <Component id="jcbReciboEmitido" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
                                   <Component id="jlFechaCobro" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jtffFechaCobro" min="-2" pref="104" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                                  <Component id="jtffFechaCobro" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace min="-2" pref="157" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="149" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -309,7 +297,7 @@
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="jlNombreRepresentante" min="-2" pref="179" max="-2" attributes="0"/>
                                       </Group>
-                                      <Component id="jtffFechaRemesa" alignment="0" min="-2" pref="91" max="-2" attributes="0"/>
+                                      <Component id="jtffFechaRemesa" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -341,7 +329,7 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jlFechaFactura" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jtffFechaFactura" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                              <Component id="jtffFechaFactura" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -364,17 +352,12 @@
                   </Group>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                                  <Component id="jtffFechaRemesa" min="-2" pref="25" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                                  <Component id="jlFechaRemesa" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jlFechaRemesa" min="-2" max="-2" attributes="0"/>
+                              <Component id="jtffFechaRemesa" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jlRemesaDia" min="-2" max="-2" attributes="0"/>
                               <Component id="jtfnfRemesaDia" alignment="0" min="-2" pref="25" max="-2" attributes="0"/>
@@ -391,10 +374,10 @@
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jtffFechaCobro" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                               <Component id="jlFechaCobro" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jtffFechaCobro" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jcbReciboEmitido" min="-2" max="-2" attributes="0"/>
@@ -460,16 +443,6 @@
             <Property name="text" type="java.lang.String" value="Fecha Factura"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jtffFechaFactura">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="MS Reference Sans Serif" size="14" style="1"/>
-            </Property>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldFecha()"/>
-          </AuxValues>
-        </Component>
         <Component class="javax.swing.JLabel" name="jlImporte">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -523,16 +496,6 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Fecha Remesa"/>
           </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="jtffFechaRemesa">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="MS Reference Sans Serif" size="14" style="1"/>
-            </Property>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldFecha()"/>
-          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jlRemesaDia">
           <Properties>
@@ -768,16 +731,6 @@
             <Property name="text" type="java.lang.String" value="Fecha Cobro"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jtffFechaCobro">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="MS Reference Sans Serif" size="14" style="1"/>
-            </Property>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldFecha()"/>
-          </AuxValues>
-        </Component>
         <Component class="javax.swing.JCheckBox" name="jcbReciboEmitido">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -795,6 +748,30 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jlNombreRepresentante">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="MS Reference Sans Serif" size="14" style="1"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="util.JTextFieldFecha" name="jtffFechaFactura">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="00.00.00"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="MS Reference Sans Serif" size="14" style="1"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="util.JTextFieldFecha" name="jtffFechaRemesa">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="00.00.00"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="MS Reference Sans Serif" size="14" style="1"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="util.JTextFieldFecha" name="jtffFechaCobro">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="00.00.00"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="MS Reference Sans Serif" size="14" style="1"/>
             </Property>
@@ -884,6 +861,18 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbNuevoActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="util.JTextFieldFecha" name="jtffVencimiento">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="00.00.00"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="MS Reference Sans Serif" size="14" style="1"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtffVencimientoFocusLost"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtffVencimientoActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
