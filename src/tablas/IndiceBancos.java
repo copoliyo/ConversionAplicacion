@@ -13,7 +13,10 @@ import util.Apariencia;
 import util.BaseDatos;
 import util.Cadena;
 
-
+/**
+ *
+ * @author Txus
+ */
 public class IndiceBancos {
 	private String empresa;
 	private int banco;
@@ -21,7 +24,10 @@ public class IndiceBancos {
 	private String descripcion;
 	private int provincia;
 
-	public IndiceBancos(){
+    /**
+     *
+     */
+    public IndiceBancos(){
 		empresa = DatosComunes.eEmpresa;
 		banco = 0;
 		sucursal = "";
@@ -29,7 +35,11 @@ public class IndiceBancos {
 		provincia = 0;
 	}
 
-	public IndiceBancos(ResultSet rs){
+    /**
+     *
+     * @param rs
+     */
+    public IndiceBancos(ResultSet rs){
 		try{
 			if(rs.next() == true){			
 				empresa = rs.getString("EMPRESA").trim();
@@ -46,7 +56,11 @@ public class IndiceBancos {
 		}		
 	}
 
-	public void read(ResultSet rs){
+    /**
+     *
+     * @param rs
+     */
+    public void read(ResultSet rs){
 		try{			
 			empresa = rs.getString("EMPRESA").trim();
 			banco = rs.getInt("BCOIND_BANCO");
@@ -62,7 +76,12 @@ public class IndiceBancos {
 	}
 
 	// Con este método leemos una banco o sucursal pasando tan sólo una consulta SQL
-	public void read(String strSql){
+
+    /**
+     *
+     * @param strSql
+     */
+    	public void read(String strSql){
 
 		ResultSet rsSql = null;
 		MysqlConnect m = null;
@@ -86,8 +105,53 @@ public class IndiceBancos {
 			}
 		}
 	}
+        
+        
+
+    /**
+     * Con este método leemos una banco o sucursal pasando el numero del 
+     * Banco y de la Sucursal, devuelve un objeto de tipo IndiceBancos
+     * @param numeroBanco
+     * @param numeroSucursal
+     * @return null si no lo encuentra o un objeto IndiceBancos si lo encuentra.
+     */
+    	public IndiceBancos read(int numeroBanco, int numeroSucursal){
+
+                String strSql;
+            
+		ResultSet rsSql = null;
+		MysqlConnect m = null;
+
+		m = MysqlConnect.getDbCon();
+
+                strSql = "SELECT * FROM BCOIND WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND ";
+		strSql += "BCOIND_BANCO = " + numeroBanco + " AND ";
+                strSql += "BCOIND_SUCURSAL = " + numeroSucursal;
+		                
+		if(BaseDatos.countRows(strSql) != 0){
+			try {
+				rsSql = m.query(strSql);				
+				// Como ya tenemos el ResultSet se lo pasamos al mérodo 'read(ResultSet rs)'.
+				if(rsSql.next()){
+					this.read(rsSql);
+					// Cerramos para evitar gastar memoria
+					rsSql.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				if(DatosComunes.enDebug)
+					e.printStackTrace();
+                                return null;
+			}
+		}
+                
+                return this;
+	}
 	
-	public void write(){
+    /**
+     *
+     */
+    public void write(){
 		PreparedStatement ps = null;
    
 		String sqlInsert = "INSERT INTO BCOIND " +
@@ -132,43 +196,83 @@ public class IndiceBancos {
 		}
 	}
 	
-	public String getEmpresa() {
+    /**
+     *
+     * @return
+     */
+    public String getEmpresa() {
 		return empresa;
 	}
 
-	public void setEmpresa(String empresa) {
+    /**
+     *
+     * @param empresa
+     */
+    public void setEmpresa(String empresa) {
 		this.empresa = empresa;
 	}
 
-	public int getBanco() {
+    /**
+     *
+     * @return
+     */
+    public int getBanco() {
 		return banco;
 	}
 
-	public void setBanco(int banco) {
+    /**
+     *
+     * @param banco
+     */
+    public void setBanco(int banco) {
 		this.banco = banco;
 	}
 
-	public String getSucursal() {
+    /**
+     *
+     * @return
+     */
+    public String getSucursal() {
 		return sucursal;
 	}
 
-	public void setSucursal(String sucursal) {
+    /**
+     *
+     * @param sucursal
+     */
+    public void setSucursal(String sucursal) {
 		this.sucursal = sucursal;
 	}
 
-	public String getDescripcion() {
+    /**
+     *
+     * @return
+     */
+    public String getDescripcion() {
 		return descripcion;
 	}
 
-	public void setDescripcion(String descripcion) {
+    /**
+     *
+     * @param descripcion
+     */
+    public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
 
-	public int getProvincia() {
+    /**
+     *
+     * @return
+     */
+    public int getProvincia() {
 		return provincia;
 	}
 
-	public void setProvincia(int provincia) {
+    /**
+     *
+     * @param provincia
+     */
+    public void setProvincia(int provincia) {
 		this.provincia = provincia;
 	}
 }
