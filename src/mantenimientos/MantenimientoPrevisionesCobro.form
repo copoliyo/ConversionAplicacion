@@ -110,7 +110,7 @@
                   </Group>
                   <Component id="jbSalir" min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="25" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -231,60 +231,6 @@
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jlCliente" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jbBuscarCliente" min="-2" pref="30" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="jlFactura" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlFechaFactura" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlImporte" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlFechaRemesa" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlBancoNegociacion" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jtfnfCliente" alignment="0" min="-2" pref="106" max="-2" attributes="0"/>
-                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="jtfnf2dImporte" alignment="0" pref="90" max="32767" attributes="0"/>
-                                  <Component id="jtffFechaFactura" alignment="0" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                                  <Component id="jtffFechaRemesa" alignment="1" min="-2" pref="90" max="-2" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Component id="jtfnfFactura" min="-2" pref="90" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jbBuscarBancoNegociacion" min="-2" pref="30" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jtfnfBancoNegociacion" min="-2" pref="64" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                          </Group>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jlNombreCliente" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" attributes="0">
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="jlNombreBancoNegociacion" min="-2" pref="306" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="109" max="-2" attributes="0"/>
-                                          <Component id="jPanelDatosDomiciliacion" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
                           <Component id="jlRepresentante" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jbBuscarRepresentante" min="-2" pref="30" max="-2" attributes="0"/>
@@ -308,6 +254,56 @@
                           </Group>
                           <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jlCliente" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="jbBuscarCliente" min="-2" pref="30" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="jlFactura" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlFechaFactura" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlImporte" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlFechaRemesa" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlBancoNegociacion" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jtfnfCliente" alignment="0" min="-2" pref="106" max="-2" attributes="0"/>
+                              <Component id="jtfnf2dImporte" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jtffFechaFactura" alignment="0" max="32767" attributes="0"/>
+                              <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                                  <Component id="jtffFechaRemesa" alignment="1" min="-2" pref="90" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Component id="jtfnfFactura" min="-2" pref="90" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jbBuscarBancoNegociacion" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="jtfnfBancoNegociacion" min="-2" pref="64" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jlNombreCliente" max="32767" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <Component id="jlNombreBancoNegociacion" min="-2" pref="306" max="-2" attributes="0"/>
+                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace pref="81" max="32767" attributes="0"/>
+                                  <Component id="jPanelDatosDomiciliacion" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
                   </Group>
               </Group>
           </Group>
@@ -324,75 +320,69 @@
                           <Component id="jtfnfCliente" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jtfnfFactura" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                              <Component id="jlFactura" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jlFechaFactura" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jtffFechaFactura" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jlImporte" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jtfnf2dImporte" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
-                          <Component id="jtfnfBancoNegociacion" min="-2" pref="25" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="jPanelDatosDomiciliacion" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="jlNombreBancoNegociacion" min="-2" pref="30" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="-2" pref="152" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="jlBancoNegociacion" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jbBuscarBancoNegociacion" min="-2" pref="30" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jtffFechaRemesa" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jlFechaRemesa" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                                  <Component id="jPanelDatosDomiciliacion" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="jlNombreBancoNegociacion" min="-2" pref="30" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="jlBancoNegociacion" min="-2" max="-2" attributes="0"/>
+                              <Component id="jbBuscarBancoNegociacion" min="-2" pref="30" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jlRemesaDia" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jtfnfRemesaDia" alignment="0" min="-2" pref="25" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jtfnfFactura" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                      <Component id="jlFactura" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jlRepresentante" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jbBuscarRepresentante" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Component id="jtfnfRepresentante" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="jlNombreRepresentante" alignment="0" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jtffFechaCobro" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jlFechaCobro" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jlFechaFactura" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jtffFechaFactura" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="jcbReciboEmitido" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jlImporte" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jtfnf2dImporte" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
+                                  <Component id="jtfnfBancoNegociacion" min="-2" pref="25" max="-2" attributes="0"/>
                               </Group>
                           </Group>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jtffFechaRemesa" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlFechaRemesa" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jlRemesaDia" min="-2" max="-2" attributes="0"/>
+                              <Component id="jtfnfRemesaDia" alignment="0" min="-2" pref="25" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jlRepresentante" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jbBuscarRepresentante" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="jtfnfRepresentante" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jlNombreRepresentante" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jtffFechaCobro" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlFechaCobro" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="jcbReciboEmitido" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
@@ -428,8 +418,11 @@
               <Font name="MS Reference Sans Serif" size="14" style="1"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtfnfClienteFocusLost"/>
+          </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldNumeroFijo(7)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldNumeroFijo(9)"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jlFactura">
@@ -579,39 +572,47 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="jlSucursalDomiciliacion" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jbBuscarSucursalDomiciliacion" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="jlSucursalDomiciliacion" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="jbBuscarSucursalDomiciliacion" min="-2" pref="30" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Component id="jlBancoDomiciliacion" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="jbBuscarBancoDomiciliacion" min="-2" pref="30" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="jlBancoDomiciliacion" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="jbBuscarBancoDomiciliacion" min="-2" pref="30" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace type="separate" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jtfnfBancoDomiciliacion" pref="49" max="32767" attributes="0"/>
-                          <Component id="jtfnfSucursalDomiciliacion" max="32767" attributes="0"/>
+                          <Component id="jlDigitosControl" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="jlDigitosControl" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jtfnfDigitosControl" min="-2" pref="32" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="jlCuentaDomiciliacion" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jtfnfCuentaDomicilacion" min="-2" pref="161" max="-2" attributes="0"/>
+                          <Component id="jtfnfDigitosControl" alignment="0" min="-2" pref="32" max="-2" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jtfnfBancoDomiciliacion" pref="49" max="32767" attributes="0"/>
+                              <Component id="jtfnfSucursalDomiciliacion" max="32767" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="20" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                              <Component id="jlCuentaDomiciliacion" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="jtfnfCuentaDomiciliacion" min="-2" pref="161" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jlNombreSucursalDomiciliacion" max="32767" attributes="0"/>
+                                  <Component id="jlNombreBancoDomiciliacion" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -619,38 +620,42 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jbBuscarSucursalDomiciliacion" alignment="1" min="-2" pref="30" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
-                                      <Component id="jlBancoDomiciliacion" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Group type="103" groupAlignment="1" attributes="0">
-                                          <Component id="jbBuscarBancoDomiciliacion" min="-2" pref="30" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="jtfnfBancoDomiciliacion" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                                              <Component id="jlDigitosControl" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jtfnfDigitosControl" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+                              <Component id="jlBancoDomiciliacion" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="jlSucursalDomiciliacion" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="jbBuscarBancoDomiciliacion" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jtfnfBancoDomiciliacion" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                      <Component id="jlNombreBancoDomiciliacion" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jtfnfSucursalDomiciliacion" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                                      <Component id="jlCuentaDomiciliacion" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jtfnfCuentaDomicilacion" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="jlSucursalDomiciliacion" alignment="1" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="jbBuscarSucursalDomiciliacion" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="jtfnfSucursalDomiciliacion" min="-2" pref="25" max="-2" attributes="0"/>
+                                  <Component id="jlNombreSucursalDomiciliacion" min="-2" pref="25" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                              <Component id="jlDigitosControl" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                              <Component id="jtfnfCuentaDomiciliacion" min="-2" pref="25" max="-2" attributes="0"/>
+                              <Component id="jlCuentaDomiciliacion" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jtfnfDigitosControl" alignment="0" min="-2" pref="25" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="29" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -683,6 +688,9 @@
                   <Image iconType="3" name="/Imagenes/BUSCAR.gif"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbBuscarBancoDomiciliacionActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jlSucursalDomiciliacion">
               <Properties>
@@ -701,6 +709,9 @@
                   <Image iconType="3" name="/Imagenes/BUSCAR.gif"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbBuscarSucursalDomiciliacionActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="jtfnfSucursalDomiciliacion">
               <Properties>
@@ -727,12 +738,15 @@
                 <Property name="text" type="java.lang.String" value="DC"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jtfnfCuentaDomicilacion">
+            <Component class="javax.swing.JTextField" name="jtfnfCuentaDomiciliacion">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="MS Reference Sans Serif" size="14" style="1"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtfnfCuentaDomiciliacionFocusLost"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldNumeroFijo(10)"/>
               </AuxValues>
@@ -743,6 +757,20 @@
                   <Font name="MS Reference Sans Serif" size="14" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Cuenta"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jlNombreBancoDomiciliacion">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="MS Reference Sans Serif" size="14" style="1"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jlNombreSucursalDomiciliacion">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="MS Reference Sans Serif" size="14" style="1"/>
+                </Property>
               </Properties>
             </Component>
           </SubComponents>
