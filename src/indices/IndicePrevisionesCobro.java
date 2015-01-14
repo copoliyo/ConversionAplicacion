@@ -52,9 +52,51 @@ import util.EscapeDialog;
 import util.JTextFieldFecha;
 import util.JTextFieldNumeroFijo;
 
+/**
+ *
+ * @author Txus
+ */
 public class IndicePrevisionesCobro {
-	public enum Columna {
-		FECHA_VENCIMIENTO(0), EFECTO(1), IMPORTE(2), FECHA_FACTURA(3), FACTURA(4), ACUMULADO(5), CUENTA(6); 
+
+    /**
+     *
+     */
+    public enum Columna {
+ 
+        /**
+         *
+         */
+        FECHA_VENCIMIENTO(0), 
+
+            /**
+             *
+             */
+            EFECTO(1), 
+
+            /**
+             *
+             */
+            IMPORTE(2), 
+
+            /**
+             *
+             */
+            FECHA_FACTURA(3), 
+
+        /**
+         *
+         */
+        FACTURA(4), 
+
+        /**
+         *
+         */
+        ACUMULADO(5), 
+
+            /**
+             *
+             */
+            CUENTA(6); 
 
 		private int value;
 
@@ -91,7 +133,10 @@ public class IndicePrevisionesCobro {
 		}
 	};
 	
-	public IndicePrevisionesCobro(){
+    /**
+     *
+     */
+    public IndicePrevisionesCobro(){
 		this.strCuenta = "";
 		m = MysqlConnect.getDbCon();
 		consultaTotal = true;
@@ -99,7 +144,11 @@ public class IndicePrevisionesCobro {
 		creaGui();
 	}
 	
-	public IndicePrevisionesCobro(String strCuenta){
+    /**
+     *
+     * @param strCuenta
+     */
+    public IndicePrevisionesCobro(String strCuenta){
 		this.strCuenta = strCuenta.trim();
 		m = MysqlConnect.getDbCon();
 		consultaTotal = false;
@@ -321,15 +370,17 @@ public class IndicePrevisionesCobro {
 					importe = efectoCobrar.getImporte();
 					fechaFactura = efectoCobrar.getFechaFactura();
 					factura = efectoCobrar.getFactura();
-					cuentaEfectoCobrar = efectoCobrar.getCuenta();					
+					cuentaEfectoCobrar = efectoCobrar.getCuenta();					                                        
 					
 					// Obtenemos el título de la cuenta
 					 String strSqlCuenta = "SELECT * FROM CONTAB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' " +
 			            "AND CONTAB_CENTRO = " + DatosComunes.centroCont +  " " +
 			            "AND CONTAB_CUENTA = '" + cuentaEfectoCobrar + "'";
-					cuenta.read(strSqlCuenta);
-					
-					tituloCuentaEfectoCobrar = cuenta.getTitulo();					
+                                        
+					if(cuenta.read(strSqlCuenta) == 0)
+                                            tituloCuentaEfectoCobrar = "Inexistente!!!";
+					else
+                                            tituloCuentaEfectoCobrar = cuenta.getTitulo();					
 					
 					fila[Columna.FECHA_VENCIMIENTO.value] = strFechaVencimiento;
 					if(efecto == 0)
@@ -432,7 +483,11 @@ public class IndicePrevisionesCobro {
 		
 	}
         
-        public EfectoCobrar getEfectoCobrar(){
+    /**
+     *
+     * @return
+     */
+    public EfectoCobrar getEfectoCobrar(){
 		try {
 			rs.close();
 		} catch (SQLException e) {
@@ -443,8 +498,10 @@ public class IndicePrevisionesCobro {
 		return efectoCobrar;
 	}
         
-        
-        public void muestra(){
+    /**
+     *
+     */
+    public void muestra(){
 		pantalla.setVisible(true);
 	}
 }

@@ -7,11 +7,18 @@ package mantenimientos;
 
 import general.DatosComunes;
 import general.MysqlConnect;
+import indices.IndiceBancosSucursales;
+import indices.IndiceClientesContables;
+import indices.IndiceCodigosBanco;
 import indices.IndicePrevisionesCobro;
+import indices.IndiceRepresentantes;
 import java.sql.ResultSet;
 import javax.swing.JFrame;
+import tablas.Banco;
+import tablas.ClienteContable;
 import tablas.Cuenta;
 import tablas.EfectoCobrar;
+import tablas.IndiceBancos;
 import tablas.Representante;
 import util.Apariencia;
 import util.BaseDatos;
@@ -111,6 +118,7 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         jtffFechaFactura = new util.JTextFieldFecha();
         jtffFechaRemesa = new util.JTextFieldFecha();
         jtffFechaCobro = new util.JTextFieldFecha();
+        jlNombreBancoNegociacion = new javax.swing.JLabel();
         jbSalir = new javax.swing.JButton();
         jbDeduccionAbonos = new javax.swing.JButton();
         jbDepuracionRiesgo = new javax.swing.JButton();
@@ -139,6 +147,11 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         jlEfecto.setText("Efecto");
 
         jtfnfEfecto.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtfnfEfecto.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfnfEfectoFocusLost(evt);
+            }
+        });
         jtfnfEfecto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtfnfEfectoActionPerformed(evt);
@@ -155,6 +168,11 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         jlCentro.setText("Centro");
 
         jtfnfCentro.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtfnfCentro.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfnfCentroFocusLost(evt);
+            }
+        });
 
         jPanelDatosPrevision.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Previsión", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("MS Reference Sans Serif", 1, 14), new java.awt.Color(51, 51, 255))); // NOI18N
         jPanelDatosPrevision.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
@@ -164,6 +182,11 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
 
         jbBuscarCliente.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbBuscarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BUSCAR.gif"))); // NOI18N
+        jbBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBuscarClienteActionPerformed(evt);
+            }
+        });
 
         jtfnfCliente.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
 
@@ -185,6 +208,11 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
 
         jbBuscarBancoNegociacion.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbBuscarBancoNegociacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BUSCAR.gif"))); // NOI18N
+        jbBuscarBancoNegociacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBuscarBancoNegociacionActionPerformed(evt);
+            }
+        });
 
         jtfnfBancoNegociacion.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
 
@@ -242,55 +270,58 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         jPanelDatosDomiciliacionLayout.setHorizontalGroup(
             jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelDatosDomiciliacionLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanelDatosDomiciliacionLayout.createSequentialGroup()
+                        .addComponent(jlSucursalDomiciliacion)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jbBuscarSucursalDomiciliacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanelDatosDomiciliacionLayout.createSequentialGroup()
+                        .addComponent(jlBancoDomiciliacion)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jbBuscarBancoDomiciliacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addGroup(jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jtfnfBancoDomiciliacion, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
+                    .addComponent(jtfnfSucursalDomiciliacion))
+                .addGap(18, 18, 18)
                 .addGroup(jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelDatosDomiciliacionLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanelDatosDomiciliacionLayout.createSequentialGroup()
-                                .addComponent(jlSucursalDomiciliacion)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jbBuscarSucursalDomiciliacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanelDatosDomiciliacionLayout.createSequentialGroup()
-                                .addComponent(jlBancoDomiciliacion)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jbBuscarBancoDomiciliacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, Short.MAX_VALUE))
-                    .addGroup(jPanelDatosDomiciliacionLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jlDigitosControl)
-                        .addGap(62, 62, 62)))
-                .addGroup(jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jtfnfBancoDomiciliacion, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
-                        .addComponent(jtfnfSucursalDomiciliacion))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jtfnfDigitosControl, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelDatosDomiciliacionLayout.createSequentialGroup()
-                        .addComponent(jtfnfDigitosControl, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28)
                         .addComponent(jlCuentaDomiciliacion)
-                        .addGap(27, 27, 27)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jtfnfCuentaDomicilacion, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanelDatosDomiciliacionLayout.setVerticalGroup(
             jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelDatosDomiciliacionLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jbBuscarBancoDomiciliacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtfnfBancoDomiciliacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlBancoDomiciliacion, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jbBuscarSucursalDomiciliacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jtfnfSucursalDomiciliacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jlSucursalDomiciliacion, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jtfnfDigitosControl, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlDigitosControl)
-                    .addComponent(jtfnfCuentaDomicilacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlCuentaDomiciliacion))
+                    .addComponent(jbBuscarSucursalDomiciliacion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanelDatosDomiciliacionLayout.createSequentialGroup()
+                        .addGroup(jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanelDatosDomiciliacionLayout.createSequentialGroup()
+                                .addGap(23, 23, 23)
+                                .addComponent(jlBancoDomiciliacion))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelDatosDomiciliacionLayout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jbBuscarBancoDomiciliacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jtfnfBancoDomiciliacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jlDigitosControl)
+                                        .addComponent(jtfnfDigitosControl, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(11, 11, 11)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelDatosDomiciliacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jtfnfSucursalDomiciliacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jlCuentaDomiciliacion)
+                                .addComponent(jtfnfCuentaDomicilacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jlSucursalDomiciliacion, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -315,6 +346,8 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
             }
         });
 
+        jlNombreBancoNegociacion.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+
         javax.swing.GroupLayout jPanelDatosPrevisionLayout = new javax.swing.GroupLayout(jPanelDatosPrevision);
         jPanelDatosPrevision.setLayout(jPanelDatosPrevisionLayout);
         jPanelDatosPrevisionLayout.setHorizontalGroup(
@@ -323,6 +356,9 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
                 .addContainerGap()
                 .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
+                        .addComponent(jlRemesaDia)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
                         .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
                                 .addComponent(jlCliente)
@@ -330,56 +366,57 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
                                 .addComponent(jbBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jlFactura)
                             .addComponent(jlFechaFactura)
-                            .addComponent(jlImporte))
+                            .addComponent(jlImporte)
+                            .addComponent(jlFechaRemesa)
+                            .addComponent(jlBancoNegociacion))
                         .addGap(18, 18, 18)
                         .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jtfnfCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jtfnf2dImporte, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-                                .addComponent(jtfnfFactura, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-                                .addComponent(jtffFechaFactura, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)))
-                        .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
-                                .addGap(52, 52, 52)
-                                .addComponent(jPanelDatosDomiciliacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
-                                .addGap(141, 141, 141)
-                                .addComponent(jlNombreCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addContainerGap())))
-                    .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
-                        .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlRemesaDia)
-                            .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
-                                .addComponent(jlRepresentante)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jbBuscarRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jtfnfRemesaDia, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
-                                        .addComponent(jtfnfRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jlNombreRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jtffFechaFactura, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jtffFechaRemesa, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
+                                    .addComponent(jtfnfFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(14, 14, 14))
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelDatosPrevisionLayout.createSequentialGroup()
-                                    .addComponent(jlFechaRemesa)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jtffFechaRemesa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelDatosPrevisionLayout.createSequentialGroup()
-                                    .addComponent(jlBancoNegociacion)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jbBuscarBancoNegociacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jtfnfBancoNegociacion, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(100, 100, 100)
                         .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jcbReciboEmitido)
+                            .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jlNombreCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
+                                .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jlNombreBancoNegociacion, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
+                                        .addGap(109, 109, 109)
+                                        .addComponent(jPanelDatosDomiciliacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
+                        .addComponent(jlRepresentante)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbBuscarRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jtfnfRemesaDia, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
+                                .addComponent(jtfnfRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jlNombreRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
                                 .addComponent(jlFechaCobro)
                                 .addGap(18, 18, 18)
-                                .addComponent(jtffFechaCobro, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(92, 92, 92))))
+                                .addComponent(jtffFechaCobro, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jcbReciboEmitido))
+                        .addGap(27, 27, 27))))
         );
         jPanelDatosPrevisionLayout.setVerticalGroup(
             jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -391,13 +428,13 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
                         .addComponent(jlCliente)
                         .addComponent(jbBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jtfnfCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(17, 17, 17)
                 .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlFactura)
-                            .addComponent(jtfnfFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jtfnfFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlFactura))
+                        .addGap(13, 13, 13)
                         .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jlFechaFactura)
                             .addComponent(jtffFechaFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -405,41 +442,46 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
                         .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jlImporte)
                             .addComponent(jtfnf2dImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jbBuscarBancoNegociacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jtfnfBancoNegociacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
-                                .addComponent(jlBancoNegociacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(9, 9, 9))))
-                    .addComponent(jPanelDatosDomiciliacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGap(47, 47, 47)
+                        .addComponent(jtfnfBancoNegociacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlFechaRemesa)
-                            .addComponent(jtffFechaRemesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlRemesaDia)
-                            .addComponent(jtfnfRemesaDia, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(13, 13, 13)
                         .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jlRepresentante)
-                                .addComponent(jbBuscarRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jtfnfRepresentante)
-                            .addComponent(jlNombreRepresentante, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlFechaCobro)
-                            .addComponent(jtffFechaCobro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcbReciboEmitido)
-                        .addGap(26, 26, 26))))
+                            .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
+                                .addGap(152, 152, 152)
+                                .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jlBancoNegociacion)
+                                    .addComponent(jbBuscarBancoNegociacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jtffFechaRemesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jlFechaRemesa))
+                                .addGap(18, 18, 18))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelDatosPrevisionLayout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(jPanelDatosDomiciliacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jlNombreBancoNegociacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(58, 58, 58)))
+                        .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
+                                .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jlRemesaDia)
+                                    .addComponent(jtfnfRemesaDia, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(13, 13, 13)
+                                .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jlRepresentante)
+                                        .addComponent(jbBuscarRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jtfnfRepresentante)
+                                    .addComponent(jlNombreRepresentante, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jtffFechaCobro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jlFechaCobro))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jcbReciboEmitido)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jbSalir.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
@@ -505,44 +547,42 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jlVencimiento)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jbBuscarFechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtffVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jbNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(40, 40, 40)
-                                .addComponent(jlEfecto)
-                                .addGap(18, 18, 18)
-                                .addComponent(jtfnfEfecto, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jlSituacion)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jcbxSituacion, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(12, 12, 12)
-                                .addComponent(jlCentro)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jtfnfCentro, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPanelDatosPrevision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbDeduccionAbonos)
+                        .addComponent(jlVencimiento)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jbDepuracionRiesgo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jbBorrar)
+                        .addComponent(jbBuscarFechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbGrabar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jbAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jtffVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbAdelante, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(20, 20, 20))
+                        .addComponent(jbNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(jlEfecto)
+                        .addGap(18, 18, 18)
+                        .addComponent(jtfnfEfecto, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jlSituacion)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jcbxSituacion, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(jlCentro)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jtfnfCentro, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jbDeduccionAbonos)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jbDepuracionRiesgo)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jbBorrar)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jbGrabar)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jbAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jbAdelante, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanelDatosPrevision, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -564,9 +604,9 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jbNuevo)))
-                .addGap(18, 18, 18)
-                .addComponent(jPanelDatosPrevision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanelDatosPrevision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jbAdelante, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -583,7 +623,16 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbBuscarRepresentanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarRepresentanteActionPerformed
-        // TODO add your handling code here:
+        
+        Representante representante = new Representante();
+        int codigoRepresentante;
+        
+        IndiceRepresentantes ir = new IndiceRepresentantes();
+                
+        codigoRepresentante = ir.getRepresentante();
+        representante = representante.read(DatosComunes.eEmpresa, DatosComunes.centroCont, codigoRepresentante);
+        jtfnfRepresentante.setText(String.valueOf(codigoRepresentante));
+        jlNombreRepresentante.setText(representante.getApellidosRazonSocial());
     }//GEN-LAST:event_jbBuscarRepresentanteActionPerformed
 
     private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
@@ -667,28 +716,83 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
     }//GEN-LAST:event_jtffVencimientoActionPerformed
 
     private void jtffVencimientoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtffVencimientoFocusLost
-        int fechaVencimiento, numeroEfecto, centro;
-
-        fechaVencimiento = jtffVencimiento.getFechaAAAAMMDD();
-        numeroEfecto = Integer.valueOf(jtfnfEfecto.getText());
-        centro = Integer.valueOf(jtfnfCentro.getText());
-
-        if (fechaVencimiento > 0 && numeroEfecto > 0) {
-            String strSql = "SELECT * FROM EFECOB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND ";
-            strSql += "EFECOB_CENTRO = " + centro + " AND ";
-            strSql += "EFECOB_VENCIM = " + fechaVencimiento + " AND ";
-            strSql += "EFECOB_EFECTO = " + numeroEfecto + " LIMIT 1";
-
-            if (BaseDatos.countRows(strSql) > 0) {
-                borrarPantalla();
-                cargaDatos(strSql);
-            }
-        }
+        
+        cargaPorVencimientoEfectoCentro();        
     }//GEN-LAST:event_jtffVencimientoFocusLost
 
     private void jtffFechaCobroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtffFechaCobroActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jtffFechaCobroActionPerformed
+
+    private void jtfnfEfectoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnfEfectoFocusLost
+        
+        cargaPorVencimientoEfectoCentro();
+    }//GEN-LAST:event_jtfnfEfectoFocusLost
+
+    private void jtfnfCentroFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnfCentroFocusLost
+        
+        cargaPorVencimientoEfectoCentro();
+    }//GEN-LAST:event_jtfnfCentroFocusLost
+
+    private void jbBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarClienteActionPerformed
+
+        // En el programa de Cobol hay un lío de la leche, hay cuentas de caja, de banco,
+        // lía códigos de cuenta con códigos de cliente!!!
+        String cuentaContable;
+        int codigoCliente;
+        ClienteContable cliente = new ClienteContable();
+
+        IndiceClientesContables ic = new IndiceClientesContables();
+
+        if (ic.getCuenta() != null) {
+            // Obtenemos la cuenta contable
+            cuentaContable = ic.getCuenta();
+            // Obtenemos el código numerico del cliente
+            codigoCliente = Integer.valueOf(String.valueOf(Integer.valueOf(cuentaContable.substring(2))));
+            //Sólo mostramos el código del cliente sin el 43 de delante
+            jtfnfCliente.setText(String.valueOf(codigoCliente));
+
+            if (cuentaContable.startsWith("43")) {
+                cuentaContable = String.valueOf(Integer.valueOf(cuentaContable.substring(2)));
+            }
+
+            String strSql = "SELECT * FROM CLITES WHERE EMPRESA = '"
+                    + DatosComunes.eEmpresa
+                    + "' AND CLITES_CLIENTE = " + codigoCliente;
+
+            if (DatosComunes.centroCont != 0) {
+                strSql += " AND CLITES_CENTRO = " + DatosComunes.centroCont;
+            }
+
+            if (cliente.read(strSql) > 0) {
+                jlNombreCliente.setText(cliente.getApellidosRazonSocial());
+            } else {
+                jlNombreCliente.setText("");
+            }
+
+        }
+    }//GEN-LAST:event_jbBuscarClienteActionPerformed
+
+    private void jbBuscarBancoNegociacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarBancoNegociacionActionPerformed
+        
+        Banco banco = new Banco();
+        // Saca la ventana del indice de abncos que tenemos dados de alta
+        IndiceCodigosBanco indiceBanco = new IndiceCodigosBanco();
+        // Obtenemos el código del banco desde el índice
+        banco = indiceBanco.getBanco();
+        
+        // Estos una TABLA, no un INDICE, no confundirse!!!
+        IndiceBancos ibs = new IndiceBancos();
+        
+        if(banco != null){
+            jtfnfBancoNegociacion.setText(String.valueOf(banco.getBanco()));
+            
+            // Recordar que en el Indice de Bancos, el Banco sin número de 
+            // Sucursal, es la descripción de la entidad, ej.: BBVA
+            ibs.read(banco.getBanco(), 0);
+            jlNombreBancoNegociacion.setText(ibs.getDescripcion());
+        }
+    }//GEN-LAST:event_jbBuscarBancoNegociacionActionPerformed
 
     private void salir() {
         this.dispose();
@@ -765,6 +869,42 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         jcbxSituacion.setSelectedIndex(efectoCobrar.getSituacion());                
         
     }
+    
+    private void cargaPorVencimientoEfectoCentro(){
+        int fechaVencimiento, numeroEfecto, centro;
+        
+        fechaVencimiento = jtffVencimiento.getFechaAAAAMMDD();
+        numeroEfecto = Integer.valueOf(jtfnfEfecto.getText());
+        centro = Integer.valueOf(jtfnfCentro.getText());
+        
+        if (fechaVencimiento > 0 && numeroEfecto > 0) {
+            String strSql = "SELECT * FROM EFECOB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND ";
+            strSql += "EFECOB_CENTRO = " + centro + " AND ";
+            strSql += "EFECOB_VENCIM = " + fechaVencimiento + " AND ";
+            strSql += "EFECOB_EFECTO = " + numeroEfecto + " LIMIT 1";
+
+            if (BaseDatos.countRows(strSql) > 0) {
+                borrarPantalla();
+                cargaDatos(strSql);
+            }
+        }
+        
+    }
+    
+    private void cargaPorVencimientoEfectoCentro(int fechaVencimiento, int numeroEfecto, int centro){
+
+        if (fechaVencimiento > 0 && numeroEfecto > 0) {
+            String strSql = "SELECT * FROM EFECOB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND ";
+            strSql += "EFECOB_CENTRO = " + centro + " AND ";
+            strSql += "EFECOB_VENCIM = " + fechaVencimiento + " AND ";
+            strSql += "EFECOB_EFECTO = " + numeroEfecto + " LIMIT 1";
+
+            if (BaseDatos.countRows(strSql) > 0) {
+                borrarPantalla();
+                cargaDatos(strSql);
+            }
+        }
+    }
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -798,6 +938,7 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
     private javax.swing.JLabel jlFechaFactura;
     private javax.swing.JLabel jlFechaRemesa;
     private javax.swing.JLabel jlImporte;
+    private javax.swing.JLabel jlNombreBancoNegociacion;
     private javax.swing.JLabel jlNombreCliente;
     private javax.swing.JLabel jlNombreRepresentante;
     private javax.swing.JLabel jlRemesaDia;
