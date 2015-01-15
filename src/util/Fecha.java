@@ -12,7 +12,7 @@ public class Fecha{
 	
 	public Fecha(){
 		anio = Calendar.getInstance().get(Calendar.YEAR);
-		mes = Calendar.getInstance().get(Calendar.MONTH);		
+		mes = Calendar.getInstance().get(Calendar.MONTH) + 1;		
 		dia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);			
 	}		
 	
@@ -21,12 +21,26 @@ public class Fecha{
 	}
 	
 	
+        public int fechaDiaHoy(){
+		int fecha = 0;
+		int anio, mes, dia;
+		
+		anio = Calendar.getInstance().get(Calendar.YEAR);
+		mes = Calendar.getInstance().get(Calendar.MONTH) + 1;		
+		dia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);	
+		
+		String fechaStr = String.format("%04d%02d%02d", anio, mes + 1, dia);
+		fecha = Integer.valueOf(fechaStr);
+		
+		return fecha;
+	}
+        
 	public static int fechaDia(){
 		int fecha = 0;
 		int anio, mes, dia;
 		
 		anio = Calendar.getInstance().get(Calendar.YEAR);
-		mes = Calendar.getInstance().get(Calendar.MONTH);		
+		mes = Calendar.getInstance().get(Calendar.MONTH) + 1;		
 		dia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);	
 		
 		String fechaStr = String.format("%04d%02d%02d", anio, mes + 1, dia);
@@ -88,6 +102,18 @@ public class Fecha{
 		return fechaOk;
 	}
 	
+        // fechaAcadena pasa la fecha de la instancia a una cadena de
+	// texto en formato DD.MM.AA
+	public String fechaAcadena(){	
+		
+            String fechaStr;		
+            fechaStr = String.format("%02d.%02d.%02d", this.dia, this.mes,  this.anio%1000);
+		
+            return fechaStr;
+	}
+
+        
+        
 	// fechaAcadena pasa una fecha tal como se almacenará en la base de datos
 	// es decir, un número de 8 cifras en el formato AAAAMMDD a una cadena de
 	// texto en formato DDMMAA
