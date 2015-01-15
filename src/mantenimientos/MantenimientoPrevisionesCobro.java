@@ -18,6 +18,7 @@ import java.awt.FocusTraversalPolicy;
 import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import tablas.Banco;
 import tablas.ClienteContable;
 import tablas.Cuenta;
@@ -26,7 +27,9 @@ import tablas.IndiceBancos;
 import tablas.Representante;
 import util.Apariencia;
 import util.BaseDatos;
+import util.Cadena;
 import util.CuentaBancaria;
+import util.Fecha;
 
 /**
  *
@@ -117,7 +120,6 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         jtfnfFactura = new util.JTextFieldNumeroFijo(6);
         jlFechaFactura = new javax.swing.JLabel();
         jlImporte = new javax.swing.JLabel();
-        jtfnf2dImporte = new util.JTextFieldNumero2Decimales();
         jlBancoNegociacion = new javax.swing.JLabel();
         jbBuscarBancoNegociacion = new javax.swing.JButton();
         jtfnfBancoNegociacion = new util.JTextFieldNumeroFijo(4);
@@ -148,6 +150,7 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         jtffFechaRemesa = new util.JTextFieldFecha();
         jtffFechaCobro = new util.JTextFieldFecha();
         jlNombreBancoNegociacion = new javax.swing.JLabel();
+        jtfnf2dImporte = new util.JTextFieldNumero2Decimales();
         jbSalir = new javax.swing.JButton();
         jbDeduccionAbonos = new javax.swing.JButton();
         jbDepuracionRiesgo = new javax.swing.JButton();
@@ -234,8 +237,6 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
 
         jlImporte.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlImporte.setText("Importe");
-
-        jtfnf2dImporte.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
 
         jlBancoNegociacion.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlBancoNegociacion.setText("Banco Negoc.");
@@ -410,6 +411,8 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
 
         jlNombreBancoNegociacion.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
 
+        jtfnf2dImporte.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+
         javax.swing.GroupLayout jPanelDatosPrevisionLayout = new javax.swing.GroupLayout(jPanelDatosPrevision);
         jPanelDatosPrevision.setLayout(jPanelDatosPrevisionLayout);
         jPanelDatosPrevisionLayout.setHorizontalGroup(
@@ -452,8 +455,7 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
                             .addComponent(jlBancoNegociacion))
                         .addGap(18, 18, 18)
                         .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jtfnfCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtfnf2dImporte)
+                            .addComponent(jtfnfCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
                             .addComponent(jtffFechaFactura, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(jtffFechaRemesa, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -463,7 +465,8 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
                             .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
                                 .addComponent(jbBuscarBancoNegociacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jtfnfBancoNegociacion, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jtfnfBancoNegociacion, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jtfnf2dImporte, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanelDatosPrevisionLayout.createSequentialGroup()
                                 .addGap(18, 18, 18)
@@ -510,8 +513,8 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jlImporte)
-                                    .addComponent(jtfnf2dImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(100, 100, 100)
+                                    .addComponent(jtfnf2dImporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(101, 101, 101)
                                 .addComponent(jtfnfBancoNegociacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanelDatosPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -553,9 +556,19 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
 
         jbDepuracionRiesgo.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbDepuracionRiesgo.setText("Depuración Riesgo");
+        jbDepuracionRiesgo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbDepuracionRiesgoActionPerformed(evt);
+            }
+        });
 
         jbBorrar.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbBorrar.setText("Borrar");
+        jbBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBorrarActionPerformed(evt);
+            }
+        });
 
         jbGrabar.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbGrabar.setText("Grabar");
@@ -672,7 +685,7 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
                         .addComponent(jbDepuracionRiesgo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jbDeduccionAbonos, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
@@ -760,6 +773,39 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
 
     private void jbGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGrabarActionPerformed
         enCreacion = false;
+        
+        efectoCobrar.setEmpresa(DatosComunes.eEmpresa);
+        efectoCobrar.setBanco(Integer.valueOf(jtfnfBancoNegociacion.getText().trim()));
+        efectoCobrar.setFechaCobro(jtffFechaCobro.getFechaAAAAMMDD());
+	efectoCobrar.setVencimiento(jtffVencimiento.getFechaAAAAMMDD());
+        efectoCobrar.setEfecto(Integer.valueOf(jtfnfEfecto.getText().trim()));
+        efectoCobrar.setCentro(Integer.valueOf(jtfnfCentro.getText().trim()));
+	efectoCobrar.setSituacion(jcbxSituacion.getSelectedIndex());
+        efectoCobrar.setFechaRemesa(jtffFechaRemesa.getFechaAAAAMMDD());
+        efectoCobrar.setRemesa(Integer.valueOf(jtfnfRemesaDia.getText().trim()));
+        efectoCobrar.setFactura(Integer.valueOf(jtfnfFactura.getText().trim()));
+        efectoCobrar.setCuenta(jtfnfCliente.getText().trim());
+        // fechaAsientoApunte
+	// Que pasa si ya tenía una fecha/asiento/apunte
+        // Hay que vaciar el Objeto EfectoCobrar al pinchar en 'Nuevo'
+        // fechaEfecto - Lo mismo, pero no tiene sentido crear nuevos efectos aquí!!!
+        // vencimientoDv
+        efectoCobrar.setNumeroBanco(Integer.valueOf(jtfnfBancoDomiciliacion.getText().trim()));
+	efectoCobrar.setNumeroSucursal(Integer.valueOf(jtfnfSucursalDomiciliacion.getText().trim()));
+	efectoCobrar.setDigitosControl(Integer.valueOf(jtfnfDigitosControl.getText().trim()));
+	efectoCobrar.setCuentaBancaria(Integer.valueOf(jtfnfCuentaDomiciliacion.getText().trim()));
+	// timbres
+        efectoCobrar.setFechaFactura(jtffFechaFactura.getFechaAAAAMMDD());
+        efectoCobrar.setImporte(jtfnf2dImporte.getDouble());
+	efectoCobrar.setRepresentante(Integer.valueOf(jtfnfRepresentante.getText().trim()));
+	if(jcbReciboEmitido.isSelected())
+            efectoCobrar.setReciboImpreso(1);
+        else
+            efectoCobrar.setReciboImpreso(0);
+			
+	// origen
+        
+        efectoCobrar.write();
     }//GEN-LAST:event_jbGrabarActionPerformed
 
     private void jtfnfEfectoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnfEfectoActionPerformed
@@ -879,6 +925,109 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
     private void jtfnfClienteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnfClienteFocusLost
         // TODO add your handling code here:
     }//GEN-LAST:event_jtfnfClienteFocusLost
+
+    private void jbBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBorrarActionPerformed
+
+        int fechaVencimiento, numeroEfecto, centro;
+
+        fechaVencimiento = jtffVencimiento.getFechaAAAAMMDD();
+        numeroEfecto = Integer.valueOf(jtfnfEfecto.getText());
+        centro = Integer.valueOf(jtfnfCentro.getText());
+
+        if (fechaVencimiento == 0 || numeroEfecto == 0) {
+            Apariencia.mensajeInformativo(5, "Debes introducir une Fecha de Vencimiento y <br>"
+                    + "Número de Efecto válidos!!!");
+        } else {
+            String strSql = "SELECT * FROM EFECOB WHERE EMPRESA = '"
+                    + DatosComunes.eEmpresa
+                    + "' AND EFECOB_VENCIM = " + fechaVencimiento + " AND EFECOB_EFECTO = " + numeroEfecto
+                    + " AND EFECOB_CENTRO = " + centro;
+
+            // Comprobramos si existe el efecto, SOLO tiene que existir uno que cumpla la condición
+            if (BaseDatos.countRows(strSql) == 1) {
+                efectoCobrar.read(strSql);
+
+                // Damos la oportunidad de no borrar
+                Object[] opciones = {"Si", "No"};
+
+                int n = JOptionPane.showOptionDialog(this,
+                        "<html><font size='4'><strong>"
+                        + "Desea borrar el efecto con vencimiento:<BR>'"
+                        + Cadena.fechaAcadena(fechaVencimiento) + "  y número de efecto: " + numeroEfecto
+                        + "'</strong></font></html>",
+                        "Borrar Registro",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null, // Sin Icono personalizado.
+                        opciones, // Título de los botonoes
+                        opciones[1]); // Botón por defecto.
+
+                if (n == 0) {
+                    if (efectoCobrar.delete(centro, fechaVencimiento, numeroEfecto) > 0) {
+                        Apariencia.mensajeInformativo(5, "Efecto borrado correctamente...");
+                        // Cargamos el anterior
+                        strSql = "SELECT * FROM EFECOB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' ";
+                        //strSql += "AND EFECOB_CENTRO = " + jtfnfCentro.getText().trim() + " ";
+                        strSql += "AND EFECOB_VENCIM = " + fechaVencimiento + " ";
+                        strSql += "AND EFECOB_EFECTO < " + numeroEfecto + " ";
+                        strSql += "ORDER BY EFECOB_VENCIM DESC, EFECOB_EFECTO DESC LIMIT 1";
+
+                        if (BaseDatos.countRows(strSql) == 0) {
+                            strSql = "SELECT * FROM EFECOB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' ";
+                            //strSql += "AND EFECOB_CENTRO = " + jtfnfCentro.getText().trim() + " ";
+                            strSql += "AND EFECOB_VENCIM < " + fechaVencimiento + " ";
+                            strSql += "ORDER BY EFECOB_VENCIM DESC, EFECOB_EFECTO DESC LIMIT 1";
+                        }
+
+                        //Apariencia.mensajeInformativo(5, strSql);
+                        if (BaseDatos.countRows(strSql) > 0) {
+                            cargaDatos(strSql);
+                        }
+
+                    } else {
+                        Apariencia.mensajeInformativo(5, "No existe este vencimiento!!!<BR>Revisarlo!!!");
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "<html><font size='4'><strong>"
+                        + "No se puede borrar ese Efecto a Cobrar porque no existe!!!"
+                        + "</strong></font></html>");
+            }
+
+        }
+
+    }//GEN-LAST:event_jbBorrarActionPerformed
+
+    private void jbDepuracionRiesgoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDepuracionRiesgoActionPerformed
+        
+        int anio, mes, dia;
+        
+        // Restamos 40 días a la fecha actual
+        Fecha fechaLimite40DiasAntes = new Fecha();
+        
+        anio = fechaLimite40DiasAntes.getAnio();
+        mes = fechaLimite40DiasAntes.getMes();
+        dia = fechaLimite40DiasAntes.getDia();
+        
+        // Quitamos 10 dias al día
+        dia -= 10;
+        if(dia < 0)
+            dia += 30;
+        // Quitamos 1 mes al mes
+        mes -= 1;
+        if(mes < 1){
+            // Nos hemos pasado por 'abajo', estamos en el año anterior.
+            mes = 12;            
+            anio--;
+        }
+        
+        fechaLimite40DiasAntes.setAnio(anio);
+        fechaLimite40DiasAntes.setMes(mes);
+        fechaLimite40DiasAntes.setDia(dia);
+        
+        Apariencia.mensajeInformativo(5, fechaLimite40DiasAntes.fechaAcadena());
+            
+    }//GEN-LAST:event_jbDepuracionRiesgoActionPerformed
 
     private void salir() {
         this.dispose();
@@ -1104,7 +1253,7 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
     private util.JTextFieldFecha jtffFechaFactura;
     private util.JTextFieldFecha jtffFechaRemesa;
     private util.JTextFieldFecha jtffVencimiento;
-    private javax.swing.JTextField jtfnf2dImporte;
+    private util.JTextFieldNumero2Decimales jtfnf2dImporte;
     private javax.swing.JTextField jtfnfBancoDomiciliacion;
     private javax.swing.JTextField jtfnfBancoNegociacion;
     private javax.swing.JTextField jtfnfCentro;

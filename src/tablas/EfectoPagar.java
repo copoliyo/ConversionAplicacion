@@ -208,7 +208,7 @@ public class EfectoPagar {
 	
 	// Borramos un EFECTO  de un CENTRO concreto, en una FECHA_DE_VENCIMIENTO y con un NUMERO_DE_EFECTO.
 	// Devolvemos el número de registros borrados o -1 si hay error
-	public static int delete(int centro, int fechaVencimiento, int numeroEfecto){
+	public int delete(int centro, int fechaVencimiento, int numeroEfecto){
 		int registrosBorrados = 0;
 		
 		Statement ps = null;

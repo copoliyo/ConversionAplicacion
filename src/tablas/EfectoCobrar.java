@@ -6,6 +6,7 @@ import general.MysqlConnect;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 import util.Apariencia;
@@ -13,9 +14,10 @@ import util.BaseDatos;
 
 import util.Cadena;
 
-
-
-
+/**
+ *
+ * @author Txus
+ */
 public class EfectoCobrar {
 	private String empresa;
 	private int banco;
@@ -42,7 +44,10 @@ public class EfectoCobrar {
 	private int reciboImpreso;
 	private int origen;
 
-	public EfectoCobrar(){
+    /**
+     *
+     */
+    public EfectoCobrar(){
 		empresa = DatosComunes.eEmpresa;		
 		banco = 0;
 		fechaCobro = 0;
@@ -69,7 +74,11 @@ public class EfectoCobrar {
 		origen = 0;
 	}
 
-	public EfectoCobrar(ResultSet rs){
+    /**
+     *
+     * @param rs
+     */
+    public EfectoCobrar(ResultSet rs){
 		try{
 			if(rs.next() == true){				
 				empresa = rs.getString("EMPRESA").trim();
@@ -105,7 +114,11 @@ public class EfectoCobrar {
 		}
 	}
 
-	public void read(ResultSet rs){
+    /**
+     *
+     * @param rs
+     */
+    public void read(ResultSet rs){
 		try{				
 			empresa = rs.getString("EMPRESA").trim();
 			banco = rs.getInt("EFECOB_BANCO");
@@ -140,7 +153,12 @@ public class EfectoCobrar {
 	}
         
         // Con este método leemos una cuenta pasando tan sólo una consulta SQL
-	public void read(String strSql){
+
+    /**
+     *
+     * @param strSql
+     */
+    	public void read(String strSql){
 
 		ResultSet rsSql = null;
 		MysqlConnect m = null;
@@ -165,7 +183,10 @@ public class EfectoCobrar {
 		}
 	}
 
-	public void write(){
+    /**
+     *
+     */
+    public void write(){
 		PreparedStatement ps = null;
    
 		String sqlInsert = "INSERT INTO EFECOB " +
@@ -288,195 +309,425 @@ public class EfectoCobrar {
 		}
 	}
 	
-	public String getEmpresa() {
+        // Borramos un EFECTO  de un CENTRO concreto, en una FECHA_DE_VENCIMIENTO y con un NUMERO_DE_EFECTO.
+	// Devolvemos el número de registros borrados o -1 si hay error
+
+    /**
+     *
+     * @param centro
+     * @param fechaVencimiento
+     * @param numeroEfecto
+     * @return Número de registros borrados
+     */
+    	public int delete(int centro, int fechaVencimiento, int numeroEfecto){
+		int registrosBorrados = 0;
+		
+		Statement ps = null;
+   
+		String sqlDelete = "DELETE FROM EFECOB WHERE " + 
+							"EMPRESA = '" + DatosComunes.eEmpresa + "' AND " +
+							"EFECOB_CENTRO = " + centro + " AND " +
+							"EFECOB_VENCIM = " + fechaVencimiento + " AND " +
+							"EFECOB_EFECTO = " + numeroEfecto;
+
+		try {
+			ps = MysqlConnect.db.conn.createStatement();			
+			
+			registrosBorrados = ps.executeUpdate(sqlDelete);
+
+		} catch (SQLException e) {
+			registrosBorrados = -1;
+			if(DatosComunes.enDebug){
+				JOptionPane.showMessageDialog(null,
+						"Error en borrado fichero de Efectos a Cobrar!!!");
+				e.printStackTrace();
+			}
+		}		
+		
+		return registrosBorrados;
+	}
+        
+    /**
+     *
+     * @return
+     */
+    public String getEmpresa() {
 		return empresa;
 	}
 
-	public void setEmpresa(String empresa) {
+    /**
+     *
+     * @param empresa
+     */
+    public void setEmpresa(String empresa) {
 		this.empresa = empresa;
 	}
 
-	public int getBanco() {
+    /**
+     *
+     * @return
+     */
+    public int getBanco() {
 		return banco;
 	}
 
-	public void setBanco(int banco) {
+    /**
+     *
+     * @param banco
+     */
+    public void setBanco(int banco) {
 		this.banco = banco;
 	}
 
-	public int getFechaCobro() {
+    /**
+     *
+     * @return
+     */
+    public int getFechaCobro() {
 		return fechaCobro;
 	}
 
-	public void setFechaCobro(int fechaCobro) {
+    /**
+     *
+     * @param fechaCobro
+     */
+    public void setFechaCobro(int fechaCobro) {
 		this.fechaCobro = fechaCobro;
 	}
 
-	public int getVencimiento() {
+    /**
+     *
+     * @return
+     */
+    public int getVencimiento() {
 		return vencimiento;
 	}
 
-	public void setVencimiento(int vencimiento) {
+    /**
+     *
+     * @param vencimiento
+     */
+    public void setVencimiento(int vencimiento) {
 		this.vencimiento = vencimiento;
 	}
 
-	public int getEfecto() {
+    /**
+     *
+     * @return
+     */
+    public int getEfecto() {
 		return efecto;
 	}
 
-	public void setEfecto(int efecto) {
+    /**
+     *
+     * @param efecto
+     */
+    public void setEfecto(int efecto) {
 		this.efecto = efecto;
 	}
 
-	public int getCentro() {
+    /**
+     *
+     * @return
+     */
+    public int getCentro() {
 		return centro;
 	}
 
-	public void setCentro(int centro) {
+    /**
+     *
+     * @param centro
+     */
+    public void setCentro(int centro) {
 		this.centro = centro;
 	}
 
-	public int getSituacion() {
+    /**
+     *
+     * @return
+     */
+    public int getSituacion() {
 		return situacion;
 	}
 
-	public void setSituacion(int situacion) {
+    /**
+     *
+     * @param situacion
+     */
+    public void setSituacion(int situacion) {
 		this.situacion = situacion;
 	}
 
-	public int getFechaRemesa() {
+    /**
+     *
+     * @return
+     */
+    public int getFechaRemesa() {
 		return fechaRemesa;
 	}
 
-	public void setFechaRemesa(int fechaRemesa) {
+    /**
+     *
+     * @param fechaRemesa
+     */
+    public void setFechaRemesa(int fechaRemesa) {
 		this.fechaRemesa = fechaRemesa;
 	}
 
-	public int getRemesa() {
+    /**
+     *
+     * @return
+     */
+    public int getRemesa() {
 		return remesa;
 	}
 
-	public void setRemesa(int remesa) {
+    /**
+     *
+     * @param remesa
+     */
+    public void setRemesa(int remesa) {
 		this.remesa = remesa;
 	}
 
-	public int getFactura() {
+    /**
+     *
+     * @return
+     */
+    public int getFactura() {
 		return factura;
 	}
 
-	public void setFactura(int factura) {
+    /**
+     *
+     * @param factura
+     */
+    public void setFactura(int factura) {
 		this.factura = factura;
 	}
 
-	public String getCuenta() {
+    /**
+     *
+     * @return
+     */
+    public String getCuenta() {
 		return cuenta;
 	}
 
-	public void setCuenta(String cuenta) {
+    /**
+     *
+     * @param cuenta
+     */
+    public void setCuenta(String cuenta) {
 		this.cuenta = cuenta;
 	}
 
-	public long getFechaAsientoApunte() {
+    /**
+     *
+     * @return
+     */
+    public long getFechaAsientoApunte() {
 		return fechaAsientoApunte;
 	}
 
-	public void setFechaAsientoApunte(long fechaAsientoApunte) {
+    /**
+     *
+     * @param fechaAsientoApunte
+     */
+    public void setFechaAsientoApunte(long fechaAsientoApunte) {
 		this.fechaAsientoApunte = fechaAsientoApunte;
 	}
 
-	public int getFechaEfecto() {
+    /**
+     *
+     * @return
+     */
+    public int getFechaEfecto() {
 		return fechaEfecto;
 	}
 
-	public void setFechaEfecto(int fechaEfecto) {
+    /**
+     *
+     * @param fechaEfecto
+     */
+    public void setFechaEfecto(int fechaEfecto) {
 		this.fechaEfecto = fechaEfecto;
 	}
 
-	public double getImporte() {
+    /**
+     *
+     * @return
+     */
+    public double getImporte() {
 		return importe;
 	}
 
-	public void setImporte(double importe) {
+    /**
+     *
+     * @param importe
+     */
+    public void setImporte(double importe) {
 		this.importe = importe;
 	}
 
-	public int getVencimientoDv() {
+    /**
+     *
+     * @return
+     */
+    public int getVencimientoDv() {
 		return vencimientoDv;
 	}
 
-	public void setVencimientoDv(int vencimientoDv) {
+    /**
+     *
+     * @param vencimientoDv
+     */
+    public void setVencimientoDv(int vencimientoDv) {
 		this.vencimientoDv = vencimientoDv;
 	}
 
-	public int getNumeroBanco() {
+    /**
+     *
+     * @return
+     */
+    public int getNumeroBanco() {
 		return numeroBanco;
 	}
 
-	public void setNumeroBanco(int numeroBanco) {
+    /**
+     *
+     * @param numeroBanco
+     */
+    public void setNumeroBanco(int numeroBanco) {
 		this.numeroBanco = numeroBanco;
 	}
 
-	public int getNumeroSucursal() {
+    /**
+     *
+     * @return
+     */
+    public int getNumeroSucursal() {
 		return numeroSucursal;
 	}
 
-	public void setNumeroSucursal(int numeroSucursal) {
+    /**
+     *
+     * @param numeroSucursal
+     */
+    public void setNumeroSucursal(int numeroSucursal) {
 		this.numeroSucursal = numeroSucursal;
 	}
 
-	public int getDigitosControl() {
+    /**
+     *
+     * @return
+     */
+    public int getDigitosControl() {
 		return digitosControl;
 	}
 
-	public void setDigitosControl(int digitosControl) {
+    /**
+     *
+     * @param digitosControl
+     */
+    public void setDigitosControl(int digitosControl) {
 		this.digitosControl = digitosControl;
 	}
 
-	public long getCuentaBancaria() {
+    /**
+     *
+     * @return
+     */
+    public long getCuentaBancaria() {
 		return cuentaBancaria;
 	}
 
-	public void setCuentaBancaria(long cuentaBancaria) {
+    /**
+     *
+     * @param cuentaBancaria
+     */
+    public void setCuentaBancaria(long cuentaBancaria) {
 		this.cuentaBancaria = cuentaBancaria;
 	}
 
-	public double getTimbres() {
+    /**
+     *
+     * @return
+     */
+    public double getTimbres() {
 		return timbres;
 	}
 
-	public void setTimbres(double timbres) {
+    /**
+     *
+     * @param timbres
+     */
+    public void setTimbres(double timbres) {
 		this.timbres = timbres;
 	}
 
-	public int getFechaFactura() {
+    /**
+     *
+     * @return
+     */
+    public int getFechaFactura() {
 		return fechaFactura;
 	}
 
-	public void setFechaFactura(int fechaFactura) {
+    /**
+     *
+     * @param fechaFactura
+     */
+    public void setFechaFactura(int fechaFactura) {
 		this.fechaFactura = fechaFactura;
 	}
 
-	public int getRepresentante() {
+    /**
+     *
+     * @return
+     */
+    public int getRepresentante() {
 		return representante;
 	}
 
-	public void setRepresentante(int representante) {
+    /**
+     *
+     * @param representante
+     */
+    public void setRepresentante(int representante) {
 		this.representante = representante;
 	}
 
-	public int getReciboImpreso() {
+    /**
+     *
+     * @return
+     */
+    public int getReciboImpreso() {
 		return reciboImpreso;
 	}
 
-	public void setReciboImpreso(int reciboImpreso) {
+    /**
+     *
+     * @param reciboImpreso
+     */
+    public void setReciboImpreso(int reciboImpreso) {
 		this.reciboImpreso = reciboImpreso;
 	}
 
-	public int getOrigen() {
+    /**
+     *
+     * @return
+     */
+    public int getOrigen() {
 		return origen;
 	}
 
-	public void setOrigen(int origen) {
+    /**
+     *
+     * @param origen
+     */
+    public void setOrigen(int origen) {
 		this.origen = origen;
 	}
 }

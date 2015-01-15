@@ -110,7 +110,7 @@
                   </Group>
                   <Component id="jbSalir" min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="25" max="32767" attributes="0"/>
+              <EmptySpace pref="28" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -269,8 +269,7 @@
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jtfnfCliente" alignment="0" min="-2" pref="106" max="-2" attributes="0"/>
-                              <Component id="jtfnf2dImporte" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jtfnfCliente" alignment="0" pref="106" max="32767" attributes="0"/>
                               <Component id="jtffFechaFactura" alignment="0" max="32767" attributes="0"/>
                               <Group type="103" alignment="0" groupAlignment="1" attributes="0">
                                   <Component id="jtffFechaRemesa" alignment="1" min="-2" pref="90" max="-2" attributes="0"/>
@@ -284,6 +283,7 @@
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Component id="jtfnfBancoNegociacion" min="-2" pref="64" max="-2" attributes="0"/>
                               </Group>
+                              <Component id="jtfnf2dImporte" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
@@ -345,9 +345,9 @@
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="jlImporte" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jtfnf2dImporte" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                      <Component id="jtfnf2dImporte" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="101" max="-2" attributes="0"/>
                                   <Component id="jtfnfBancoNegociacion" min="-2" pref="25" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -458,16 +458,6 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Importe"/>
           </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="jtfnf2dImporte">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="MS Reference Sans Serif" size="14" style="1"/>
-            </Property>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldNumero2Decimales()"/>
-          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jlBancoNegociacion">
           <Properties>
@@ -836,6 +826,13 @@
             </Property>
           </Properties>
         </Component>
+        <Component class="util.JTextFieldNumero2Decimales" name="jtfnf2dImporte">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="MS Reference Sans Serif" size="14" style="1"/>
+            </Property>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JButton" name="jbSalir">
@@ -866,6 +863,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Depuraci&#xf3;n Riesgo"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbDepuracionRiesgoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbBorrar">
       <Properties>
@@ -874,6 +874,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Borrar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbBorrarActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbGrabar">
       <Properties>
