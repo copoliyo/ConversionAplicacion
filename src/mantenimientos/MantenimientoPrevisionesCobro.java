@@ -19,6 +19,7 @@ import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import procesos.DepuracionRiesgosContables;
 import tablas.Banco;
 import tablas.ClienteContable;
 import tablas.Cuenta;
@@ -999,34 +1000,51 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
     }//GEN-LAST:event_jbBorrarActionPerformed
 
     private void jbDepuracionRiesgoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDepuracionRiesgoActionPerformed
-        
+
         int anio, mes, dia;
-        
+
         // Restamos 40 días a la fecha actual
-        Fecha fechaLimite40DiasAntes = new Fecha();
-        
+        final Fecha fechaLimite40DiasAntes = new Fecha();
+
         anio = fechaLimite40DiasAntes.getAnio();
         mes = fechaLimite40DiasAntes.getMes();
         dia = fechaLimite40DiasAntes.getDia();
-        
+
         // Quitamos 10 dias al día
         dia -= 10;
-        if(dia < 0)
+        if (dia < 0) {
             dia += 30;
+        }
         // Quitamos 1 mes al mes
         mes -= 1;
-        if(mes < 1){
+        if (mes < 1) {
             // Nos hemos pasado por 'abajo', estamos en el año anterior.
-            mes = 12;            
+            mes = 12;
             anio--;
         }
-        
+
         fechaLimite40DiasAntes.setAnio(anio);
         fechaLimite40DiasAntes.setMes(mes);
         fechaLimite40DiasAntes.setDia(dia);
+
+        // Apariencia.mensajeInformativo(5, fechaLimite40DiasAntes.fechaAcadena());
+                
+        /* Create and display the dialog */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                DepuracionRiesgosContables drc = new DepuracionRiesgosContables(new javax.swing.JDialog(),
+                true,
+                Fecha.cadenaAfecha(fechaLimite40DiasAntes.fechaAcadena()));
+                drc.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                drc.setVisible(true);
+            }
+        });
         
-        Apariencia.mensajeInformativo(5, fechaLimite40DiasAntes.fechaAcadena());
-            
     }//GEN-LAST:event_jbDepuracionRiesgoActionPerformed
 
     private void salir() {
