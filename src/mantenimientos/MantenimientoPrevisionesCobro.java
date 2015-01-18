@@ -17,6 +17,7 @@ import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 import java.sql.ResultSet;
 import java.util.Vector;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import procesos.DepuracionRiesgosContables;
@@ -36,7 +37,9 @@ import util.Fecha;
  *
  * @author Txus
  */
-public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
+//public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
+public class MantenimientoPrevisionesCobro extends JDialog {
+
     // Con esta variable definimos si estamos en una consulta (TRUE) o en
     // un mantenimiento (FALSE). Nos servirá para tener un sólo programa
     // para algunas Consultas/Mantenimientos que pueden compartir las 
@@ -61,18 +64,21 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
      */
     public MantenimientoPrevisionesCobro(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        initComponents();        
+        initComponents();       
+        
+        
+        
     }
     
     public MantenimientoPrevisionesCobro(JFrame parentFrame) {
-        super();
+        super(parentFrame, true);
         frameMenu = parentFrame;
         initComponents();
         borrarPantalla();
         cargaInicial();
         this.setVisible(true);        
         
-        // Establecemos el orden de los campos.
+        // Establecemos el orden de los campos.        
         Vector<Component> order = new Vector<Component>(18);
         order.add(jtffVencimiento);
         order.add(jtfnfEfecto);
@@ -94,6 +100,7 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         order.add(jcbReciboEmitido);                
         MyOFocusTraversalPolicy newPolicy = new MyOFocusTraversalPolicy(order);
         this.setFocusTraversalPolicy(newPolicy);
+        
     }
 
     /**
@@ -1028,8 +1035,16 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         fechaLimite40DiasAntes.setDia(dia);
 
         // Apariencia.mensajeInformativo(5, fechaLimite40DiasAntes.fechaAcadena());
-                
+        DepuracionRiesgosContables drc = new DepuracionRiesgosContables(new util.EscapeDialog(),
+                true,
+                Fecha.cadenaAfecha(fechaLimite40DiasAntes.fechaAcadena())); 
+         drc.setVisible(true);
+         
+         this.setVisible(true);
+         this.repaint();
+        
         /* Create and display the dialog */
+        /*
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 DepuracionRiesgosContables drc = new DepuracionRiesgosContables(new javax.swing.JDialog(),
@@ -1044,7 +1059,7 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
                 drc.setVisible(true);
             }
         });
-        
+        */
     }//GEN-LAST:event_jbDepuracionRiesgoActionPerformed
 
     private void salir() {

@@ -34,7 +34,7 @@ import util.Fecha;
  *
  * @author Txus
  */
-public class DepuracionRiesgosContables extends util.EscapeDialog {
+public class DepuracionRiesgosContables extends javax.swing.JDialog {
     
     public enum Columna {
 
@@ -134,7 +134,7 @@ public class DepuracionRiesgosContables extends util.EscapeDialog {
         spEfectosCobrar.setFont(Apariencia.cambiaFuente());
         this.add(spEfectosCobrar);	
         
-        cargaPrevisionesCobro();
+        //cargaPrevisionesCobro();
     }
     
     class TableCellRenderer extends DefaultTableCellRenderer {
@@ -339,7 +339,7 @@ public class DepuracionRiesgosContables extends util.EscapeDialog {
     }
 
     private void salir() {
-        this.dispose();
+        this.dispose();        
     }   
     
     /**

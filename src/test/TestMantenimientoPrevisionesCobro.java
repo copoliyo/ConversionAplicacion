@@ -50,10 +50,11 @@ public class TestMantenimientoPrevisionesCobro {
             System.out.println(e);
         }
          
+       
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                new MantenimientoPrevisionesCobro(new JFrame());
             }
-        });
+        });      
     }
 }
