@@ -94,14 +94,21 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="00.00.00"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtffHastaFechaActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="jtbCobradosComoRemesados">
       <Properties>
         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
           <ComponentRef name="bgTipoDepuracion"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Poner COBRADOS como REMESADOS"/>
+        <Property name="selected" type="boolean" value="true"/>
+        <Property name="text" type="java.lang.String" value="Poner los REMESADOS como COBRADOS"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtbCobradosComoRemesadosActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="jrbBorrarCobrados">
       <Properties>
@@ -110,6 +117,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Borrar efectos COBRADOS"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jrbBorrarCobradosActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbBajaAntiguos">
       <Properties>
@@ -122,6 +132,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Proceso"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbProcesoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbSalir">
       <Properties>

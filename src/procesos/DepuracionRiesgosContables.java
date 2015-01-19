@@ -14,6 +14,7 @@ import java.awt.Font;
 import java.awt.Rectangle;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import util.EscapeDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -56,11 +57,15 @@ public class DepuracionRiesgosContables extends util.EscapeDialog {
     
     private static EfectoCobrar efectoCobrar = new EfectoCobrar();
 
+    private boolean borrarCobrados = false;
+    private String strSql = "";
+    
+    int fechaFiltro = 0;
+    
     ResultSet rs = null;
     MysqlConnect m = null;
 
-    // Consulta SQL
-    String strSql = "";
+    // Consulta SQL    
     String strCuenta = "";
     private int fechaTope;
     private DefaultTableCellRenderer tcr;
@@ -81,11 +86,11 @@ public class DepuracionRiesgosContables extends util.EscapeDialog {
      */
     public DepuracionRiesgosContables(util.EscapeDialog parent, boolean modal, int hastaFecha) {
         super(parent, modal);
-        
+        this.fechaTope = hastaFecha;
         initComponents();
         inicializaTabla();
         jtffHastaFecha.setText(Fecha.fechaAcadena(hastaFecha));
-        this.fechaTope = hastaFecha;        
+                
     }
     
     private void inicializaTabla(){
@@ -182,18 +187,24 @@ public class DepuracionRiesgosContables extends util.EscapeDialog {
 	// Primero cargamos TODAS las previsiones de Cobro.
         // La fecha sólo nos sirve para poner el foco en la primera
         // a partir de la fecha de vencimiento		
-        String strDesdeFecha = String.valueOf(Cadena.cadenaAfecha(jtffHastaFecha.getText()));
-        int fechaFiltro = 0;
+        String strHastaFecha = String.valueOf(Cadena.cadenaAfecha(jtffHastaFecha.getText()));
+        
+        
+        if(strHastaFecha.equalsIgnoreCase("0"))
+            fechaFiltro = fechaTope;
+        else
+            fechaFiltro = Cadena.cadenaAfecha(jtffHastaFecha.getText());
 
-        if (strDesdeFecha.length() > 0) {
-            fechaFiltro = Integer.valueOf(strDesdeFecha);
-        }
+        if (fechaFiltro == 0) 
+            fechaFiltro = Cadena.cadenaAfecha(jtffHastaFecha.getText());
+        
+            
 
         Object fila[] = {"", "", "", "", "", "", ""};
 
 		// Necesitamos saber las que no tienen fecha de Cobro, esto es, que están pendientes
         // OJO a la clausula ORDER!!!!!A
-        String strSql = "SELECT * FROM EFECOB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND ";
+        strSql = "SELECT * FROM EFECOB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND ";
 
         /* El indice del programa original pasa del CENTRO????
          if(DatosComunes.centroCont != 0)
@@ -202,14 +213,23 @@ public class DepuracionRiesgosContables extends util.EscapeDialog {
          strSql = strSql + " AND ";
          */
         if (strCuenta.length() > 0) {
-            strSql += " EFECOB_CUENTA = '" + strCuenta + "' AND ";
+            strSql += "EFECOB_CUENTA = '" + strCuenta + "' AND ";
         }
 
-        strSql += " EFECOB_FECHA_COBRO = 0 "
-                + "ORDER BY EFECOB_VENCIM, EFECOB_EFECTO, EFECOB_CUENTA, EFECOB_FECHA_COBRO ASC";
+        strSql+= "EFECOB_VENCIM <= " + fechaFiltro + " AND ";
+        
+        if(borrarCobrados)
+            strSql += "EFECOB_SITUACION = 5 AND EFECOB_IMPORTE > 0 AND EFECOB_VENCIM > 0 ";
+        else
+            strSql += "EFECOB_SITUACION = 3 ";
+              
+        
+        strSql += "ORDER BY EFECOB_VENCIM, EFECOB_EFECTO, EFECOB_CUENTA, EFECOB_FECHA_COBRO ASC";
 
+        //Apariencia.mensajeInformativo(4, strSql);
         Cuenta cuenta = new Cuenta();
-
+        //EfectoCobrar efectoCobrar = new EfectoCobrar();
+        
 		// Utilizados para leer sólo una vez y ver si hay que mostrarlos o
         // si son 0, mejor no sacar nada.
         double dAcumulado = 0.0, importe = 0.0;
@@ -219,12 +239,13 @@ public class DepuracionRiesgosContables extends util.EscapeDialog {
         String strFechaVencimiento = "";
 
         m = MysqlConnect.getDbCon();
-
+        
+        
         int numeroRegistros = BaseDatos.countRows(strSql);
         int numeroFilas = 0;
         if (numeroRegistros != 0) {
             try {
-                EfectoCobrar efectoCobrar = new EfectoCobrar();
+                
                 rs = m.query(strSql);
 
                 while (rs.next() || rs.isLast()) {
@@ -307,7 +328,7 @@ public class DepuracionRiesgosContables extends util.EscapeDialog {
                         modeloTabla.addRow(fila);
                         numeroFilas++;
                     } else {
-                        if (fechaVencimiento >= fechaFiltro) {
+                        if (fechaVencimiento <= fechaFiltro) {
                             modeloTabla.addRow(fila);
                             numeroFilas++;
                         }
@@ -320,11 +341,14 @@ public class DepuracionRiesgosContables extends util.EscapeDialog {
                 Apariencia.mensajeInformativo(5, "Error en lectura fichero de DebeHaber<BR>Consulta Acumulados Contables");
             }
 
+            /*
             if (fechaFiltro != 0) {
                 numeroFilas = 0;
             } else {
                 numeroFilas--;
             }
+            */
+            numeroFilas--;
             // Vamos al final de la trabla
             jtEfectosCobrar.clearSelection();
             jtEfectosCobrar.setRowSelectionInterval(numeroFilas, numeroFilas);
@@ -367,16 +391,37 @@ public class DepuracionRiesgosContables extends util.EscapeDialog {
         jlHastaFecha.setText("Hasta Fecha");
 
         jtffHastaFecha.setText("00.00.00");
+        jtffHastaFecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtffHastaFechaActionPerformed(evt);
+            }
+        });
 
         bgTipoDepuracion.add(jtbCobradosComoRemesados);
-        jtbCobradosComoRemesados.setText("Poner COBRADOS como REMESADOS");
+        jtbCobradosComoRemesados.setSelected(true);
+        jtbCobradosComoRemesados.setText("Poner los REMESADOS como COBRADOS");
+        jtbCobradosComoRemesados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtbCobradosComoRemesadosActionPerformed(evt);
+            }
+        });
 
         bgTipoDepuracion.add(jrbBorrarCobrados);
         jrbBorrarCobrados.setText("Borrar efectos COBRADOS");
+        jrbBorrarCobrados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrbBorrarCobradosActionPerformed(evt);
+            }
+        });
 
         jbBajaAntiguos.setText("Baja Antiguos");
 
         jbProceso.setText("Proceso");
+        jbProceso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbProcesoActionPerformed(evt);
+            }
+        });
 
         jbSalir.setText("Salir");
         jbSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -439,6 +484,93 @@ public class DepuracionRiesgosContables extends util.EscapeDialog {
         
         salir();
     }//GEN-LAST:event_jbSalirActionPerformed
+
+    private void jtbCobradosComoRemesadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtbCobradosComoRemesadosActionPerformed
+        borrarCobrados = false;
+        Apariencia.mensajeInformativo(5, 
+            "Al pulsar el botón de 'Proceso',<br> los efectos REMESADOS se pondrán<br> con el estatus de COBRADOS.");
+        cargaPrevisionesCobro();
+    }//GEN-LAST:event_jtbCobradosComoRemesadosActionPerformed
+
+    private void jrbBorrarCobradosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrbBorrarCobradosActionPerformed
+       borrarCobrados = true;
+       Apariencia.mensajeInformativo(5, 
+            "Al pulsar el botón de 'Proceso',<br> los efectos COBRADOS se borrarán<br> hasta la fecha indicada inclusive.");
+       cargaPrevisionesCobro();
+    }//GEN-LAST:event_jrbBorrarCobradosActionPerformed
+
+    private void jtffHastaFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtffHastaFechaActionPerformed
+        
+        cargaPrevisionesCobro();
+    }//GEN-LAST:event_jtffHastaFechaActionPerformed
+
+    private void jbProcesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbProcesoActionPerformed
+
+        m = MysqlConnect.getDbCon();
+        int numeroRegistros, opcion;
+        Object[] opciones = {"Si", "No"};
+
+        numeroRegistros = BaseDatos.countRows(strSql);
+
+        if (borrarCobrados) {
+            if (numeroRegistros > 0) {
+                // Damos la oportunidad de no borrar
+
+                opcion = JOptionPane.showOptionDialog(this,
+                        "<html><font size='4'><strong><center>"
+                        + "Se borrarán " + String.valueOf(numeroRegistros) + " Efectos a Cobrar.<br>"
+                        + "¿Desea continuar?<br>"
+                        + "</center></strong></font></html>",
+                        "Borrar Efectos a Cobrar",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null, // Sin Icono personalizado.
+                        opciones, // Título de los botonoes
+                        opciones[1]); // Botón por defecto.           
+                // Si = 0
+                if (opcion == 0) {
+                    // Creamos la SQL de borrado.
+                    String strSqlDelete = strSql.replaceFirst("SELECT *", "DELETE  ");
+                    Apariencia.mensajeInformativo(3, strSqlDelete);
+                }
+            } else {
+                Apariencia.mensajeInformativo(4, "<html><font size='4'><strong><center>"
+                        + "Lo siento, pero no hay efectos COBRADO para borrar."
+                        + "</center></strong></font></html>");
+            }
+        } else {
+            //if (numeroRegistros > 0) {
+            if(true){
+                // Damos la oportunidad de no poner com COBRADOS
+                opcion = JOptionPane.showOptionDialog(this,
+                        "<html><font size='4'><strong><center>"
+                        + "Se pondrán como COBRADOS " + String.valueOf(numeroRegistros) + " Efectos a Cobrar,<br>"
+                        + "que ahora figuran como REMESADOS.<br>"
+                        + "¿Desea continuar?<br>"
+                        + "</center></strong></font></html>",
+                        "Borrar Efectos a Cobrar",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null, // Sin Icono personalizado.
+                        opciones, // Título de los botonoes
+                        opciones[1]); // Botón por defecto.     
+                // Si = 0
+                if (opcion == 0) {
+                    // Creamos la SQL de UPDATE
+                    String strSqlUpdate = "UPDATE EFECOB SET EFECOB_SITUACION = 5, EFECOB_BANCO = 0, EFECOB_REMESA = 0, EFECOB_FECHA_REMESA = 0 "
+                            + "WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND " 
+                            + "EFECOB_VENCIM <= " + fechaFiltro + " AND "
+                            + "EFECOB_SITUACION = 3";
+                    Apariencia.mensajeInformativo(3, strSqlUpdate);
+                }
+            } else {
+                Apariencia.mensajeInformativo(4, "<html><font size='4'><strong><center>" +
+                        "Lo siento, pero no hay efectos REMESADOS para poner como COBRADOS." +
+                        "</center></strong></font></html>");
+            }
+
+        }
+    }//GEN-LAST:event_jbProcesoActionPerformed
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
