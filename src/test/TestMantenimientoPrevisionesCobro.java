@@ -18,7 +18,7 @@ import mantenimientos.MantenimientoPrevisionesCobro;
  *
  * @author Txus
  */
-public class TestMantenimientoPrevisionesCobro {
+public class TestMantenimientoPrevisionesCobro extends javax.swing.JFrame{
     /**
 	 * @param args
 	 */
@@ -48,12 +48,13 @@ public class TestMantenimientoPrevisionesCobro {
                     }
         } catch (UnsupportedLookAndFeelException e) {
             System.out.println(e);
-        }
+        }                                                                                          
          
        
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-               new MantenimientoPrevisionesCobro(new JFrame());
+               new MantenimientoPrevisionesCobro(new javax.swing.JFrame());
+               System.exit(0);
             }
         });      
     }

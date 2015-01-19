@@ -14,7 +14,7 @@ import java.awt.Font;
 import java.awt.Rectangle;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JDialog;
+import util.EscapeDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
@@ -34,7 +34,7 @@ import util.Fecha;
  *
  * @author Txus
  */
-public class DepuracionRiesgosContables extends javax.swing.JDialog {
+public class DepuracionRiesgosContables extends util.EscapeDialog {
     
     public enum Columna {
 
@@ -79,7 +79,7 @@ public class DepuracionRiesgosContables extends javax.swing.JDialog {
     /**
      * Creates new form DepuracionRiesgosContables
      */
-    public DepuracionRiesgosContables(javax.swing.JDialog parent, boolean modal, int hastaFecha) {
+    public DepuracionRiesgosContables(util.EscapeDialog parent, boolean modal, int hastaFecha) {
         super(parent, modal);
         
         initComponents();
@@ -134,7 +134,7 @@ public class DepuracionRiesgosContables extends javax.swing.JDialog {
         spEfectosCobrar.setFont(Apariencia.cambiaFuente());
         this.add(spEfectosCobrar);	
         
-        //cargaPrevisionesCobro();
+        cargaPrevisionesCobro();
     }
     
     class TableCellRenderer extends DefaultTableCellRenderer {

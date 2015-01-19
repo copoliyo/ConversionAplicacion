@@ -17,7 +17,7 @@ import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 import java.sql.ResultSet;
 import java.util.Vector;
-import javax.swing.JDialog;
+import util.EscapeDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import procesos.DepuracionRiesgosContables;
@@ -38,7 +38,7 @@ import util.Fecha;
  * @author Txus
  */
 //public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
-public class MantenimientoPrevisionesCobro extends JDialog {
+public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
 
     // Con esta variable definimos si estamos en una consulta (TRUE) o en
     // un mantenimiento (FALSE). Nos servirá para tener un sólo programa
@@ -62,7 +62,7 @@ public class MantenimientoPrevisionesCobro extends JDialog {
     /**
      * Creates new form MantenimientoPrevisionesCobro
      */
-    public MantenimientoPrevisionesCobro(java.awt.Frame parent, boolean modal) {
+    public MantenimientoPrevisionesCobro(javax.swing.JFrame parent, boolean modal) {
         super(parent, modal);
         initComponents();       
         
@@ -70,7 +70,7 @@ public class MantenimientoPrevisionesCobro extends JDialog {
         
     }
     
-    public MantenimientoPrevisionesCobro(JFrame parentFrame) {
+    public MantenimientoPrevisionesCobro(javax.swing.JFrame parentFrame) {        
         super(parentFrame, true);
         frameMenu = parentFrame;
         initComponents();
@@ -1047,7 +1047,7 @@ public class MantenimientoPrevisionesCobro extends JDialog {
         /*
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                DepuracionRiesgosContables drc = new DepuracionRiesgosContables(new javax.swing.JDialog(),
+                DepuracionRiesgosContables drc = new DepuracionRiesgosContables(new util.EscapeDialog(),
                 true,
                 Fecha.cadenaAfecha(fechaLimite40DiasAntes.fechaAcadena()));
                 drc.addWindowListener(new java.awt.event.WindowAdapter() {
