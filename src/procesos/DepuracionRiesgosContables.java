@@ -14,6 +14,9 @@ import java.awt.Font;
 import java.awt.Rectangle;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import util.EscapeDialog;
 import javax.swing.JScrollPane;
@@ -30,6 +33,7 @@ import util.Apariencia;
 import util.BaseDatos;
 import util.Cadena;
 import util.Fecha;
+import util.JOptionPaneConTimeOut;
 
 /**
  *
@@ -512,6 +516,7 @@ public class DepuracionRiesgosContables extends util.EscapeDialog {
 
         numeroRegistros = BaseDatos.countRows(strSql);
 
+        // Si borrarCobrados == true, se borran los Efectos a Cobrar cobrados hasta la fecha indicada.
         if (borrarCobrados) {
             if (numeroRegistros > 0) {
                 // Damos la oportunidad de no borrar
@@ -530,8 +535,21 @@ public class DepuracionRiesgosContables extends util.EscapeDialog {
                 // Si = 0
                 if (opcion == 0) {
                     // Creamos la SQL de borrado.
+                    
                     String strSqlDelete = strSql.replaceFirst("SELECT *", "DELETE  ");
                     Apariencia.mensajeInformativo(3, strSqlDelete);
+                    
+                    Statement ps = null;
+                    try {
+                        ps = MysqlConnect.db.conn.createStatement();
+                        int registrosBorrados = ps.executeUpdate(strSqlDelete);
+                        Apariencia.mensajeInformativo(5, "Borrados " + String.valueOf(registrosBorrados) + " Efectos a Cobrar");
+                        ps.close();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(DepuracionRiesgosContables.class.getName()).log(Level.SEVERE, null, ex);
+                    }                                 
+                    
+                    cargaPrevisionesCobro();
                 }
             } else {
                 Apariencia.mensajeInformativo(4, "<html><font size='4'><strong><center>"
@@ -548,7 +566,7 @@ public class DepuracionRiesgosContables extends util.EscapeDialog {
                         + "que ahora figuran como REMESADOS.<br>"
                         + "¿Desea continuar?<br>"
                         + "</center></strong></font></html>",
-                        "Borrar Efectos a Cobrar",
+                        "Efectos a Cobrar",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE,
                         null, // Sin Icono personalizado.
@@ -558,10 +576,24 @@ public class DepuracionRiesgosContables extends util.EscapeDialog {
                 if (opcion == 0) {
                     // Creamos la SQL de UPDATE
                     String strSqlUpdate = "UPDATE EFECOB SET EFECOB_SITUACION = 5, EFECOB_BANCO = 0, EFECOB_REMESA = 0, EFECOB_FECHA_REMESA = 0 "
-                            + "WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND " 
+                            + "WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
                             + "EFECOB_VENCIM <= " + fechaFiltro + " AND "
                             + "EFECOB_SITUACION = 3";
                     Apariencia.mensajeInformativo(3, strSqlUpdate);
+
+                    try {
+                        if (m.insert(strSqlUpdate) > 0) // JOptionPane.showMessageDialog(null, "Grabación correcta.");
+                        {
+                            JOptionPaneConTimeOut.visualizaDialogo(null,
+                                    "Grabación correcta.",
+                                    "Grabacion Efecto a Cobrar", 5000);
+                        }
+                    } catch (SQLException e) {                    
+                        Apariencia.mensajeInformativo(5, "<center>Se han puesto como COBRADOS los Efectos a Cobrar<br>que estaban REMESADOS.</center>" );
+                        e.printStackTrace();
+                    }
+
+                    cargaPrevisionesCobro();
                 }
             } else {
                 Apariencia.mensajeInformativo(4, "<html><font size='4'><strong><center>" +
