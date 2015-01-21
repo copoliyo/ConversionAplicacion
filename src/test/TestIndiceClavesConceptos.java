@@ -87,7 +87,7 @@ public class TestIndiceClavesConceptos extends javax.swing.JFrame {
 
     private void jbIndiceClavesConceptosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbIndiceClavesConceptosActionPerformed
         
-        IndiceClavesConceptos icc = new IndiceClavesConceptos(this, true);
+        IndiceClavesConceptos icc = new IndiceClavesConceptos(new util.EscapeDialog(), true);
         icc.setVisible(true);
         
         ClaveContable cc = new ClaveContable();

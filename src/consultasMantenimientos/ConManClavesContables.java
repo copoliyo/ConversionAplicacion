@@ -5,7 +5,17 @@
  */
 package consultasMantenimientos;
 
+import general.DatosComunes;
+import general.MysqlConnect;
+import indices.IndiceClavesConceptos;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import tablas.ClaveContable;
 import test.*;
+import util.Apariencia;
+import util.BaseDatos;
 
 /**
  *
@@ -13,19 +23,27 @@ import test.*;
  */
 public class ConManClavesContables extends util.EscapeDialog {
 
+    private ClaveContable claveContable;
+    public static ResultSet rs = null;
+    public static MysqlConnect m = null;
+
     /**
      * Creates new form TestConManClavesContables
      */
-     public ConManClavesContables(javax.swing.JFrame parent) {
-        super(parent);
+    public ConManClavesContables(javax.swing.JFrame parent) {        
+        super(parent, true);
+        m = MysqlConnect.getDbCon();
         initComponents();
-        //this.setVisible(true);
+        this.setVisible(true);
+        borrarPantalla();
     }
-    
-    public ConManClavesContables(javax.swing.JFrame parent, boolean modal) {
+
+    public ConManClavesContables(javax.swing.JFrame parent, boolean modal) {        
         super(parent, modal);
+        m = MysqlConnect.getDbCon();
         initComponents();
-        //this.setVisible(true);
+        this.setVisible(true);
+        borrarPantalla();       
     }
 
     /**
@@ -54,27 +72,54 @@ public class ConManClavesContables extends util.EscapeDialog {
         jbAtras = new javax.swing.JButton();
         jbAdelante = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Claves Automáticas");
 
+        jlClave.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlClave.setText("Clave");
 
         jbIndiceClavesContables.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BUSCAR.gif"))); // NOI18N
         jbIndiceClavesContables.setPreferredSize(new java.awt.Dimension(30, 30));
+        jbIndiceClavesContables.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbIndiceClavesContablesActionPerformed(evt);
+            }
+        });
 
+        jtfnfClaveContable.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtfnfClaveContable.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfnfClaveContableFocusLost(evt);
+            }
+        });
+        jtfnfClaveContable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfnfClaveContableActionPerformed(evt);
+            }
+        });
+
+        jlDescripcion.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlDescripcion.setText("Descripción");
 
-        jlPrevision.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("Actualiza"), "Actualiza"));
+        jtffDescripcion.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+
+        jlPrevision.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("Actualiza"), "Actualiza", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("MS Reference Sans Serif", 1, 14), new java.awt.Color(0, 0, 255))); // NOI18N
+        jlPrevision.setFont(new java.awt.Font("MS Mincho", 1, 14)); // NOI18N
         jlPrevision.setName("Actualiza"); // NOI18N
 
+        jLabel1.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jLabel1.setText("Previsión");
 
+        jLabel2.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jLabel2.setText("Acumulado");
 
+        jcbPrevision.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jcbPrevision.setModel(new javax.swing.DefaultComboBoxModel());
 
+        jcbAcumulado.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jcbAcumulado.setModel(new javax.swing.DefaultComboBoxModel());
 
+        jcbxIva.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jcbxIva.setText("I.V.A.");
 
         javax.swing.GroupLayout jlPrevisionLayout = new javax.swing.GroupLayout(jlPrevision);
@@ -83,18 +128,18 @@ public class ConManClavesContables extends util.EscapeDialog {
             jlPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jlPrevisionLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jlPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jlPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jlPrevisionLayout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(30, 30, 30)
-                        .addComponent(jcbPrevision, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                        .addComponent(jcbPrevision, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jlPrevisionLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
                         .addComponent(jcbAcumulado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addComponent(jcbxIva)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jlPrevisionLayout.setVerticalGroup(
             jlPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -114,12 +159,29 @@ public class ConManClavesContables extends util.EscapeDialog {
         jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/SALIR.gif"))); // NOI18N
         jbSalir.setPreferredSize(new java.awt.Dimension(30, 30));
 
+        jbBorrar.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbBorrar.setText("Borrar");
+        jbBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBorrarActionPerformed(evt);
+            }
+        });
 
+        jbGrabar.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbGrabar.setText("Grabar");
+        jbGrabar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbGrabarActionPerformed(evt);
+            }
+        });
 
         jbAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Atras.gif"))); // NOI18N
         jbAtras.setPreferredSize(new java.awt.Dimension(30, 30));
+        jbAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAtrasActionPerformed(evt);
+            }
+        });
 
         jbAdelante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Adelante.gif"))); // NOI18N
         jbAdelante.setPreferredSize(new java.awt.Dimension(30, 30));
@@ -148,7 +210,7 @@ public class ConManClavesContables extends util.EscapeDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jtfnfClaveContable, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jtffDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -156,11 +218,11 @@ public class ConManClavesContables extends util.EscapeDialog {
                 .addComponent(jbBorrar)
                 .addGap(18, 18, 18)
                 .addComponent(jbGrabar)
-                .addGap(18, 18, 18)
+                .addGap(30, 30, 30)
                 .addComponent(jbAtras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jbAdelante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(23, 23, 23))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,23 +240,285 @@ public class ConManClavesContables extends util.EscapeDialog {
                 .addComponent(jlPrevision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jbAtras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jbBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jbGrabar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jbAtras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbGrabar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jbAdelante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbAdelanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAdelanteActionPerformed
-        // TODO add your handling code here:
+        
+        // Si hay un espacio, entendemos código 0
+        if (jtfnfClaveContable.getText().trim().length() == 0) 
+            jtfnfClaveContable.setText("0");
+       
+        claveContable = new ClaveContable();
+        String strSql = "SELECT * FROM CLCEPC WHERE EMPRESA = '"
+                + DatosComunes.eEmpresa
+                + "' AND CLCEPC_KEY > " + jtfnfClaveContable.getText().trim()
+                + " LIMIT 1";
+        
+        int numeroDeFilas = 0;
+
+        numeroDeFilas = BaseDatos.countRows(strSql);
+        if (numeroDeFilas > 0) {
+            try {
+               borrarPantalla();
+                rs = m.query(strSql);
+
+                // Recorremos el recodSet para ir rellenando la tabla de rutas
+                if (rs.next() == true) {
+                    claveContable.read(rs);
+                    
+                    jtfnfClaveContable.setText(String.valueOf(claveContable.getClave()));                                        
+                }
+            } catch (SQLException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }        
+                
+        cargaClave();
     }//GEN-LAST:event_jbAdelanteActionPerformed
 
+    private void jbIndiceClavesContablesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbIndiceClavesContablesActionPerformed
+
+        IndiceClavesConceptos icc = new IndiceClavesConceptos(this, true);
+        icc.setVisible(true);
+
+        ClaveContable cc = new ClaveContable();
+        cc = icc.getClaveContable();
+        if (cc.getClave() != 0) {
+            jtfnfClaveContable.setText(String.valueOf(cc.getClave()));
+            cargaClave();
+        }
+    }//GEN-LAST:event_jbIndiceClavesContablesActionPerformed
+
+    private void jtfnfClaveContableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnfClaveContableActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtfnfClaveContableActionPerformed
+
+    private void jtfnfClaveContableFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnfClaveContableFocusLost
+        
+        int clave;
+        if(jtfnfClaveContable.getText().trim().length() > 0)
+            clave = Integer.valueOf(jtfnfClaveContable.getText().trim());
+        else{
+            clave = 0;
+            jtfnfClaveContable.setText("0");
+        }
+        
+        if(clave > 0){
+            jbGrabar.setEnabled(true);
+            jbBorrar.setEnabled(true);
+        }else{
+            jbGrabar.setEnabled(false);
+            jbBorrar.setEnabled(false);
+        }
+        
+        cargaClave();
+    }//GEN-LAST:event_jtfnfClaveContableFocusLost
+
+    private void jbGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGrabarActionPerformed
+        
+        claveContable = new ClaveContable();
+        
+        claveContable.setClave(Integer.valueOf(jtfnfClaveContable.getText().trim()));
+        claveContable.setDescripcion(jtffDescripcion.getText().trim());
+        if(jcbxIva.isSelected() == true)
+            claveContable.setActualizaIva(1);
+        else
+            claveContable.setActualizaIva(0);
+        
+        claveContable.setActualizaPrevisiones(jcbPrevision.getSelectedIndex());
+        claveContable.setActualizaAcumulados(jcbAcumulado.getSelectedIndex());
+        
+        if(claveContable.write())
+            Apariencia.mensajeInformativo(5, "Clave grabada correctamente.");
+        
+    }//GEN-LAST:event_jbGrabarActionPerformed
+
+    private void jbBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBorrarActionPerformed
+        borrarClave();
+    }//GEN-LAST:event_jbBorrarActionPerformed
+
+    private void jbAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAtrasActionPerformed
+        // Si hay un espacio, entendemos código 0
+        if (jtfnfClaveContable.getText().trim().length() == 0) 
+            jtfnfClaveContable.setText("0");
+       
+        claveContable = new ClaveContable();
+        String strSql = "SELECT * FROM CLCEPC WHERE EMPRESA = '"
+                + DatosComunes.eEmpresa
+                + "' AND CLCEPC_KEY < " + jtfnfClaveContable.getText().trim()
+                + " ORDER BY CLCEPC_KEY DESC LIMIT 1";
+        
+        int numeroDeFilas = 0;
+
+        numeroDeFilas = BaseDatos.countRows(strSql);
+        if (numeroDeFilas > 0) {
+            try {
+                borrarPantalla();
+                rs = m.query(strSql);
+
+                // Recorremos el recodSet para ir rellenando la tabla de rutas
+                if (rs.next() == true) {
+                    claveContable.read(rs);
+                    
+                    jtfnfClaveContable.setText(String.valueOf(claveContable.getClave()));                                        
+                }
+            } catch (SQLException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }        
+                
+        cargaClave();
+    }//GEN-LAST:event_jbAtrasActionPerformed
+
+    private void cargaClave() {
+
+        int clave;
+
+        claveContable = new ClaveContable();
+
+        clave = Integer.valueOf(jtfnfClaveContable.getText().trim());
+                
+
+        if (clave > 0) {
+            // Si es > 0 tenemos que rellenar los ComboBox de todas formas, 
+            // porque podemos estar creando una clave nueva
+            if (clave < 50) {
+                jcbPrevision.removeAllItems();
+                jcbPrevision.addItem("No");
+                jcbPrevision.addItem("Pago en Menos");
+                jcbPrevision.addItem("Cobro");
+
+                jcbAcumulado.removeAllItems();
+                jcbAcumulado.addItem("No");
+                jcbAcumulado.addItem("Facturado Cliente");
+                jcbAcumulado.addItem("Remesado Banco");
+                jcbAcumulado.addItem("Retenc.IRPF Repres");
+                jcbAcumulado.addItem("Impagado Clientes");
+                jcbAcumulado.addItem("Fact+Rappel Cliente");
+            } else {
+                jcbPrevision.removeAllItems();
+                jcbPrevision.addItem("No");
+                jcbPrevision.addItem("Pago");
+                jcbPrevision.addItem("Cobro en menos");
+
+                jcbAcumulado.removeAllItems();
+                jcbAcumulado.addItem("No");
+                jcbAcumulado.addItem("Facturado Proveedor");
+                jcbAcumulado.addItem("Comision Represent.");
+                jcbAcumulado.addItem("Negociado Bancos");
+                jcbAcumulado.addItem("Gtos.Devol.Banco");
+                jcbAcumulado.addItem("Fact+Rappel Provee");
+            }
+            // Si read devuelve TRUE, es que ha leido la clave bien
+            if (claveContable.read(clave)) {
+                jtffDescripcion.setText(claveContable.getDescripcion());
+
+                if (claveContable.getActualizaIva() == 0) {
+                    jcbxIva.setSelected(false);
+                } else {
+                    jcbxIva.setSelected(true);
+                }
+                
+                // Seleccionamos lo que actualiza
+                if (clave < 50) {                   
+                    // Debe
+                    jcbPrevision.setSelectedIndex(claveContable.getActualizaPrevisiones());                    
+                    jcbAcumulado.setSelectedIndex(claveContable.getActualizaAcumulados());
+                } else {
+                    //Haber                   
+                    jcbPrevision.setSelectedIndex(claveContable.getActualizaPrevisiones());                    
+                    jcbAcumulado.setSelectedIndex(claveContable.getActualizaAcumulados());
+
+                }
+            }else{
+                // Si no leemos una clave válida, borramos la descripción e
+                // inicialmente, suponemos que no actualiza IVA
+               jtffDescripcion.setText(""); 
+               jcbxIva.setSelected(false);
+            }
+        }                
+    }
+    
+    private void borrarClave() {
+
+        int clave, opcion;
+
+        //enCreacion = false;
+        int registrosBorrados, numeroRegistros;
+        boolean existeClave = false;
+        Object[] opciones = {"Si", "No"};
+
+        clave = Integer.valueOf(jtfnfClaveContable.getText().trim());
+
+        String strSql = "SELECT * FROM CLCEPC WHERE EMPRESA = '"
+                + DatosComunes.eEmpresa
+                + "' AND CLCEPC_KEY = " + clave;
+
+        // Comprobramos si existe la ruta
+        numeroRegistros = BaseDatos.countRows(strSql);
+        if (numeroRegistros > 0) {
+            String sqlDelete = "DELETE FROM CLCEPC WHERE "
+                    + "EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                    + "CLCEPC_KEY = " + clave;
+            opcion = JOptionPane.showOptionDialog(this,
+                    "<html><font size='4'><strong><center>"
+                    + "Se borrarán " + String.valueOf(numeroRegistros) + " Clave contable.<br>"
+                    + "¿Desea continuar?<br>"
+                    + "</center></strong></font></html>",
+                    "Borrar Clave Contable",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null, // Sin Icono personalizado.
+                    opciones, // Título de los botonoes
+                    opciones[1]); // Botón por defecto.           
+            // Si = 0
+            if (opcion == 0) {
+                try {
+                    Statement ps = MysqlConnect.db.conn.createStatement();
+
+                    registrosBorrados = ps.executeUpdate(sqlDelete);
+
+                    if (registrosBorrados > 0) {
+                        JOptionPane.showMessageDialog(null,
+                                "Clave Borrada!!!");
+                        borrarPantalla();
+                    }
+                } catch (SQLException e) {
+                    registrosBorrados = -1;
+                    if (DatosComunes.enDebug) {
+                        JOptionPane.showMessageDialog(null,
+                                "Error en borrado fichero de Claves Contables!!!");
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } else {
+            Apariencia.mensajeInformativo(5, "No existe la Clave Contable.<BR><center>Revisarlo!!!</center>");
+        }
+    }
+    
+    private void borrarPantalla(){
+        jtfnfClaveContable.setText("0");
+        jtffDescripcion.setText("");
+        jcbAcumulado.removeAllItems();
+        jcbPrevision.removeAllItems();
+        jcbxIva.setSelected(false);
+        jbBorrar.setEnabled(false);
+        jbGrabar.setEnabled(false);
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
