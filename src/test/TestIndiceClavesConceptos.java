@@ -8,7 +8,6 @@ package test;
 import general.DatosComunes;
 import indices.IndiceClavesConceptos;
 import javax.swing.UIManager;
-import sun.awt.resources.awt;
 import tablas.ClaveContable;
 
 /**
