@@ -8,11 +8,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
+import util.Apariencia;
+import util.BaseDatos;
 
 import util.Cadena;
 
-
-
+/**
+ *
+ * @author Txus
+ */
 public class FacturaEmitida {
 	private String empresa;
 	private int cliente;
@@ -30,7 +34,10 @@ public class FacturaEmitida {
 	private double recargoEquivalencia;
 	private double total;
 	
-	public FacturaEmitida(){
+    /**
+     *
+     */
+    public FacturaEmitida(){
 		empresa = DatosComunes.eEmpresa;
 		cliente = 0;
 		año = 0;
@@ -54,7 +61,11 @@ public class FacturaEmitida {
 		total = 0.0;
 	}
 	
-	public FacturaEmitida(ResultSet rs){
+    /**
+     *
+     * @param rs
+     */
+    public FacturaEmitida(ResultSet rs){
 		try{
 			if(rs.next() == true){				
 				empresa = rs.getString("EMPRESA").trim();
@@ -87,7 +98,11 @@ public class FacturaEmitida {
 		}
 	}
 	
-	public void read(ResultSet rs){
+    /**
+     *
+     * @param rs
+     */
+    public void read(ResultSet rs){
 		try{				
 				empresa = rs.getString("EMPRESA").trim();
 				cliente = rs.getInt("FACEMI_CLIENTE");
@@ -115,8 +130,48 @@ public class FacturaEmitida {
 				e.printStackTrace();
 		}
 	}
+        
+    /**
+     *
+     * @param strSql Cadena con la consulta a ejecutar.
+     * @return <code>true</code> Si la lectura ha sido correcta. <br>
+     * @return <code>false</code> Si ha habido algún problema al leer la Factura Emitida.
+     */
+    public boolean read(String strSql) {
+        boolean lecturaCorrecta = true;
 
-	public void write(){
+        ResultSet rsSql = null;
+        MysqlConnect m = null;
+
+        m = MysqlConnect.getDbCon();
+
+        int registrosLeidos = BaseDatos.countRows(strSql);
+
+        if (registrosLeidos != 0) {
+            try {
+                rsSql = m.query(strSql);
+                // Como ya tenemos el ResultSet se lo pasamos al mñrodo 'read(ResultSet rs)'.
+                if (rsSql.next()) {
+                    this.read(rsSql);
+                    // Cerramos para evitar gastar memoria
+                    rsSql.close();
+                }
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                if (DatosComunes.enDebug) {
+                    e.printStackTrace();
+                }
+                Apariencia.mensajeInformativo(5, "Error en lectura fichero de Facturas Emitidas");
+            }
+        }
+
+        return lecturaCorrecta;
+    }
+
+    /**
+     *
+     */
+    public void write(){
 		PreparedStatement ps = null;
    
 		String sqlInsert = "INSERT INTO FACEMI " +
@@ -214,139 +269,279 @@ public class FacturaEmitida {
 		}
 	}
 	
-	public String getEmpresa() {
+    /**
+     *
+     * @return
+     */
+    public String getEmpresa() {
 		return empresa;
 	}
 
-	public void setEmpresa(String empresa) {
+    /**
+     *
+     * @param empresa
+     */
+    public void setEmpresa(String empresa) {
 		this.empresa = empresa;
 	}
 
-	public int getCliente() {
+    /**
+     *
+     * @return
+     */
+    public int getCliente() {
 		return cliente;
 	}
 
-	public void setCliente(int cliente) {
+    /**
+     *
+     * @param cliente
+     */
+    public void setCliente(int cliente) {
 		this.cliente = cliente;
 	}
 
-	public int getAño() {
+    /**
+     *
+     * @return
+     */
+    public int getAño() {
 		return año;
 	}
 
-	public void setAño(int año) {
+    /**
+     *
+     * @param año
+     */
+    public void setAño(int año) {
 		this.año = año;
 	}
 
-	public String getSerie() {
+    /**
+     *
+     * @return
+     */
+    public String getSerie() {
 		return serie;
 	}
 
-	public void setSerie(String serie) {
+    /**
+     *
+     * @param serie
+     */
+    public void setSerie(String serie) {
 		this.serie = serie;
 	}
 
-	public int getFactura() {
+    /**
+     *
+     * @return
+     */
+    public int getFactura() {
 		return factura;
 	}
 
-	public void setFactura(int factura) {
+    /**
+     *
+     * @param factura
+     */
+    public void setFactura(int factura) {
 		this.factura = factura;
 	}
 
-	public int getCentro() {
+    /**
+     *
+     * @return
+     */
+    public int getCentro() {
 		return centro;
 	}
 
-	public void setCentro(int centro) {
+    /**
+     *
+     * @param centro
+     */
+    public void setCentro(int centro) {
 		this.centro = centro;
 	}
 
-	public int getFecha() {
+    /**
+     *
+     * @return
+     */
+    public int getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(int fecha) {
+    /**
+     *
+     * @param fecha
+     */
+    public void setFecha(int fecha) {
 		this.fecha = fecha;
 	}
 
-	public long getFechaAsientoApunte() {
+    /**
+     *
+     * @return
+     */
+    public long getFechaAsientoApunte() {
 		return fechaAsientoApunte;
 	}
 
-	public void setFechaAsientoApunte(long fechaAsientoApunte) {
+    /**
+     *
+     * @param fechaAsientoApunte
+     */
+    public void setFechaAsientoApunte(long fechaAsientoApunte) {
 		this.fechaAsientoApunte = fechaAsientoApunte;
 	}
 
-	public String getNombreCliente() {
+    /**
+     *
+     * @return
+     */
+    public String getNombreCliente() {
 		return nombreCliente;
 	}
 
-	public void setNombreCliente(String nombreCliente) {
+    /**
+     *
+     * @param nombreCliente
+     */
+    public void setNombreCliente(String nombreCliente) {
 		this.nombreCliente = nombreCliente;
 	}
 
-	public String getNif() {
+    /**
+     *
+     * @return
+     */
+    public String getNif() {
 		return nif;
 	}
 
-	public void setNif(String nif) {
+    /**
+     *
+     * @param nif
+     */
+    public void setNif(String nif) {
 		this.nif = nif;
 	}
 
-	public double getBaseIva(int i) {
+    /**
+     *
+     * @param i
+     * @return
+     */
+    public double getBaseIva(int i) {
 		return baseIva[i];
 	}
 	
-	public double[] getBaseIva() {
+    /**
+     *
+     * @return
+     */
+    public double[] getBaseIva() {
 		return baseIva;
 	}
 
-	public void setBaseIva(int indice, double valor) {
+    /**
+     *
+     * @param indice
+     * @param valor
+     */
+    public void setBaseIva(int indice, double valor) {
 		this.baseIva[indice] = valor;
 	}
 	
-	public void setBaseIva(double[] baseIva) {
+    /**
+     *
+     * @param baseIva
+     */
+    public void setBaseIva(double[] baseIva) {
 		this.baseIva = baseIva;
 	}
 
-	public double getBaseRecargoEquivalencia(int i) {
+    /**
+     *
+     * @param i
+     * @return
+     */
+    public double getBaseRecargoEquivalencia(int i) {
 		return baseRecargoEquivalencia[i];
 	}
 
-	public double[] getBaseRecargoEquivalencia() {
+    /**
+     *
+     * @return
+     */
+    public double[] getBaseRecargoEquivalencia() {
 		return baseRecargoEquivalencia;
 	}
 
-	public void setBaseRecargoEquivalencia(int indice, double valor) {
+    /**
+     *
+     * @param indice
+     * @param valor
+     */
+    public void setBaseRecargoEquivalencia(int indice, double valor) {
 		this.baseRecargoEquivalencia[indice] = valor;
 	}
 
-	public void setBaseRecargoEquivalencia(double[] baseRecargoEquivalencia) {
+    /**
+     *
+     * @param baseRecargoEquivalencia
+     */
+    public void setBaseRecargoEquivalencia(double[] baseRecargoEquivalencia) {
 		this.baseRecargoEquivalencia = baseRecargoEquivalencia;
 	}
 
-	public double getIva() {
+    /**
+     *
+     * @return
+     */
+    public double getIva() {
 		return iva;
 	}
 
-	public void setIva(double iva) {
+    /**
+     *
+     * @param iva
+     */
+    public void setIva(double iva) {
 		this.iva = iva;
 	}
 
-	public double getRecargoEquivalencia() {
+    /**
+     *
+     * @return
+     */
+    public double getRecargoEquivalencia() {
 		return recargoEquivalencia;
 	}
 
-	public void setRecargoEquivalencia(double recargoEquivalencia) {
+    /**
+     *
+     * @param recargoEquivalencia
+     */
+    public void setRecargoEquivalencia(double recargoEquivalencia) {
 		this.recargoEquivalencia = recargoEquivalencia;
 	}
 
-	public double getTotal() {
+    /**
+     *
+     * @return
+     */
+    public double getTotal() {
 		return total;
 	}
 
-	public void setTotal(double total) {
+    /**
+     *
+     * @param total
+     */
+    public void setTotal(double total) {
 		this.total = total;
 	}
 }
