@@ -95,17 +95,17 @@ public class TestConManClavesContables extends javax.swing.JFrame {
     public static void main(String args[]) {
         
         new DatosComunes("MV");
-        
-       try {
-                    try {
-                        UIManager.setLookAndFeel("org.jvnet.substance.skin.Substance"+"Sahara"+"LookAndFeel");
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (InstantiationException ex) {
-                        Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IllegalAccessException ex) {
-                        Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+
+        try {
+            try {
+                UIManager.setLookAndFeel("org.jvnet.substance.skin.Substance" + "Sahara" + "LookAndFeel");
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (UnsupportedLookAndFeelException e) {
             System.out.println(e);
         }                       
