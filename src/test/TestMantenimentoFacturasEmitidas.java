@@ -9,6 +9,7 @@ import general.DatosComunes;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 import mantenimientos.MantenimientoFacturasEmitidas;
 
@@ -92,18 +93,33 @@ public class TestMantenimentoFacturasEmitidas extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-         new DatosComunes("MV");
+        new DatosComunes("MV");
 
         try {
-            try {
-                UIManager.setLookAndFeel("org.jvnet.substance.skin.Substance" + "Sahara" + "LookAndFeel");
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InstantiationException ex) {
-                Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
+            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    try {
+                        UIManager.setLookAndFeel(info.getClassName());
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(TestMantenimentoFacturasEmitidas.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InstantiationException ex) {
+                        Logger.getLogger(TestMantenimentoFacturasEmitidas.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(TestMantenimentoFacturasEmitidas.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    break;
+                }
             }
+            /*
+             try {
+             UIManager.setLookAndFeel("org.jvnet.substance.skin.Substance" + "Sahara" + "LookAndFeel");
+             } catch (ClassNotFoundException ex) {
+             Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
+             } catch (InstantiationException ex) {
+             Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
+             } catch (IllegalAccessException ex) {
+             Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
+             }*/
         } catch (UnsupportedLookAndFeelException e) {
             System.out.println(e);
         }
