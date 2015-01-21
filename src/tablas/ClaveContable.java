@@ -127,7 +127,8 @@ public class ClaveContable {
     /**
      *
      */
-    public void write() {
+    public boolean write() {
+        boolean escrituraCorrecta = true;
         PreparedStatement ps = null;
 
         String sqlInsert = "INSERT INTO CLCEPC "
@@ -168,12 +169,15 @@ public class ClaveContable {
             ps.execute();
 
         } catch (SQLException e) {
+            escrituraCorrecta = false;
             if (DatosComunes.enDebug) {
                 JOptionPane.showMessageDialog(null,
                         "Error en escritura fichero de ClaveContable!!!");
                 e.printStackTrace();
             }
         }
+        
+        return escrituraCorrecta;
     }
 
     /**

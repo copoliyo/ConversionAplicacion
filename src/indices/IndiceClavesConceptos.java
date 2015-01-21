@@ -36,7 +36,7 @@ public class IndiceClavesConceptos extends util.EscapeDialog {
     /**
      * Creates new form IndiceClavesConceptos
      */
-    public IndiceClavesConceptos(javax.swing.JFrame parent, boolean modal) {
+    public IndiceClavesConceptos(util.EscapeDialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
         inicializaTabla();

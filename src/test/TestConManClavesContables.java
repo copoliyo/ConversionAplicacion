@@ -7,8 +7,10 @@ package test;
 
 import consultasMantenimientos.ConManClavesContables;
 import general.DatosComunes;
-import javax.swing.SwingUtilities;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -32,52 +34,93 @@ public class TestConManClavesContables extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jbTestConManClaves = new javax.swing.JButton();
+        jbSalir = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Claves Automáticas");
+
+        jbTestConManClaves.setText("Test Mantetimiento Claves y Coceptos");
+        jbTestConManClaves.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbTestConManClavesActionPerformed(evt);
+            }
+        });
+
+        jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/SALIR.gif"))); // NOI18N
+        jbSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSalirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 408, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(76, 76, 76)
+                        .addComponent(jbTestConManClaves))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(144, 144, 144)
+                        .addComponent(jbSalir)))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 313, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(57, 57, 57)
+                .addComponent(jbTestConManClaves)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                .addComponent(jbSalir)
+                .addGap(91, 91, 91))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jbSalirActionPerformed
+
+    private void jbTestConManClavesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbTestConManClavesActionPerformed
+        
+        new ConManClavesContables(new javax.swing.JFrame(), true);
+    }//GEN-LAST:event_jbTestConManClavesActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /**
-         * @param args
-         */
         
-        // TODO Auto-generated method stub
         new DatosComunes("MV");
 
-        // SOLO HAY QUE UTILIZARLO UNA VEZ!!!!!!!!!!
         try {
-            UIManager.setLookAndFeel("org.jvnet.substance.skin.Substance" + "Sahara" + "LookAndFeel");
-        } catch (Exception e) {
-            System.out.println("Falló la carga del tema");
-        }
-
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-               new ConManClavesContables(new javax.swing.JFrame());
-               System.exit(0);
+            try {
+                UIManager.setLookAndFeel("org.jvnet.substance.skin.Substance" + "Sahara" + "LookAndFeel");
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(TestMantenimientoPrevisionesCobro.class.getName()).log(Level.SEVERE, null, ex);
             }
-        });  
-	
-        
+        } catch (UnsupportedLookAndFeelException e) {
+            System.out.println(e);
+        }                       
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new TestConManClavesContables().setVisible(true);
+            }
+        });
     }
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jbSalir;
+    private javax.swing.JButton jbTestConManClaves;
     // End of variables declaration//GEN-END:variables
 }
