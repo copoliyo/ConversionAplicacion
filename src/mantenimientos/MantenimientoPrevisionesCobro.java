@@ -17,7 +17,6 @@ import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 import java.sql.ResultSet;
 import java.util.Vector;
-import util.EscapeDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import procesos.DepuracionRiesgosContables;
@@ -76,8 +75,6 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         initComponents();
         borrarPantalla();
         cargaInicial();
-        this.setVisible(true);        
-        
         // Establecemos el orden de los campos.        
         Vector<Component> order = new Vector<Component>(18);
         order.add(jtffVencimiento);
@@ -100,6 +97,9 @@ public class MantenimientoPrevisionesCobro extends util.EscapeDialog {
         order.add(jcbReciboEmitido);                
         MyOFocusTraversalPolicy newPolicy = new MyOFocusTraversalPolicy(order);
         this.setFocusTraversalPolicy(newPolicy);
+        this.setVisible(true);        
+        
+        
         
     }
 
