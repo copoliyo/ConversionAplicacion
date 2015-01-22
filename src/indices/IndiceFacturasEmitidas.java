@@ -7,6 +7,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -27,7 +31,7 @@ import util.EscapeDialog;
 
 public class IndiceFacturasEmitidas {
 	public enum Columna {
-		FECHA(0), FACTURA(1), IMPORTE(2), IVA(3), RECARGO_EQUIVALENCIA(4), TOTAL(5), FECHA_CONTABLE(6), ASIENTO_CONTABLE(7); 
+		FECHA(0), FACTURA(1), IMPORTE(2), IVA(3), RECARGO_EQUIVALENCIA(4), TOTAL(5), FECHA_CONTABLE(6), ASIENTO_CONTABLE(7), ANY(8), SERIE(9); 
 
 		private int value;
 
@@ -49,6 +53,8 @@ public class IndiceFacturasEmitidas {
 	String strSql = "";
 	String strCuenta = "";
 
+        FacturaEmitida facturaEmitida = null;
+        
 	DefaultTableModel modeloTabla = new DefaultTableModel() {
 		@Override
 		public boolean isCellEditable(int row, int column) {
@@ -57,6 +63,13 @@ public class IndiceFacturasEmitidas {
 		}
 	};
 	
+        public IndiceFacturasEmitidas(){
+		this.strCuenta = "";
+		m = MysqlConnect.getDbCon();
+		
+		creaGui();
+	}
+        
 	public IndiceFacturasEmitidas(String strCuenta){
 		this.strCuenta = strCuenta.trim();
 		m = MysqlConnect.getDbCon();
@@ -68,7 +81,7 @@ public class IndiceFacturasEmitidas {
 		pantalla = new EscapeDialog();
 		pantalla.setTitle("Facturas Emitidas");
 		pantalla.setModal(true);
-		pantalla.setSize(800, 600); 
+		pantalla.setSize(900, 600); 
 		pantalla.setDefaultCloseOperation(0);
 		pantalla.setLayout(null);
 		
@@ -81,6 +94,9 @@ public class IndiceFacturasEmitidas {
 		modeloTabla.addColumn("Total");
 		modeloTabla.addColumn("Fecha Contable");
 		modeloTabla.addColumn("Asiento");
+                modeloTabla.addColumn("Any");
+                modeloTabla.addColumn("Serie");
+                
 
 		jtFacturasEmitidas = new JTable(modeloTabla);
 		jtFacturasEmitidas.setFont(Apariencia.cambiaFuente(Font.PLAIN, 13));
@@ -95,6 +111,8 @@ public class IndiceFacturasEmitidas {
 		jtFacturasEmitidas.getColumn("Total").setMaxWidth(120);
 		jtFacturasEmitidas.getColumn("Fecha Contable").setMaxWidth(80);
 		jtFacturasEmitidas.getColumn("Asiento").setMaxWidth(80);
+                jtFacturasEmitidas.getColumn("Any").setMaxWidth(60);
+                jtFacturasEmitidas.getColumn("Serie").setMaxWidth(30);
 		jtFacturasEmitidas.setRowHeight(20);
 		
 		
@@ -105,6 +123,8 @@ public class IndiceFacturasEmitidas {
 		jtFacturasEmitidas.getColumn("Factura").setCellRenderer(tcr);
 		jtFacturasEmitidas.getColumn("Fecha Contable").setCellRenderer(tcr);
 		jtFacturasEmitidas.getColumn("Asiento").setCellRenderer(tcr);
+                jtFacturasEmitidas.getColumn("Any").setCellRenderer(tcr);
+                jtFacturasEmitidas.getColumn("Serie").setCellRenderer(tcr);
 		
 		// Hacemos que la comluna del saldo se alinee a la derecha y
 		// que salga en rojo si es negativa.
@@ -112,15 +132,17 @@ public class IndiceFacturasEmitidas {
 		jtFacturasEmitidas.getColumn("Importe").setCellRenderer(tcr2);
 		jtFacturasEmitidas.getColumn("IVA").setCellRenderer(tcr2);
 		jtFacturasEmitidas.getColumn("Rec.Equiv.").setCellRenderer(tcr2);
-		jtFacturasEmitidas.getColumn("Total").setCellRenderer(tcr2);
+		jtFacturasEmitidas.getColumn("Total").setCellRenderer(tcr2);                
 		
 		// Creamos un JscrollPane y le agregamos la JTable
 		spFacturasEmitidas = new JScrollPane(jtFacturasEmitidas);
 		// Si quisieramos barra horizontal, descomentar la linea siguiente
 		spFacturasEmitidas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		// Agregamos el JScrollPane al contenedor
-		spFacturasEmitidas.setBounds(10, 10, 770, 560);	
+		spFacturasEmitidas.setBounds(10, 10, 870, 560);	
 		spFacturasEmitidas.setFont(Apariencia.cambiaFuente());
+                // Necesitamos saber si hacemos doble click en una fila
+		jtFacturasEmitidas.addMouseListener(new TablaListener());
 		pantalla.add(spFacturasEmitidas);			
 					
 		
@@ -160,12 +182,17 @@ public class IndiceFacturasEmitidas {
 	
 	public void cargaFacturasEmitidas(){
 		borrarTabla();
-						
-		Object fila[] = {"", "", "", "", "", "", "", ""};	
+						                
+		Object fila[] = {"", "", "", "", "", "", "", "", "", ""};	
 		
 		String strSql = "SELECT * FROM FACEMI WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND " +
-				        " FACEMI_CENTRO = " + DatosComunes.centroCont + " AND " +
-				        " FACEMI_CLIENTE = '" + strCuenta + "' ORDER BY FACEMI_FECHA ASC";				
+				        " FACEMI_CENTRO = " + DatosComunes.centroCont;
+                
+                if(strCuenta.length() > 0)
+                        strSql += " AND  FACEMI_CLIENTE = '" + strCuenta + "'";
+                                
+                strSql += " ORDER BY FACEMI_FECHA ASC";				
+                
 		String claveFechaAsientoApunte = "";
 		double baseTotal = 0.0;
 		
@@ -212,7 +239,8 @@ public class IndiceFacturasEmitidas {
 					
 					fila[Columna.FECHA_CONTABLE.value] = Cadena.fechaAcadena(Integer.valueOf(strFechaAsiento));
 					fila[Columna.ASIENTO_CONTABLE.value] = Integer.valueOf(strAsiento);					
-					
+					fila[Columna.ANY.value] = factura.getAño();
+                                        fila[Columna.SERIE.value] = factura.getSerie();
 					modeloTabla.addRow(fila);
 					
 				}
@@ -244,4 +272,73 @@ public class IndiceFacturasEmitidas {
 		//	modeloTabla.removeRow(i);
 		modeloTabla.setRowCount(0);
 	}
+        
+        class TablaListener implements ActionListener, MouseListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			pantalla.setVisible(false);
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			// Si hacemos doble click fijamos el valor de la marca y salimos
+			if (arg0.getClickCount() == 2) {
+                                facturaEmitida = new FacturaEmitida();
+                                int any, factura;
+                                String serie;
+                                
+				JTable target = (JTable) arg0.getSource();
+				int row = target.getSelectedRow();
+				any =  (Integer) target.getValueAt(row, Columna.ANY.value);
+                                factura = (Integer) target.getValueAt(row, Columna.FACTURA.value);
+                                serie = (String) target.getValueAt(row, Columna.SERIE.value);
+                                
+                                String strSql = "SELECT * FROM FACEMI WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                                + "FACEMI_CENTRO = " + DatosComunes.centroCont + " AND "
+                                + "FACEMI_ANY = " + any + " AND "
+                                + "FACEMI_FACTURA = " + factura + " AND "
+                                + "FACEMI_SERIE = '" + serie + "' "                      
+                                + "LIMIT 1";
+                                
+                                if(!facturaEmitida.read(strSql))
+                                    facturaEmitida = null;                                    
+                                
+				pantalla.setVisible(false);
+			}
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+		}	
+	}
+        
+        public FacturaEmitida getFacturaEmitida(){
+            try {			
+			rs.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		pantalla.dispose();
+		return facturaEmitida;
+            
+        }
+        
+        public void setVisible(boolean visible){
+            pantalla.setVisible(visible);
+        }
 }
