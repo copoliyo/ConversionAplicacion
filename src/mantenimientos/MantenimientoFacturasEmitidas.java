@@ -6,10 +6,17 @@
 package mantenimientos;
 
 import general.DatosComunes;
+import indices.IndiceClientesContables;
 import indices.IndiceFacturasEmitidas;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.FocusTraversalPolicy;
+import java.util.Vector;
+import javax.swing.JOptionPane;
 import tablas.Cuenta;
 import tablas.FacturaEmitida;
 import util.Apariencia;
+import util.BaseDatos;
 import util.Cadena;
 import util.Fecha;
 
@@ -30,9 +37,30 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
         initComponents();
         facturaEmitida = new FacturaEmitida();
         cargaInicial();        
+        
+        
+         // Establecemos el orden de los campos.        
+        Vector<Component> order = new Vector<>(16);
+        order.add(jtfnfFactura);
+        order.add(jtfnfAny);
+        order.add(jtffSerie);
+        order.add(jtfnfCentro);
+        order.add(jtfnfCodigoCliente);
+        order.add(jtffeFechaFactura);
+        order.add(jtfnf2dBaseIvaReducido);
+        order.add(jtfnf2dBaseIvaGeneral);
+        order.add(jtfnf2dBaseIVASuperReducido);
+        order.add(jtfnf2dBaseREReducido);
+        order.add(jtfnf2dBaseREGeneral);
+        order.add(jtfnf2dImporteIva);
+        order.add(jtfnf2dRecargoEquivalencia);
+        order.add(jtfnf2dTotal);
+        order.add(jtffNombreCliente);
+        order.add(jtffNif);              
+        MyOFocusTraversalPolicy newPolicy = new MyOFocusTraversalPolicy(order);
+        this.setFocusTraversalPolicy(newPolicy);
+        
         this.setVisible(true);
-        
-        
         
     }
 
@@ -95,6 +123,16 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
         jlFactura.setText("Factura");
 
         jtfnfFactura.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtfnfFactura.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfnfFacturaFocusLost(evt);
+            }
+        });
+        jtfnfFactura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfnfFacturaActionPerformed(evt);
+            }
+        });
 
         jbBuscarFactura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BUSCAR.gif"))); // NOI18N
         jbBuscarFactura.setPreferredSize(new java.awt.Dimension(30, 30));
@@ -108,8 +146,18 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
         jlAny.setText("Año");
 
         jtfnfAny.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtfnfAny.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfnfAnyFocusLost(evt);
+            }
+        });
 
         jtffSerie.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtffSerie.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtffSerieFocusLost(evt);
+            }
+        });
 
         jlSerie.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlSerie.setText("Serie");
@@ -127,8 +175,18 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
 
         jbBuscarCodigoCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BUSCAR.gif"))); // NOI18N
         jbBuscarCodigoCliente.setPreferredSize(new java.awt.Dimension(30, 30));
+        jbBuscarCodigoCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBuscarCodigoClienteActionPerformed(evt);
+            }
+        });
 
         jtfnfCodigoCliente.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtfnfCodigoCliente.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfnfCodigoClienteFocusLost(evt);
+            }
+        });
         jtfnfCodigoCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtfnfCodigoClienteActionPerformed(evt);
@@ -137,7 +195,6 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
 
         jlCodigoClienteDescripcion.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlCodigoClienteDescripcion.setForeground(new java.awt.Color(102, 102, 255));
-        jlCodigoClienteDescripcion.setText("ffff");
 
         jlFechaFactura.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlFechaFactura.setText("Fecha Factura");
@@ -257,7 +314,7 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
                             .addComponent(jtfnfCodigoCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
                             .addComponent(jtffeFechaFactura, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
-                        .addComponent(jlCodigoClienteDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jlCodigoClienteDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpDatosFacturaLayout.createSequentialGroup()
                         .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jlBasesIva)
@@ -340,6 +397,11 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
 
         jbBorrar.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbBorrar.setText("Borrar");
+        jbBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBorrarActionPerformed(evt);
+            }
+        });
 
         jbAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Atras.gif"))); // NOI18N
         jbAtras.setPreferredSize(new java.awt.Dimension(30, 30));
@@ -455,6 +517,21 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
 
     }
     
+    private void borrarPantallaSoloDatos() {
+        jtffNif.setText("");
+        jtffNombreCliente.setText("");       
+        jtffeFechaFactura.setText("00.00.00");
+        jtfnf2dBaseIVASuperReducido.setText("0,0");
+        jtfnf2dBaseIvaGeneral.setText("0,0");
+        jtfnf2dBaseIvaReducido.setText("0,0");
+        jtfnf2dBaseREGeneral.setText("0,0");
+        jtfnf2dBaseREReducido.setText("0,0");
+        jtfnf2dImporteIva.setText("0,0");
+        jtfnf2dRecargoEquivalencia.setText("0,0");
+        jtfnf2dTotal.setText("0,0");
+        jtfnfCodigoCliente.setText("0");        
+    }
+    
     
     
     private void cargaInicial(){
@@ -568,6 +645,191 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
         
     }//GEN-LAST:event_jbBuscarFacturaActionPerformed
 
+    private void jtfnfFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnfFacturaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtfnfFacturaActionPerformed
+
+    private void jtfnfFacturaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnfFacturaFocusLost
+        String strSql = "SELECT * FROM FACEMI WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                      + "FACEMI_CENTRO = " + DatosComunes.centroCont + " AND "
+                      + "FACEMI_ANY = " + jtfnfAny.getText() + " AND "
+                      + "FACEMI_FACTURA = " + jtfnfFactura.getText() + " AND "
+                      + "FACEMI_SERIE = '" + jtffSerie.getText() + "' "                      
+                      + "LIMIT 1";
+        
+        if(facturaEmitida.read(strSql) == true)
+            cargaDatos(facturaEmitida);
+        else
+            borrarPantallaSoloDatos();
+    }//GEN-LAST:event_jtfnfFacturaFocusLost
+
+    private void jtfnfAnyFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnfAnyFocusLost
+        String strSql = "SELECT * FROM FACEMI WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                      + "FACEMI_CENTRO = " + DatosComunes.centroCont + " AND "
+                      + "FACEMI_ANY = " + jtfnfAny.getText() + " AND "
+                      + "FACEMI_FACTURA = " + jtfnfFactura.getText() + " AND "
+                      + "FACEMI_SERIE = '" + jtffSerie.getText() + "' "                      
+                      + "LIMIT 1";
+        
+        if(facturaEmitida.read(strSql) == true)
+            cargaDatos(facturaEmitida);
+        else
+            borrarPantallaSoloDatos();
+    }//GEN-LAST:event_jtfnfAnyFocusLost
+
+    private void jtffSerieFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtffSerieFocusLost
+        String strSql = "SELECT * FROM FACEMI WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                      + "FACEMI_CENTRO = " + DatosComunes.centroCont + " AND "
+                      + "FACEMI_ANY = " + jtfnfAny.getText() + " AND "
+                      + "FACEMI_FACTURA = " + jtfnfFactura.getText() + " AND "
+                      + "FACEMI_SERIE = '" + jtffSerie.getText() + "' "                      
+                      + "LIMIT 1";
+        
+        if(facturaEmitida.read(strSql) == true)
+            cargaDatos(facturaEmitida);
+        else
+            borrarPantallaSoloDatos();
+    }//GEN-LAST:event_jtffSerieFocusLost
+
+    private void jbBuscarCodigoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarCodigoClienteActionPerformed
+        
+        String cuentaCliente;
+        
+        IndiceClientesContables icc = new IndiceClientesContables();
+         
+        cuentaCliente = icc.getCuenta();
+        
+        if(cuentaCliente != null){
+            Cuenta cuenta = new Cuenta();
+            if(cuenta.read(cuentaCliente, DatosComunes.centroCont) == true){
+                // Quitamos el 43 inicial de la Cuenta Contable
+                // Demasiado lío, para setText, tiene que ser String, por ello
+                // hacemos el Integer.valueOf de la cuenta (String) si el 43  :-(
+                jtfnfCodigoCliente.setText(String.valueOf(Integer.valueOf(cuentaCliente.substring(2, cuentaCliente.length()))));
+                jlCodigoClienteDescripcion.setText(cuenta.getTitulo());
+            }
+        }        
+    }//GEN-LAST:event_jbBuscarCodigoClienteActionPerformed
+
+    private void jtfnfCodigoClienteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnfCodigoClienteFocusLost
+        
+        long cliente;
+        String cuentaCliente;
+        Cuenta cuenta = new Cuenta();        
+        
+        cliente = Long.valueOf(jtfnfCodigoCliente.getText().trim());
+        cuentaCliente = "43" + Cadena.enteroCerosIzquierda(cliente, 7);
+        if(cuenta.read(cuentaCliente, DatosComunes.centroCont) == true){
+           jlCodigoClienteDescripcion.setText(cuenta.getTitulo()); 
+        }
+        
+    }//GEN-LAST:event_jtfnfCodigoClienteFocusLost
+
+    private void jbBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBorrarActionPerformed
+
+        int factura, any, centro;
+        String serie = "";
+
+        factura = Integer.valueOf(jtfnfFactura.getText().trim());
+        any = Integer.valueOf(jtfnfAny.getText().trim());
+        centro = Integer.valueOf(jtfnfCentro.getText().trim());
+        serie = jtffSerie.getText().trim();
+
+        if (factura == 0 || any == 0 || centro != DatosComunes.centroCont) {
+            Apariencia.mensajeInformativo(5, "<center>Debes introducir un número de Factura y <br>"
+                    + "un año válidos!!!</center>");
+        } else {
+            String strSql = "SELECT * FROM FACEMI WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                    + "FACEMI_CENTRO = " + DatosComunes.centroCont + " AND "
+                    + "FACEMI_ANY = " + any + " AND "
+                    + "FACEMI_FACTURA = " + factura + " AND "
+                    + "FACEMI_SERIE = '" + serie + "' AND "
+                    + "FACEMI_CENTRO = " + centro + " "
+                    + "LIMIT 1";
+
+            if (facturaEmitida.read(strSql) == true) {
+                // Damos la oportunidad de no borrar
+                Object[] opciones = {"Si", "No"};
+
+                int n = JOptionPane.showOptionDialog(this,
+                        "<html><font size='4'><strong>"
+                        + "Desea borrar la Factura Emitida<br>"
+                        + "Número : " + factura + "<br>"
+                        + "Año    : " + any + "<br>"
+                        + "Serie  : " + serie + "<br>"
+                        + "</strong></font></html>",
+                        "Borrar factura Emitida",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null, // Sin Icono personalizado.
+                        opciones, // Título de los botonoes
+                        opciones[1]); // Botón por defecto.
+                //Si
+                if (n == 0) {
+                    if (facturaEmitida.delete(centro, factura, any, serie) > 0) {
+                        Apariencia.mensajeInformativo(4, "Factura emitida borrada.");
+
+                        // Cargamos la siguiente factura emitida
+                        strSql = "SELECT * FROM FACEMI WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                                + "FACEMI_CENTRO = " + DatosComunes.centroCont + " AND "
+                                + "FACEMI_ANY >= " + jtfnfAny.getText() + " AND "
+                                + "FACEMI_FACTURA > " + jtfnfFactura.getText() + " AND "
+                                + "FACEMI_SERIE = '" + jtffSerie.getText() + "' "
+                                + "ORDER BY FACEMI_ANY ASC, FACEMI_FACTURA ASC "
+                                + "LIMIT 1";
+
+                        if (facturaEmitida.read(strSql)) {
+                            cargaDatos(facturaEmitida);
+                        }
+                    } else {
+                        Apariencia.mensajeInformativo(4, "No se ha podido borrar la Factura Emitida!!!");
+                    }
+                }
+            } else {
+                Apariencia.mensajeInformativo(4, "No existe la Factura que quieres borrar!!!");
+            }
+        }
+    }//GEN-LAST:event_jbBorrarActionPerformed
+
+        public static class MyOFocusTraversalPolicy
+            extends FocusTraversalPolicy {
+ 
+        Vector<Component> order;
+ 
+        public MyOFocusTraversalPolicy(Vector<Component> order) {
+            this.order = new Vector<Component>(order.size());
+            this.order.addAll(order);
+        }
+ 
+        public Component getComponentAfter(Container focusCycleRoot,
+                Component aComponent) {
+            int idx = (order.indexOf(aComponent) + 1) % order.size();
+            return order.get(idx);
+        }
+ 
+        public Component getComponentBefore(Container focusCycleRoot,
+                Component aComponent) {
+            int idx = order.indexOf(aComponent) - 1;
+            if (idx < 0) {
+                idx = order.size() - 1;
+            }
+            return order.get(idx);
+        }
+ 
+        public Component getDefaultComponent(Container focusCycleRoot) {
+            return order.get(0);
+        }
+ 
+        public Component getLastComponent(Container focusCycleRoot) {
+            return order.lastElement();
+        }
+ 
+        public Component getFirstComponent(Container focusCycleRoot) {
+            return order.get(0);
+        }
+    }
+
+    
     /**
      * @param args the command line arguments
      */
