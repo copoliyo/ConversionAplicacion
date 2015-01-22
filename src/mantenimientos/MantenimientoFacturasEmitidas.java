@@ -383,6 +383,11 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
 
         jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/SALIR.gif"))); // NOI18N
         jbSalir.setPreferredSize(new java.awt.Dimension(30, 30));
+        jbSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSalirActionPerformed(evt);
+            }
+        });
 
         jbTotalMeses.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbTotalMeses.setText("Tot/Meses");
@@ -790,6 +795,10 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
             }
         }
     }//GEN-LAST:event_jbBorrarActionPerformed
+
+    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
+        dispose();
+    }//GEN-LAST:event_jbSalirActionPerformed
 
         public static class MyOFocusTraversalPolicy
             extends FocusTraversalPolicy {
