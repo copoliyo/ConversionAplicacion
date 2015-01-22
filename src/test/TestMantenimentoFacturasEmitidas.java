@@ -19,6 +19,7 @@ import mantenimientos.MantenimientoFacturasEmitidas;
  */
 public class TestMantenimentoFacturasEmitidas extends javax.swing.JFrame {
 
+    MantenimientoFacturasEmitidas mfe = null;
     /**
      * Creates new form TestMantenimentoFacturasEmitidas
      */
@@ -86,7 +87,10 @@ public class TestMantenimentoFacturasEmitidas extends javax.swing.JFrame {
     }//GEN-LAST:event_jbSalirActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new MantenimientoFacturasEmitidas(new javax.swing.JFrame(), true);
+        if(mfe == null)
+            mfe = new MantenimientoFacturasEmitidas(new javax.swing.JFrame(), true);
+        else
+            mfe.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

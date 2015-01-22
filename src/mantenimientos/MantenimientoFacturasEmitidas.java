@@ -35,12 +35,12 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
         super(parent, modal);
         
         initComponents();
-        facturaEmitida = new FacturaEmitida();
+        
         cargaInicial();        
         
         
-         // Establecemos el orden de los campos.        
-        Vector<Component> order = new Vector<>(16);
+        Vector<Component> order;
+        order = new Vector<>(16);
         order.add(jtfnfFactura);
         order.add(jtfnfAny);
         order.add(jtffSerie);
@@ -118,6 +118,8 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Facturas Emitidas");
+        setModal(true);
+        setResizable(false);
 
         jlFactura.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlFactura.setText("Factura");
@@ -543,6 +545,8 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
         
         borrarPantalla();
         
+        facturaEmitida = new FacturaEmitida();
+        
         String strSql = "SELECT * FROM FACEMI WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
                       + "FACEMI_CENTRO = " + DatosComunes.centroCont + " "
                       + "ORDER BY FACEMI_ANY DESC, FACEMI_FACTURA DESC "
@@ -634,7 +638,7 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
                       + "ORDER BY FACEMI_ANY DESC, FACEMI_FACTURA DESC "
                       + "LIMIT 1";
         
-        if(facturaEmitida.read(strSql))
+        if(facturaEmitida.read(strSql) == true)
             cargaDatos(facturaEmitida);
     }//GEN-LAST:event_jbAtrasActionPerformed
 
@@ -645,8 +649,10 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
         else
             ife.setVisible(true);
         
-        if((facturaEmitida = ife.getFacturaEmitida()) != null)
+        if(ife.getFacturaEmitida() != null){
+            facturaEmitida = ife.getFacturaEmitida();
             cargaDatos(facturaEmitida);
+        }
         
     }//GEN-LAST:event_jbBuscarFacturaActionPerformed
 
