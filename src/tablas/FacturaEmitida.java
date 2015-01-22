@@ -158,12 +158,16 @@ public class FacturaEmitida {
                 }
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
+                lecturaCorrecta = false;
                 if (DatosComunes.enDebug) {
                     e.printStackTrace();
                 }
                 Apariencia.mensajeInformativo(5, "Error en lectura fichero de Facturas Emitidas");
-            }
+            }            
+        }else{
+            lecturaCorrecta = false;
         }
+            
 
         return lecturaCorrecta;
     }
