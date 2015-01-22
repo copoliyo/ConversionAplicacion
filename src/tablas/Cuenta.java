@@ -145,7 +145,7 @@ public class Cuenta {
      * @return
      */
         public boolean read(String strCuenta, int centro) {
-        boolean lecturaOk = false;
+        boolean lecturaOk = true;
 
         String strSqlCuenta = "SELECT * FROM CONTAB WHERE "
                 + "EMPRESA = '" + DatosComunes.eEmpresa + "' "
@@ -169,11 +169,14 @@ public class Cuenta {
                 }
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
+                lecturaOk = false;
                 if (DatosComunes.enDebug) {
                     e.printStackTrace();
                 }
                 Apariencia.mensajeInformativo(5, "Error en lectura fichero de Cuentas Contables");
-            }
+            }            
+        }else{
+            lecturaOk = false;
         }
 
         return lecturaOk;
