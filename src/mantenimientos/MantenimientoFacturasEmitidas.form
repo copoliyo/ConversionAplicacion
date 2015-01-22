@@ -28,15 +28,15 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <Component id="jlFactura" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jtfnfFactura" min="-2" pref="84" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jbBuscarFactura" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                      <Component id="jlAño" min="-2" max="-2" attributes="0"/>
+                      <Component id="jlAny" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jtfnfAño" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="jtfnfAny" min="-2" pref="55" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                       <Component id="jlSerie" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -65,7 +65,7 @@
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              <Component id="jpDatosFactura" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -73,52 +73,44 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
+              <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jtfnfFactura" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jbBuscarFactura" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                      <Component id="jlFactura" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jtfnfFactura" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jbBuscarFactura" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jtfnfAño" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jtffSerie" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlSerie" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlCentro" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jtfnfCentro" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jlAño" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jtfnfAny" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jtffSerie" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jlSerie" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jlCentro" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jtfnfCentro" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <Component id="jlAny" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              <Component id="jpDatosFactura" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jbAtras" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jbAdelante" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jbTotalMeses" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="jbGrabar" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="jbBorrar" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="jbSalir" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  <Component id="jbSalir" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jbTotalMeses" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="jbGrabar" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="jbBorrar" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="jbAtras" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+              <EmptySpace min="24" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="jlFactura">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="MS Reference Sans Serif" size="14" style="1"/>
@@ -132,6 +124,10 @@
           <Font name="MS Reference Sans Serif" size="14" style="1"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtfnfFacturaFocusLost"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtfnfFacturaActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldNumeroFijo(6)"/>
       </AuxValues>
@@ -145,8 +141,11 @@
           <Dimension value="[30, 30]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbBuscarFacturaActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="jlA&#xf1;o">
+    <Component class="javax.swing.JLabel" name="jlAny">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="MS Reference Sans Serif" size="14" style="1"/>
@@ -154,12 +153,15 @@
         <Property name="text" type="java.lang.String" value="A&#xf1;o"/>
       </Properties>
     </Component>
-    <Component class="util.JTextFieldFijo" name="jtfnfA&#xf1;o">
+    <Component class="util.JTextFieldFijo" name="jtfnfAny">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="MS Reference Sans Serif" size="14" style="1"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtfnfAnyFocusLost"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldFijo(4)"/>
       </AuxValues>
@@ -170,6 +172,9 @@
           <Font name="MS Reference Sans Serif" size="14" style="1"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtffSerieFocusLost"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldFijo(2)"/>
       </AuxValues>
@@ -200,7 +205,7 @@
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldNumeroFijo(3)"/>
       </AuxValues>
     </Component>
-    <Container class="javax.swing.JPanel" name="jPanel1">
+    <Container class="javax.swing.JPanel" name="jpDatosFactura">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -246,24 +251,26 @@
                               </Group>
                           </Group>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="1" attributes="0">
                                       <Component id="jlGeneral" min="-2" max="-2" attributes="0"/>
                                       <Component id="jtfnf2dBaseREGeneral" min="-2" pref="100" max="-2" attributes="0"/>
                                       <Component id="jtfnf2dBaseIvaGeneral" min="-2" pref="100" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="jlNif" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
-                                  <Component id="jlNombreCliente" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="jlNif" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jlNombreCliente" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jtffNif" min="-2" pref="111" max="-2" attributes="0"/>
+                                      <Component id="jtffNombreCliente" min="-2" pref="342" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
-                          </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jtffNombreCliente" min="-2" pref="218" max="-2" attributes="0"/>
-                              <Component id="jtffNif" min="-2" pref="85" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" attributes="0">
@@ -273,17 +280,15 @@
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="jbBuscarCodigoCliente" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlFechaFactura" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="jtfnfCodigoCliente" min="-2" pref="95" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jlCodigoClienteDescripcion" min="-2" pref="238" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="jtffeFechaFactura" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jtfnfCodigoCliente" pref="95" max="32767" attributes="0"/>
+                              <Component id="jtffeFechaFactura" max="32767" attributes="0"/>
                           </Group>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="jlCodigoClienteDescripcion" min="-2" pref="338" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -315,7 +320,7 @@
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jlFechaFactura" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jtffeFechaFactura" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
@@ -334,10 +339,12 @@
                       </Group>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jlBasesRecargoEquivalencia" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jtfnf2dBaseREGeneral" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jtfnf2dBaseREReducido" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jlBasesRecargoEquivalencia" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jtfnf2dBaseREReducido" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -355,6 +362,8 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jtfnf2dTotal" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jlTotal" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlNif" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jtffNif" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" attributes="0">
@@ -362,11 +371,6 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jlNombreCliente" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jtffNombreCliente" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jlNif" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jtffNif" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -393,6 +397,9 @@
               <Dimension value="[30, 30]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbBuscarCodigoClienteActionPerformed"/>
+          </Events>
         </Component>
         <Component class="util.JTextFieldFijo" name="jtfnfCodigoCliente">
           <Properties>
@@ -401,6 +408,7 @@
             </Property>
           </Properties>
           <Events>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtfnfCodigoClienteFocusLost"/>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtfnfCodigoClienteActionPerformed"/>
           </Events>
           <AuxValues>
@@ -415,10 +423,9 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="66" red="66" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="ffff"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel2">
+        <Component class="javax.swing.JLabel" name="jlFechaFactura">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="MS Reference Sans Serif" size="14" style="1"/>
@@ -567,7 +574,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="MS Reference Sans Serif" size="14" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Nombre Cliente"/>
+            <Property name="text" type="java.lang.String" value="Cliente"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jlNif">
@@ -622,6 +629,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Grabar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbGrabarActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbBorrar">
       <Properties>
@@ -630,6 +640,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Borrar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbBorrarActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbAtras">
       <Properties>
@@ -640,6 +653,9 @@
           <Dimension value="[30, 30]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbAtrasActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbAdelante">
       <Properties>

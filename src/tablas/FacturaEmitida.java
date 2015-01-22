@@ -6,6 +6,7 @@ import general.MysqlConnect;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 import util.Apariencia;
@@ -135,7 +136,6 @@ public class FacturaEmitida {
      *
      * @param strSql Cadena con la consulta a ejecutar.
      * @return <code>true</code> Si la lectura ha sido correcta. <br>
-     * @return <code>false</code> Si ha habido algún problema al leer la Factura Emitida.
      */
     public boolean read(String strSql) {
         boolean lecturaCorrecta = true;
@@ -158,116 +158,168 @@ public class FacturaEmitida {
                 }
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
+                lecturaCorrecta = false;
                 if (DatosComunes.enDebug) {
                     e.printStackTrace();
                 }
                 Apariencia.mensajeInformativo(5, "Error en lectura fichero de Facturas Emitidas");
-            }
+            }            
+        }else{
+            lecturaCorrecta = false;
         }
+            
 
         return lecturaCorrecta;
     }
 
     /**
      *
+     * @param centro Centro contable
+     * @param factura Número de factura
+     * @param any Año de la factura
+     * @param serie Serie 
+     * @return <code>registrosBorrados</code>  Número de registros borrados si
+     * -1 es que no se ha borrado
      */
-    public void write(){
-		PreparedStatement ps = null;
-   
-		String sqlInsert = "INSERT INTO FACEMI " +
-						   "(EMPRESA, " +
-						   "FACEMI_CLIENTE, " +
-						   "FACEMI_ANY, " +
-						   "FACEMI_SERIE, " +
-						   "FACEMI_FACTURA, " +
-						   "FACEMI_CENTRO, " +
-						   "FACEMI_FECHA, " +
-						   "FACEMI_FECH_ASTO_APT, " +
-						   "FACEMI_NOMBRE_CLI, " +
-						   "FACEMI_NIF, " +
-						   "FACEMI_BASES_IVA_1, " +
-						   "FACEMI_BASES_IVA_2, " +
-						   "FACEMI_BASES_IVA_3, " +
-						   "FACEMI_BASES_RE_1, " +
-						   "FACEMI_BASES_RE_2, " +
-						   "FACEMI_BASES_RE_3, " +
-						   "FACEMI_IVA, " +
-						   "FACEMI_RECEQ, " +
-						   "FACEMI_TOTAL) " +						   
-				           "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " +
-				                   "?, ?, ?, ?, ?, ?, ?, ?, ?) " +
-				           "ON DUPLICATE KEY UPDATE " +
-				           "EMPRESA = ?, " +
-				           "FACEMI_CLIENTE = ?, " +
-						   "FACEMI_ANY = ?, " +
-						   "FACEMI_SERIE = ?, " +
-						   "FACEMI_FACTURA = ?, " +
-						   "FACEMI_CENTRO = ?, " +
-						   "FACEMI_FECHA = ?, " +
-						   "FACEMI_FECH_ASTO_APT = ?, " +
-						   "FACEMI_NOMBRE_CLI = ?, " +
-						   "FACEMI_NIF = ?, " +
-						   "FACEMI_BASES_IVA_1 = ?, " +
-						   "FACEMI_BASES_IVA_2 = ?, " +
-						   "FACEMI_BASES_IVA_3 = ?, " +
-						   "FACEMI_BASES_RE_1 = ?, " +
-						   "FACEMI_BASES_RE_2 = ?, " +
-						   "FACEMI_BASES_RE_3 = ?, " +
-						   "FACEMI_IVA = ?, " +
-						   "FACEMI_RECEQ = ?, " +
-						   "FACEMI_TOTAL = ? ";
-		
-		try {
-			ps = MysqlConnect.db.conn.prepareStatement(sqlInsert);
-			int i = 1;
-			// Insert
-			ps.setString(i++, Cadena.left(empresa, 2));
-			ps.setInt(i++, cliente);
-			ps.setInt(i++, año);
-			ps.setString(i++, Cadena.left(serie, 2));
-			ps.setInt(i++, factura);
-			ps.setInt(i++, centro);
-			ps.setInt(i++, fecha);
-			ps.setLong(i++, fechaAsientoApunte);
-			ps.setString(i++, Cadena.left(nombreCliente, 30));
-			ps.setString(i++, Cadena.left(nif, 16));
-			for(int j = 0; j < 3; j++)
-				ps.setDouble(i++, baseIva[j]);
-			for(int j = 0; j < 3; j++)
-				ps.setDouble(i++, baseRecargoEquivalencia[j]);
-			ps.setDouble(i++, iva);
-			ps.setDouble(i++, recargoEquivalencia);
-			ps.setDouble(i++, total);
-			
-			// Update
-			ps.setString(i++, Cadena.left(empresa, 2));
-			ps.setInt(i++, cliente);
-			ps.setInt(i++, año);
-			ps.setString(i++, Cadena.left(serie, 2));
-			ps.setInt(i++, factura);
-			ps.setInt(i++, centro);
-			ps.setInt(i++, fecha);
-			ps.setLong(i++, fechaAsientoApunte);
-			ps.setString(i++, Cadena.left(nombreCliente, 30));
-			ps.setString(i++, Cadena.left(nif, 16));
-			for(int j = 0; j < 3; j++)
-				ps.setDouble(i++, baseIva[j]);
-			for(int j = 0; j < 3; j++)
-				ps.setDouble(i++, baseRecargoEquivalencia[j]);
-			ps.setDouble(i++, iva);
-			ps.setDouble(i++, recargoEquivalencia);
-			ps.setDouble(i++, total);
-			
-			ps.execute();
-			
-		} catch (SQLException e) {
-			if(DatosComunes.enDebug){
-				JOptionPane.showMessageDialog(null,
-				"Error en escritura fichero de FacturaEmitida!!!");
-				e.printStackTrace();
-			}
-		}
-	}
+    public int delete(int centro, int factura, int any, String serie) {
+        int registrosBorrados = 0;
+
+        Statement ps = null;
+
+        String sqlDelete = "DELETE FROM FACEMI WHERE "
+                + "EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                + "FACEMI_CENTRO = " + centro + " AND "
+                + "FACEMI_FACTURA = " + factura + " AND "
+                + "FACEMI_ANY = " + any + " AND "
+                + "FACEMI_SERIE = '" + serie +"'";
+
+        try {
+            ps = MysqlConnect.db.conn.createStatement();
+
+            registrosBorrados = ps.executeUpdate(sqlDelete);
+
+        } catch (SQLException e) {
+            registrosBorrados = -1;
+            if (DatosComunes.enDebug) {
+                JOptionPane.showMessageDialog(null,
+                        "Error en borrado fichero de Efectos a Cobrar!!!");
+                e.printStackTrace();
+            }
+        }
+
+        return registrosBorrados;
+    }
+    
+    /**
+     *
+     * @return 
+     */
+    public boolean write() {
+
+        boolean escrituraCorrecta = true;
+        PreparedStatement ps = null;
+
+        String sqlInsert = "INSERT INTO FACEMI "
+                + "(EMPRESA, "
+                + "FACEMI_CLIENTE, "
+                + "FACEMI_ANY, "
+                + "FACEMI_SERIE, "
+                + "FACEMI_FACTURA, "
+                + "FACEMI_CENTRO, "
+                + "FACEMI_FECHA, "
+                + "FACEMI_FECH_ASTO_APT, "
+                + "FACEMI_NOMBRE_CLI, "
+                + "FACEMI_NIF, "
+                + "FACEMI_BASES_IVA_1, "
+                + "FACEMI_BASES_IVA_2, "
+                + "FACEMI_BASES_IVA_3, "
+                + "FACEMI_BASES_RE_1, "
+                + "FACEMI_BASES_RE_2, "
+                + "FACEMI_BASES_RE_3, "
+                + "FACEMI_IVA, "
+                + "FACEMI_RECEQ, "
+                + "FACEMI_TOTAL) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
+                + "?, ?, ?, ?, ?, ?, ?, ?, ?) "
+                + "ON DUPLICATE KEY UPDATE "
+                + "EMPRESA = ?, "
+                + "FACEMI_CLIENTE = ?, "
+                + "FACEMI_ANY = ?, "
+                + "FACEMI_SERIE = ?, "
+                + "FACEMI_FACTURA = ?, "
+                + "FACEMI_CENTRO = ?, "
+                + "FACEMI_FECHA = ?, "
+                + "FACEMI_FECH_ASTO_APT = ?, "
+                + "FACEMI_NOMBRE_CLI = ?, "
+                + "FACEMI_NIF = ?, "
+                + "FACEMI_BASES_IVA_1 = ?, "
+                + "FACEMI_BASES_IVA_2 = ?, "
+                + "FACEMI_BASES_IVA_3 = ?, "
+                + "FACEMI_BASES_RE_1 = ?, "
+                + "FACEMI_BASES_RE_2 = ?, "
+                + "FACEMI_BASES_RE_3 = ?, "
+                + "FACEMI_IVA = ?, "
+                + "FACEMI_RECEQ = ?, "
+                + "FACEMI_TOTAL = ? ";
+
+        try {
+            ps = MysqlConnect.db.conn.prepareStatement(sqlInsert);
+            int i = 1;
+            // Insert
+            ps.setString(i++, Cadena.left(empresa, 2));
+            ps.setInt(i++, cliente);
+            ps.setInt(i++, año);
+            ps.setString(i++, Cadena.left(serie, 2));
+            ps.setInt(i++, factura);
+            ps.setInt(i++, centro);
+            ps.setInt(i++, fecha);
+            ps.setLong(i++, fechaAsientoApunte);
+            ps.setString(i++, Cadena.left(nombreCliente, 30));
+            ps.setString(i++, Cadena.left(nif, 16));
+            for (int j = 0; j < 3; j++) {
+                ps.setDouble(i++, baseIva[j]);
+            }
+            for (int j = 0; j < 3; j++) {
+                ps.setDouble(i++, baseRecargoEquivalencia[j]);
+            }
+            ps.setDouble(i++, iva);
+            ps.setDouble(i++, recargoEquivalencia);
+            ps.setDouble(i++, total);
+
+            // Update
+            ps.setString(i++, Cadena.left(empresa, 2));
+            ps.setInt(i++, cliente);
+            ps.setInt(i++, año);
+            ps.setString(i++, Cadena.left(serie, 2));
+            ps.setInt(i++, factura);
+            ps.setInt(i++, centro);
+            ps.setInt(i++, fecha);
+            ps.setLong(i++, fechaAsientoApunte);
+            ps.setString(i++, Cadena.left(nombreCliente, 30));
+            ps.setString(i++, Cadena.left(nif, 16));
+            for (int j = 0; j < 3; j++) {
+                ps.setDouble(i++, baseIva[j]);
+            }
+            for (int j = 0; j < 3; j++) {
+                ps.setDouble(i++, baseRecargoEquivalencia[j]);
+            }
+            ps.setDouble(i++, iva);
+            ps.setDouble(i++, recargoEquivalencia);
+            ps.setDouble(i++, total);
+
+            ps.execute();
+
+        } catch (SQLException e) {
+            escrituraCorrecta = false;
+            if (DatosComunes.enDebug) {
+                JOptionPane.showMessageDialog(null,
+                        "Error en escritura fichero de FacturaEmitida!!!");
+                e.printStackTrace();
+            }
+        }
+        
+        return escrituraCorrecta;
+    }
 	
     /**
      *
