@@ -5,7 +5,13 @@
  */
 package mantenimientos;
 
+import general.DatosComunes;
+import indices.IndiceFacturasEmitidas;
+import tablas.Cuenta;
 import tablas.FacturaEmitida;
+import util.Apariencia;
+import util.Cadena;
+import util.Fecha;
 
 /**
  *
@@ -14,6 +20,7 @@ import tablas.FacturaEmitida;
 public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
 
     private FacturaEmitida facturaEmitida;
+    private IndiceFacturasEmitidas ife = null;
     /**
      * Creates new form MantenimientoFacturasEmitidas
      */
@@ -21,8 +28,11 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
         super(parent, modal);
         
         initComponents();
+        facturaEmitida = new FacturaEmitida();
+        cargaInicial();        
         this.setVisible(true);
-        //cargaInicial();
+        
+        
         
     }
 
@@ -35,21 +45,21 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jlFactura = new javax.swing.JLabel();
         jtfnfFactura = new util.JTextFieldNumeroFijo(6);
         jbBuscarFactura = new javax.swing.JButton();
-        jlAño = new javax.swing.JLabel();
-        jtfnfAño = new util.JTextFieldFijo(4);
+        jlAny = new javax.swing.JLabel();
+        jtfnfAny = new util.JTextFieldFijo(4);
         jtffSerie = new util.JTextFieldFijo(2);
         jlSerie = new javax.swing.JLabel();
         jlCentro = new javax.swing.JLabel();
         jtfnfCentro = new util.JTextFieldNumeroFijo(3);
-        jPanel1 = new javax.swing.JPanel();
+        jpDatosFactura = new javax.swing.JPanel();
         jlCodigoCliente = new javax.swing.JLabel();
         jbBuscarCodigoCliente = new javax.swing.JButton();
         jtfnfCodigoCliente = new util.JTextFieldFijo(7);
         jlCodigoClienteDescripcion = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jlFechaFactura = new javax.swing.JLabel();
         jtffeFechaFactura = new util.JTextFieldFecha();
         jlReducido = new javax.swing.JLabel();
         jlGeneral = new javax.swing.JLabel();
@@ -81,18 +91,23 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Facturas Emitidas");
 
-        jLabel1.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
-        jLabel1.setText("Factura");
+        jlFactura.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jlFactura.setText("Factura");
 
         jtfnfFactura.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
 
         jbBuscarFactura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BUSCAR.gif"))); // NOI18N
         jbBuscarFactura.setPreferredSize(new java.awt.Dimension(30, 30));
+        jbBuscarFactura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBuscarFacturaActionPerformed(evt);
+            }
+        });
 
-        jlAño.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
-        jlAño.setText("Año");
+        jlAny.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jlAny.setText("Año");
 
-        jtfnfAño.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtfnfAny.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
 
         jtffSerie.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
 
@@ -104,8 +119,8 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
 
         jtfnfCentro.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Factura", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(51, 51, 255))); // NOI18N
-        jPanel1.setMaximumSize(new java.awt.Dimension(699, 378));
+        jpDatosFactura.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Factura", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(51, 51, 255))); // NOI18N
+        jpDatosFactura.setMaximumSize(new java.awt.Dimension(699, 378));
 
         jlCodigoCliente.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlCodigoCliente.setText("Cod. Cliente");
@@ -124,8 +139,8 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
         jlCodigoClienteDescripcion.setForeground(new java.awt.Color(102, 102, 255));
         jlCodigoClienteDescripcion.setText("ffff");
 
-        jLabel2.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
-        jLabel2.setText("Fecha Factura");
+        jlFechaFactura.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jlFechaFactura.setText("Fecha Factura");
 
         jtffeFechaFactura.setText("00.00.00");
         jtffeFechaFactura.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
@@ -179,7 +194,7 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
         jtfnf2dTotal.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
 
         jlNombreCliente.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
-        jlNombreCliente.setText("Nombre Cliente");
+        jlNombreCliente.setText("Cliente");
 
         jlNif.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlNif.setText("N.I.F.");
@@ -188,125 +203,124 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
 
         jtffNif.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jpDatosFacturaLayout = new javax.swing.GroupLayout(jpDatosFactura);
+        jpDatosFactura.setLayout(jpDatosFacturaLayout);
+        jpDatosFacturaLayout.setHorizontalGroup(
+            jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpDatosFacturaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpDatosFacturaLayout.createSequentialGroup()
+                        .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jpDatosFacturaLayout.createSequentialGroup()
                                 .addComponent(jlTotal)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jtfnf2dTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpDatosFacturaLayout.createSequentialGroup()
                                 .addComponent(jlRecargoEquivalencia)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jtfnf2dRecargoEquivalencia, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jpDatosFacturaLayout.createSequentialGroup()
                                 .addComponent(jlImporteIva)
                                 .addGap(40, 40, 40)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(jtfnf2dBaseIvaReducido, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jlReducido)
                                         .addComponent(jtfnf2dBaseREReducido, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jtfnf2dImporteIva, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpDatosFacturaLayout.createSequentialGroup()
                                 .addGap(24, 24, 24)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jlGeneral)
                                     .addComponent(jtfnf2dBaseREGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jtfnf2dBaseIvaGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jlNif))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jtfnf2dBaseIvaGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jpDatosFacturaLayout.createSequentialGroup()
                                 .addGap(36, 36, 36)
-                                .addComponent(jlNombreCliente)))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jtffNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtffNif, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jlNif)
+                                    .addComponent(jlNombreCliente))
+                                .addGap(18, 18, 18)
+                                .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jtffNif, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jtffNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(jpDatosFacturaLayout.createSequentialGroup()
+                        .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpDatosFacturaLayout.createSequentialGroup()
                                 .addComponent(jlCodigoCliente)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jbBuscarCodigoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel2))
+                            .addComponent(jlFechaFactura))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jtfnfCodigoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jlCodigoClienteDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jtffeFechaFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jtfnfCodigoCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                            .addComponent(jtffeFechaFactura, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jlCodigoClienteDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpDatosFacturaLayout.createSequentialGroup()
+                        .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jlBasesIva)
                             .addComponent(jlBasesRecargoEquivalencia))
                         .addGap(308, 308, 308)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jlSuperreducido)
                             .addComponent(jtfnf2dBaseIVASuperReducido, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jpDatosFacturaLayout.setVerticalGroup(
+            jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpDatosFacturaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jlCodigoCliente)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jtfnfCodigoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jlCodigoClienteDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jbBuscarCodigoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jlFechaFactura)
                     .addComponent(jtffeFechaFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlReducido)
                     .addComponent(jlGeneral)
                     .addComponent(jlSuperreducido))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jlBasesIva)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jtfnf2dBaseIvaReducido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jtfnf2dBaseIvaGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jtfnf2dBaseIVASuperReducido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlBasesRecargoEquivalencia)
+                .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jtfnf2dBaseREGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtfnf2dBaseREReducido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jlBasesRecargoEquivalencia)
+                        .addComponent(jtfnf2dBaseREReducido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlImporteIva)
                     .addComponent(jtfnf2dImporteIva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpDatosFacturaLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jtfnf2dRecargoEquivalencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jlRecargoEquivalencia))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jtfnf2dTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jlTotal)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlNombreCliente)
-                            .addComponent(jtffNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jlTotal)
                             .addComponent(jlNif)
-                            .addComponent(jtffNif, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jtffNif, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jpDatosFacturaLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(jpDatosFacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jlNombreCliente)
+                            .addComponent(jtffNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -318,12 +332,22 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
 
         jbGrabar.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbGrabar.setText("Grabar");
+        jbGrabar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbGrabarActionPerformed(evt);
+            }
+        });
 
         jbBorrar.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbBorrar.setText("Borrar");
 
         jbAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Atras.gif"))); // NOI18N
         jbAtras.setPreferredSize(new java.awt.Dimension(30, 30));
+        jbAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAtrasActionPerformed(evt);
+            }
+        });
 
         jbAdelante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Adelante.gif"))); // NOI18N
         jbAdelante.setPreferredSize(new java.awt.Dimension(30, 30));
@@ -341,15 +365,15 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(22, 22, 22)
-                        .addComponent(jLabel1)
+                        .addComponent(jlFactura)
                         .addGap(18, 18, 18)
                         .addComponent(jtfnfFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jbBuscarFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31)
-                        .addComponent(jlAño)
+                        .addComponent(jlAny)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jtfnfAño, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jtfnfAny, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(39, 39, 39)
                         .addComponent(jlSerie)
                         .addGap(18, 18, 18)
@@ -374,102 +398,183 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
                 .addGap(41, 41, 41))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jpDatosFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jlFactura)
+                        .addComponent(jtfnfFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbBuscarFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jtfnfFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jbBuscarFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jtfnfAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jtffSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jlSerie)
-                                .addComponent(jlCentro)
-                                .addComponent(jtfnfCentro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jlAño))))
+                            .addComponent(jtfnfAny, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jtffSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlSerie)
+                            .addComponent(jlCentro)
+                            .addComponent(jtfnfCentro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jlAny)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jpDatosFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbAtras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jbAdelante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jbTotalMeses, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jbGrabar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jbBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(24, 24, 24))
+                    .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jbTotalMeses, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbGrabar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jbAtras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void borrarPantalla() {
+        jtffNif.setText("");
+        jtffNombreCliente.setText("");
+        jtffSerie.setText("");
+        jtffeFechaFactura.setText("00.00.00");
+        jtfnf2dBaseIVASuperReducido.setText("0,0");
+        jtfnf2dBaseIvaGeneral.setText("0,0");
+        jtfnf2dBaseIvaReducido.setText("0,0");
+        jtfnf2dBaseREGeneral.setText("0,0");
+        jtfnf2dBaseREReducido.setText("0,0");
+        jtfnf2dImporteIva.setText("0,0");
+        jtfnf2dRecargoEquivalencia.setText("0,0");
+        jtfnf2dTotal.setText("0,0");
+        jtfnfAny.setText("0");
+        jtfnfCentro.setText(String.valueOf(DatosComunes.centroCont));
+        jtfnfCodigoCliente.setText("0");
+        jtfnfFactura.setText("0");
+
+    }
+    
+    
+    
+    private void cargaInicial(){
+        
+        borrarPantalla();
+        
+        String strSql = "SELECT * FROM FACEMI WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                      + "FACEMI_CENTRO = " + DatosComunes.centroCont + " "
+                      + "ORDER BY FACEMI_ANY DESC, FACEMI_FACTURA DESC "
+                      + "LIMIT 1";
+        
+        facturaEmitida.read(strSql);
+        
+        cargaDatos(facturaEmitida);
+                
+    }
+    
+    private void cargaDatos(FacturaEmitida fe){
+        Cuenta cuentaContable = new Cuenta();
+        
+        jtfnfFactura.setText(String.valueOf(fe.getFactura()));
+        jtfnfAny.setText(String.valueOf(fe.getAño()));
+        jtffSerie.setText(fe.getSerie());
+        jtfnfCentro.setText(String.valueOf(fe.getCentro()));
+        jtfnfCodigoCliente.setText(String.valueOf(fe.getCliente()));
+        // Leer cuenta contable de clientes con el nombre
+        if(cuentaContable.read("43" + Cadena.enteroCerosIzquierda(fe.getCliente(), 7), fe.getCentro()))
+            jlCodigoClienteDescripcion.setText(cuentaContable.getTitulo());
+        else
+            jlCodigoClienteDescripcion.setText("");        
+        
+        jtffeFechaFactura.setText(Fecha.fechaAcadena(fe.getFecha()));
+        jtfnf2dBaseIvaGeneral.setText(String.valueOf(fe.getBaseIva(1)));
+        jtfnf2dBaseIvaReducido.setText(String.valueOf(fe.getBaseIva(0)));
+        jtfnf2dBaseIVASuperReducido.setText(String.valueOf(fe.getBaseIva(2)));
+        jtfnf2dBaseREGeneral.setText(String.valueOf(fe.getBaseRecargoEquivalencia(1)));
+        jtfnf2dBaseREReducido.setText(String.valueOf(fe.getBaseRecargoEquivalencia(0)));
+        jtfnf2dImporteIva.setText(String.valueOf(fe.getIva()));
+        jtfnf2dRecargoEquivalencia.setText(String.valueOf(fe.getRecargoEquivalencia()));
+        jtfnf2dTotal.setText(String.valueOf(fe.getTotal()));
+        jtffNombreCliente.setText(fe.getNombreCliente());        
+        jtffNif.setText(fe.getNif());
+    }
+    
     private void jtfnfCodigoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnfCodigoClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jtfnfCodigoClienteActionPerformed
 
     private void jbAdelanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAdelanteActionPerformed
         
+        String strSql = "SELECT * FROM FACEMI WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                      + "FACEMI_CENTRO = " + DatosComunes.centroCont + " AND "
+                      + "FACEMI_ANY >= " + jtfnfAny.getText() + " AND "
+                      + "FACEMI_FACTURA > " + jtfnfFactura.getText() + " AND "
+                      + "FACEMI_SERIE = '" + jtffSerie.getText() + "' "
+                      + "ORDER BY FACEMI_ANY ASC, FACEMI_FACTURA ASC "
+                      + "LIMIT 1";
+        
+        if(facturaEmitida.read(strSql))
+            cargaDatos(facturaEmitida);
     }//GEN-LAST:event_jbAdelanteActionPerformed
+
+    private void jbGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGrabarActionPerformed
+        
+        facturaEmitida.setEmpresa(DatosComunes.eEmpresa);
+        facturaEmitida.setCliente(Integer.valueOf(jtfnfCodigoCliente.getText().trim()));
+        facturaEmitida.setAño(Integer.valueOf(jtfnfAny.getText().trim()));
+        facturaEmitida.setSerie(jtffSerie.getText().trim());
+        facturaEmitida.setCentro(Integer.valueOf(jtfnfCentro.getText().trim()));
+        facturaEmitida.setFecha(jtffeFechaFactura.getFechaAAAAMMDD());
+        facturaEmitida.setNombreCliente(jtffNombreCliente.getText().trim());
+        facturaEmitida.setNif(jtffNif.getText().trim());
+        facturaEmitida.setBaseIva(1, jtfnf2dBaseIvaGeneral.getDouble());
+        facturaEmitida.setBaseIva(0, jtfnf2dBaseIvaReducido.getDouble());
+        facturaEmitida.setBaseIva(2, jtfnf2dBaseIVASuperReducido.getDouble());
+        facturaEmitida.setBaseRecargoEquivalencia(0, jtfnf2dBaseREReducido.getDouble());
+        facturaEmitida.setBaseRecargoEquivalencia(1, jtfnf2dBaseREGeneral.getDouble());
+        // Creo que el campo de Base Recargo Equivalencia Superreducido (indice = 2)
+        // siempre es 0 ????
+        //facturaEmitida.setBaseRecargoEquivalencia(2, 0.0);
+        facturaEmitida.setIva(jtfnf2dImporteIva.getDouble());
+        facturaEmitida.setRecargoEquivalencia(jtfnf2dRecargoEquivalencia.getDouble());
+        facturaEmitida.setTotal(jtfnf2dTotal.getDouble());
+        if(facturaEmitida.write())
+            Apariencia.mensajeInformativo(5, "Factura Emitida grabada correctamente.");
+    }//GEN-LAST:event_jbGrabarActionPerformed
+
+    private void jbAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAtrasActionPerformed
+        
+        String strSql = "SELECT * FROM FACEMI WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                      + "FACEMI_CENTRO = " + DatosComunes.centroCont + " AND "
+                      + "FACEMI_ANY <= " + jtfnfAny.getText() + " AND "
+                      + "FACEMI_FACTURA < " + jtfnfFactura.getText() + " AND "
+                      + "FACEMI_SERIE = '" + jtffSerie.getText() + "' "
+                      + "ORDER BY FACEMI_ANY DESC, FACEMI_FACTURA DESC "
+                      + "LIMIT 1";
+        
+        if(facturaEmitida.read(strSql))
+            cargaDatos(facturaEmitida);
+    }//GEN-LAST:event_jbAtrasActionPerformed
+
+    private void jbBuscarFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarFacturaActionPerformed
+        
+        if(ife == null)
+            ife = new IndiceFacturasEmitidas();
+        else
+            ife.setVisible(true);
+        
+        if((facturaEmitida = ife.getFacturaEmitida()) != null)
+            cargaDatos(facturaEmitida);
+        
+    }//GEN-LAST:event_jbBuscarFacturaActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MantenimientoFacturasEmitidas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MantenimientoFacturasEmitidas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MantenimientoFacturasEmitidas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MantenimientoFacturasEmitidas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                MantenimientoFacturasEmitidas dialog = new MantenimientoFacturasEmitidas(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+    
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JButton jbAdelante;
     private javax.swing.JButton jbAtras;
     private javax.swing.JButton jbBorrar;
@@ -478,12 +583,14 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
     private javax.swing.JButton jbGrabar;
     private javax.swing.JButton jbSalir;
     private javax.swing.JButton jbTotalMeses;
-    private javax.swing.JLabel jlAño;
+    private javax.swing.JLabel jlAny;
     private javax.swing.JLabel jlBasesIva;
     private javax.swing.JLabel jlBasesRecargoEquivalencia;
     private javax.swing.JLabel jlCentro;
     private javax.swing.JLabel jlCodigoCliente;
     private javax.swing.JLabel jlCodigoClienteDescripcion;
+    private javax.swing.JLabel jlFactura;
+    private javax.swing.JLabel jlFechaFactura;
     private javax.swing.JLabel jlGeneral;
     private javax.swing.JLabel jlImporteIva;
     private javax.swing.JLabel jlNif;
@@ -493,6 +600,7 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
     private javax.swing.JLabel jlSerie;
     private javax.swing.JLabel jlSuperreducido;
     private javax.swing.JLabel jlTotal;
+    private javax.swing.JPanel jpDatosFactura;
     private util.JTextFieldFijo jtffNif;
     private util.JTextFieldFijo jtffNombreCliente;
     private util.JTextFieldFijo jtffSerie;
@@ -505,7 +613,7 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
     private util.JTextFieldNumero2Decimales jtfnf2dImporteIva;
     private util.JTextFieldNumero2Decimales jtfnf2dRecargoEquivalencia;
     private util.JTextFieldNumero2Decimales jtfnf2dTotal;
-    private util.JTextFieldFijo jtfnfAño;
+    private util.JTextFieldFijo jtfnfAny;
     private util.JTextFieldNumeroFijo jtfnfCentro;
     private util.JTextFieldFijo jtfnfCodigoCliente;
     private util.JTextFieldNumeroFijo jtfnfFactura;
