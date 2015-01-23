@@ -570,7 +570,7 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
         if(cuentaContable.read("43" + Cadena.enteroCerosIzquierda(fe.getCliente(), 7), fe.getCentro()))
             jlCodigoClienteDescripcion.setText(cuentaContable.getTitulo());
         else
-            jlCodigoClienteDescripcion.setText("");        
+            jlCodigoClienteDescripcion.setText("Inexistente !!!");        
         
         jtffeFechaFactura.setText(Fecha.fechaAcadena(fe.getFecha()));
         jtfnf2dBaseIvaGeneral.setText(String.valueOf(fe.getBaseIva(1)));
@@ -599,7 +599,7 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
                       + "ORDER BY FACEMI_ANY ASC, FACEMI_FACTURA ASC "
                       + "LIMIT 1";
         
-        if(facturaEmitida.read(strSql))
+        if(facturaEmitida.read(strSql) == true)
             cargaDatos(facturaEmitida);
     }//GEN-LAST:event_jbAdelanteActionPerformed
 
@@ -624,7 +624,7 @@ public class MantenimientoFacturasEmitidas extends util.EscapeDialog {
         facturaEmitida.setIva(jtfnf2dImporteIva.getDouble());
         facturaEmitida.setRecargoEquivalencia(jtfnf2dRecargoEquivalencia.getDouble());
         facturaEmitida.setTotal(jtfnf2dTotal.getDouble());
-        if(facturaEmitida.write())
+        if(facturaEmitida.write() == true)
             Apariencia.mensajeInformativo(5, "Factura Emitida grabada correctamente.");
     }//GEN-LAST:event_jbGrabarActionPerformed
 
