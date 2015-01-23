@@ -320,7 +320,7 @@ public class IndiceProveedores {
 			// Si pinchamos en el botón 'Salir', no pasamos cuenta y 'tiramos' la
 			// pantalla
 			cuenta = null;
-			pantalla.dispose();
+			pantalla.setVisible(false);
 		}
 	}
 
@@ -375,7 +375,7 @@ public class IndiceProveedores {
 	}
 	
 	public String getCuenta(){
-		pantalla.dispose();
+		pantalla.setVisible(false);
 		return cuenta;
 	}
 	
@@ -384,7 +384,7 @@ public class IndiceProveedores {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
-			pantalla.dispose();
+			pantalla.setVisible(false);
 		}
 
 		@Override
@@ -394,7 +394,7 @@ public class IndiceProveedores {
 				JTable target = (JTable) arg0.getSource();
 				int row = target.getSelectedRow();
 				cuenta = (String) target.getValueAt(row, 0);
-				pantalla.dispose();
+				pantalla.setVisible(false);
 			}
 		}
 
@@ -414,5 +414,9 @@ public class IndiceProveedores {
 		public void mouseReleased(MouseEvent e) {
 		}	
 	}
+        
+        public void setVisible(boolean visible){
+            pantalla.setVisible(visible);
+        }
 }
 
