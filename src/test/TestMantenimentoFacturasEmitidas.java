@@ -12,6 +12,7 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 import mantenimientos.MantenimientoFacturasEmitidas;
+import mantenimientos.MantenimientoFacturasRecibidas;
 
 /**
  *
@@ -20,6 +21,7 @@ import mantenimientos.MantenimientoFacturasEmitidas;
 public class TestMantenimentoFacturasEmitidas extends javax.swing.JFrame {
 
     MantenimientoFacturasEmitidas mfe = null;
+    MantenimientoFacturasRecibidas mfr = null;
     /**
      * Creates new form TestMantenimentoFacturasEmitidas
      */
@@ -37,7 +39,8 @@ public class TestMantenimentoFacturasEmitidas extends javax.swing.JFrame {
     private void initComponents() {
 
         jbSalir = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jbMantenFacEmitidas = new javax.swing.JButton();
+        jbMantenFacRecibidas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -48,10 +51,17 @@ public class TestMantenimentoFacturasEmitidas extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Mantenimiento Facturas Emitidas");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jbMantenFacEmitidas.setText("Mantenimiento Facturas Emitidas");
+        jbMantenFacEmitidas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jbMantenFacEmitidasActionPerformed(evt);
+            }
+        });
+
+        jbMantenFacRecibidas.setText("Mantenimiento Facturas Recibidas");
+        jbMantenFacRecibidas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbMantenFacRecibidasActionPerformed(evt);
             }
         });
 
@@ -66,15 +76,19 @@ public class TestMantenimentoFacturasEmitidas extends javax.swing.JFrame {
                         .addComponent(jbSalir))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(86, 86, 86)
-                        .addComponent(jButton1)))
-                .addContainerGap(123, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jbMantenFacRecibidas)
+                            .addComponent(jbMantenFacEmitidas))))
+                .addContainerGap(117, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(72, 72, 72)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
+                .addComponent(jbMantenFacEmitidas)
+                .addGap(30, 30, 30)
+                .addComponent(jbMantenFacRecibidas)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                 .addComponent(jbSalir)
                 .addGap(53, 53, 53))
         );
@@ -86,12 +100,19 @@ public class TestMantenimentoFacturasEmitidas extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jbSalirActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jbMantenFacEmitidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMantenFacEmitidasActionPerformed
         if(mfe == null)
             mfe = new MantenimientoFacturasEmitidas(new javax.swing.JFrame(), true);
         else
             mfe.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jbMantenFacEmitidasActionPerformed
+
+    private void jbMantenFacRecibidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMantenFacRecibidasActionPerformed
+        if(mfr == null)
+            mfr = new MantenimientoFacturasRecibidas(new javax.swing.JFrame(), true);
+        else
+            mfr.setVisible(true);
+    }//GEN-LAST:event_jbMantenFacRecibidasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -136,7 +157,8 @@ public class TestMantenimentoFacturasEmitidas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jbMantenFacEmitidas;
+    private javax.swing.JButton jbMantenFacRecibidas;
     private javax.swing.JButton jbSalir;
     // End of variables declaration//GEN-END:variables
 }
