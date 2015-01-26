@@ -215,7 +215,7 @@ public class FacturaRecibida {
         return escrituraCorrecta;
     }
     
-        public int delete(int centro, int fecha, int orden) {
+    public int delete(int centro, int fecha, int orden) {
         int registrosBorrados = 0;
 
         Statement ps = null;

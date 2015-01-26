@@ -19,22 +19,16 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -45,7 +39,6 @@ import javax.swing.table.TableColumn;
 
 import tablas.IndiceBancos;
 import util.BaseDatos;
-import util.CuentaBancaria;
 import util.CuentaBancaria;
 
 
@@ -273,7 +266,7 @@ public class IndiceBancosSucursales {
 			// Si pinchamos en el botón 'Salir', no pasamos banco y 'tiramos' la
 			// pantalla
 			banco = null;
-			pantalla.dispose();
+			pantalla.setVisible(false);
 		}
 	}
 
@@ -327,7 +320,7 @@ public class IndiceBancosSucursales {
 	}
 	
 	public CuentaBancaria getBancoSucursal(){
-		pantalla.dispose();
+		pantalla.setVisible(false);
 		return cb;
 	}
 	
@@ -336,7 +329,7 @@ public class IndiceBancosSucursales {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
-			pantalla.dispose();
+			pantalla.setVisible(false);
 		}
 
 		@Override
@@ -367,5 +360,9 @@ public class IndiceBancosSucursales {
 		public void mouseReleased(MouseEvent e) {
 		}	
 	}
+        
+        public void setVisible(boolean visible){
+            pantalla.setVisible(visible);
+        }
 }
 
