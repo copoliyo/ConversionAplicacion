@@ -454,7 +454,7 @@ public class Cuenta {
      * @param centro
      * @return
      */
-        public static int delete(String strCuenta, int centro) {
+    public int delete(String strCuenta, int centro) {
         int registrosBorrados = 0;
 
         Statement ps = null;
