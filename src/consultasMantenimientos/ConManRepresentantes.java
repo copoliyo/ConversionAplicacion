@@ -886,6 +886,7 @@ public class ConManRepresentantes {
             if (BaseDatos.countRows(strSql) > 0) {
                 // Comprobamos si existe la cuenta contable 417 XX XX donde XX XX = codigo representante
                 Cuenta cuenta = new Cuenta();
+                cuenta.read(cuentaRepresentante, centro);
                 if (cuenta.existeCuenta(cuentaRepresentante, centro)) {
                     existeCuentaContable = true;
                     // Si existe la cuenta, tenemos que ver si tiene saldo, se es
@@ -895,7 +896,7 @@ public class ConManRepresentantes {
                         Apariencia.mensajeInformativo(5, "Cuenta contable " + cuentaRepresentante + " tiene saldo!!!<BR>No se puede borrar ni el representante ni la cuenta contable asociada");
                     } else {
                         // Tenemos que borrar el REPRESENTANTE y la CUENTA
-                        if (Cuenta.delete(cuentaRepresentante, centro) == 1) {
+                        if (cuenta.delete(cuentaRepresentante, centro) == 1) {
                             Apariencia.mensajeInformativo(5, "Cuenta contable " + cuentaRepresentante + " borrada correctamente.");
                             if (representante.delete() == 1) {
                                 Apariencia.mensajeInformativo(5, "Representante " + representante.getApellidosRazonSocial() + " borrado correctamente.");
