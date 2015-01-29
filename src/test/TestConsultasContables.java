@@ -6,6 +6,7 @@
 package test;
 
 import consultas.ConsultaCuentas;
+import consultas.ConsultaPlanContable;
 import general.DatosComunes;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +19,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class TestConsultasContables extends javax.swing.JFrame {
 
     ConsultaCuentas consultaCuentas = null;
+    ConsultaPlanContable consultaPlanContable = null;
     /**
      * Creates new form TestConsultaCuentas
      */
@@ -36,6 +38,7 @@ public class TestConsultasContables extends javax.swing.JFrame {
 
         jbTestConsultaCuentas = new javax.swing.JButton();
         jbSalir = new javax.swing.JButton();
+        jbConsultaPlanContable = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -53,6 +56,13 @@ public class TestConsultasContables extends javax.swing.JFrame {
             }
         });
 
+        jbConsultaPlanContable.setText("Consulta Plan Contable");
+        jbConsultaPlanContable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbConsultaPlanContableActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -64,15 +74,19 @@ public class TestConsultasContables extends javax.swing.JFrame {
                         .addComponent(jbSalir))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(111, 111, 111)
-                        .addComponent(jbTestConsultaCuentas)))
-                .addContainerGap(154, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jbConsultaPlanContable)
+                            .addComponent(jbTestConsultaCuentas))))
+                .addContainerGap(144, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(jbTestConsultaCuentas)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 156, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jbConsultaPlanContable)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
                 .addComponent(jbSalir)
                 .addGap(70, 70, 70))
         );
@@ -93,6 +107,15 @@ public class TestConsultasContables extends javax.swing.JFrame {
     
             System.exit(0);
     }//GEN-LAST:event_jbSalirActionPerformed
+
+    private void jbConsultaPlanContableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbConsultaPlanContableActionPerformed
+        
+        if(consultaPlanContable == null)
+            consultaPlanContable = new ConsultaPlanContable(new javax.swing.JFrame(), true);
+        else{
+            consultaPlanContable.setVisible(true);
+        }        
+    }//GEN-LAST:event_jbConsultaPlanContableActionPerformed
 
     /**
      * @param args the command line arguments
@@ -137,6 +160,7 @@ public class TestConsultasContables extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jbConsultaPlanContable;
     private javax.swing.JButton jbSalir;
     private javax.swing.JButton jbTestConsultaCuentas;
     // End of variables declaration//GEN-END:variables
