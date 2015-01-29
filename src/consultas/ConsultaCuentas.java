@@ -5,11 +5,19 @@
  */
 package consultas;
 
+import consultasMantenimientos.ConManBancos;
+import consultasMantenimientos.ConManClientes;
+import consultasMantenimientos.ConManProveedor;
+import consultasMantenimientos.ConManRepresentantes;
 import general.DatosComunes;
+import indices.IndiceAcumuladosContables;
+import indices.IndiceCuentas;
+import indices.IndiceMovimientosContables;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 import java.util.Vector;
+import mantenimientos.ManNotas;
 import tablas.Cuenta;
 import util.Apariencia;
 
@@ -19,7 +27,16 @@ import util.Apariencia;
  */
 public class ConsultaCuentas extends util.EscapeDialog {
 
+    private IndiceCuentas indiceCuentas;
     private Cuenta cuenta;
+    private ManNotas mantenimientoNotas = null;
+    private ConManClientes consultaClientes = null;
+    private ConManProveedor consultaProveedores = null;
+    private ConManRepresentantes consultaRepresentantes = null;
+    private ConManBancos consultaBancos = null;
+    private IndiceAcumuladosContables indiceAcumuladosContables = null;
+    private IndiceMovimientosContables indiceMovimientosContables = null;
+    
     /**
      * Creates new form ConsultaCuentas
      */
@@ -82,8 +99,27 @@ public class ConsultaCuentas extends util.EscapeDialog {
         else
             jcbActivado.setSelected(false);
         jtfnf2DSaldoActual.setText(String.valueOf(c.getSaldo()));
-        jtfnf2DSaldoUltimaDepuracion.setText(String.valueOf(c.getSaldoUltimaDepuracion()));        
+        jtfnf2DSaldoUltimaDepuracion.setText(String.valueOf(c.getSaldoUltimaDepuracion()));     
+        // Las cuentas sólo pueden tener movimientos si son de tercer grado.
+        if(c.getGrado().equalsIgnoreCase("3"))
+            jbMovimientos.setEnabled(true);
+        else
+            jbMovimientos.setEnabled(false);
+        
+        if(c.getExtenOtroFichero() > 0 && c.getGrado().equalsIgnoreCase("3")){
+            switch(c.getExtenOtroFichero()){
+                case 1: consultaClientes = new ConManClientes(true, c.getCuenta());
+                    break;
+                case 2: consultaProveedores = new ConManProveedor(true, c.getCuenta());
+                    break;
+                case 3: consultaRepresentantes = new ConManRepresentantes(true, c.getCuenta());
+                    break;    
+                case 4: consultaBancos = new ConManBancos(true, c.getCuenta());
+                    break;   
+            }
+        }
     }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -111,7 +147,6 @@ public class ConsultaCuentas extends util.EscapeDialog {
         jbSalir = new javax.swing.JButton();
         jbAcumuladoContable = new javax.swing.JButton();
         jbMovimientos = new javax.swing.JButton();
-        jbPrevisionesPago = new javax.swing.JButton();
         jbAtras = new javax.swing.JButton();
         jbAdelante = new javax.swing.JButton();
 
@@ -126,8 +161,23 @@ public class ConsultaCuentas extends util.EscapeDialog {
 
         jbBuscarCuenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BUSCAR.gif"))); // NOI18N
         jbBuscarCuenta.setPreferredSize(new java.awt.Dimension(30, 30));
+        jbBuscarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBuscarCuentaActionPerformed(evt);
+            }
+        });
 
         jtfnfCuenta.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtfnfCuenta.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfnfCuentaFocusLost(evt);
+            }
+        });
+        jtfnfCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfnfCuentaActionPerformed(evt);
+            }
+        });
 
         jtffTitulo.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
 
@@ -141,6 +191,11 @@ public class ConsultaCuentas extends util.EscapeDialog {
 
         jbNotas.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbNotas.setText("Notas");
+        jbNotas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbNotasActionPerformed(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Saldos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("MS Reference Sans Serif", 1, 14), new java.awt.Color(102, 102, 255))); // NOI18N
 
@@ -187,21 +242,43 @@ public class ConsultaCuentas extends util.EscapeDialog {
 
         jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/SALIR.gif"))); // NOI18N
         jbSalir.setPreferredSize(new java.awt.Dimension(30, 30));
+        jbSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSalirActionPerformed(evt);
+            }
+        });
 
         jbAcumuladoContable.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbAcumuladoContable.setText("Acumulado Contable");
+        jbAcumuladoContable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAcumuladoContableActionPerformed(evt);
+            }
+        });
 
         jbMovimientos.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbMovimientos.setText("Movimientos");
-
-        jbPrevisionesPago.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
-        jbPrevisionesPago.setText("Prev.Pago");
+        jbMovimientos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbMovimientosActionPerformed(evt);
+            }
+        });
 
         jbAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Atras.gif"))); // NOI18N
         jbAtras.setPreferredSize(new java.awt.Dimension(30, 30));
+        jbAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAtrasActionPerformed(evt);
+            }
+        });
 
         jbAdelante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Adelante.gif"))); // NOI18N
         jbAdelante.setPreferredSize(new java.awt.Dimension(30, 30));
+        jbAdelante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAdelanteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -218,8 +295,7 @@ public class ConsultaCuentas extends util.EscapeDialog {
                         .addComponent(jbAcumuladoContable)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbMovimientos)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbPrevisionesPago))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jlCuenta)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -231,10 +307,10 @@ public class ConsultaCuentas extends util.EscapeDialog {
                                 .addGap(38, 38, 38)
                                 .addComponent(jbNotas))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jtfnfCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(31, 31, 31)
+                                .addComponent(jtfnfCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
                                 .addComponent(jcbActivado)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(66, 66, 66)
                                 .addComponent(jlCentro)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jtfnfCentro, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))))
@@ -269,19 +345,131 @@ public class ConsultaCuentas extends util.EscapeDialog {
                         .addContainerGap()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbAcumuladoContable, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbMovimientos, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbPrevisionesPago, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jbAtras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbAdelante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(jbAdelante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbAcumuladoContable, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbMovimientos, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(27, 27, 27))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jbSalirActionPerformed
+
+    private void jbBuscarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarCuentaActionPerformed
+        
+        if(indiceCuentas == null)
+            indiceCuentas = new IndiceCuentas();
+        else{
+            indiceCuentas.recargarTabla();
+            indiceCuentas.setVisible(true);
+        }
+        
+        // El indice de cuentas devuelve "" si hemos salido pulsando ESCAPE
+        if(indiceCuentas.getCuenta().length() > 1){
+            cuenta.read(indiceCuentas.getCuenta(), DatosComunes.centroCont);
+            cargaDatos(cuenta);
+        }
+    }//GEN-LAST:event_jbBuscarCuentaActionPerformed
+
+    private void jbAdelanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAdelanteActionPerformed
+        
+        String strSql = "SELECT * FROM CONTAB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                + "CONTAB_CENTRO = " + DatosComunes.centroCont + " AND "
+                + "CONTAB_CUENTA > '" + jtfnfCuenta.getText().trim() + "' "
+                + "ORDER BY CONTAB_CUENTA ASC, CONTAB_GRADO ASC LIMIT 1";
+
+        if (cuenta.read(strSql) > 0) {
+            cargaDatos(cuenta);
+        }
+    }//GEN-LAST:event_jbAdelanteActionPerformed
+
+    private void jbAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAtrasActionPerformed
+        
+        String strSql = "SELECT * FROM CONTAB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                + "CONTAB_CENTRO = " + DatosComunes.centroCont + " AND "
+                + "CONTAB_CUENTA < '" + jtfnfCuenta.getText().trim() + "' "
+                + "ORDER BY CONTAB_CUENTA DESC, CONTAB_GRADO DESC LIMIT 1";
+
+        if (cuenta.read(strSql) > 0) {
+            cargaDatos(cuenta);
+        }
+    }//GEN-LAST:event_jbAtrasActionPerformed
+
+    private void jbNotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNotasActionPerformed
+        if (cuenta.getCuenta().length() > 0) {
+            if (mantenimientoNotas == null) {
+                mantenimientoNotas = new ManNotas("CONTAB", cuenta.getCuenta(), cuenta.getTitulo());
+            }else{
+                mantenimientoNotas.recargaNota("CONTAB", cuenta.getCuenta(), cuenta.getTitulo());
+            }                
+        }
+    }//GEN-LAST:event_jbNotasActionPerformed
+
+    private void jbAcumuladoContableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAcumuladoContableActionPerformed
+        
+        if(indiceAcumuladosContables == null){
+            indiceAcumuladosContables = new IndiceAcumuladosContables(cuenta.getCuenta().trim(), cuenta.getTitulo().trim());
+        }else{
+            indiceAcumuladosContables.recargaAcumulados(cuenta.getCuenta().trim(), cuenta.getTitulo().trim());
+        }
+    }//GEN-LAST:event_jbAcumuladoContableActionPerformed
+
+    private void jbMovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMovimientosActionPerformed
+        
+        if(indiceMovimientosContables == null){
+            indiceMovimientosContables = new IndiceMovimientosContables(cuenta.getCuenta().trim());            
+        }else{
+            indiceMovimientosContables.recargarMovimientos(cuenta.getCuenta().trim());
+        }
+        
+    }//GEN-LAST:event_jbMovimientosActionPerformed
+
+    private void jtfnfCuentaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnfCuentaFocusLost
+        
+        String strCuenta;
+
+        strCuenta = jtfnfCuenta.getText().trim();
+
+        if (strCuenta.length() > 0) {
+            String strSql = "SELECT * FROM CONTAB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                    + "CONTAB_CENTRO = " + DatosComunes.centroCont + " AND "
+                    + "CONTAB_CUENTA = '" + strCuenta + "' "
+                    + "LIMIT 1";
+
+            if (cuenta.read(strSql) > 0) {
+                cargaDatos(cuenta);
+            }
+        }
+    }//GEN-LAST:event_jtfnfCuentaFocusLost
+
+    private void jtfnfCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnfCuentaActionPerformed
+       
+        String strCuenta;
+
+        strCuenta = jtfnfCuenta.getText().trim();
+
+        if (strCuenta.length() > 0) {
+            String strSql = "SELECT * FROM CONTAB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                    + "CONTAB_CENTRO = " + DatosComunes.centroCont + " AND "
+                    + "CONTAB_CUENTA = '" + strCuenta + "' "
+                    + "LIMIT 1";
+
+            if (cuenta.read(strSql) > 0) {
+                cargaDatos(cuenta);
+            }else{
+                borrarPantalla();
+            }
+        }
+    }//GEN-LAST:event_jtfnfCuentaActionPerformed
    
+    
 
     public static class MyOFocusTraversalPolicy
             extends FocusTraversalPolicy {
@@ -328,7 +516,6 @@ public class ConsultaCuentas extends util.EscapeDialog {
     private javax.swing.JButton jbBuscarCuenta;
     private javax.swing.JButton jbMovimientos;
     private javax.swing.JButton jbNotas;
-    private javax.swing.JButton jbPrevisionesPago;
     private javax.swing.JButton jbSalir;
     private javax.swing.JCheckBox jcbActivado;
     private javax.swing.JLabel jlCentro;

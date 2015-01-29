@@ -36,8 +36,7 @@
                       <Component id="jbAcumuladoContable" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jbMovimientos" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jbPrevisionesPago" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jlCuenta" min="-2" max="-2" attributes="0"/>
@@ -51,10 +50,10 @@
                               <Component id="jbNotas" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
-                              <Component id="jtfnfCuenta" min="-2" pref="100" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                              <Component id="jtfnfCuenta" min="-2" pref="125" max="-2" attributes="0"/>
+                              <EmptySpace pref="112" max="32767" attributes="0"/>
                               <Component id="jcbActivado" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
                               <Component id="jlCentro" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jtfnfCentro" min="-2" pref="40" max="-2" attributes="0"/>
@@ -102,15 +101,16 @@
                   </Group>
               </Group>
               <EmptySpace type="unrelated" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jbSalir" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jbAcumuladoContable" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                  <Component id="jbMovimientos" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                  <Component id="jbPrevisionesPago" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jbAtras" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jbAdelante" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jbSalir" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jbAcumuladoContable" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="jbMovimientos" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -141,6 +141,9 @@
           <Dimension value="[30, 30]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbBuscarCuentaActionPerformed"/>
+      </Events>
     </Component>
     <Component class="util.JTextFieldNumeroFijo" name="jtfnfCuenta">
       <Properties>
@@ -148,6 +151,10 @@
           <Font name="MS Reference Sans Serif" size="14" style="1"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtfnfCuentaFocusLost"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtfnfCuentaActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldNumeroFijo(9)"/>
       </AuxValues>
@@ -195,6 +202,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Notas"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbNotasActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JPanel" name="jPanel1">
       <Properties>
@@ -288,6 +298,9 @@
           <Dimension value="[30, 30]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbSalirActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbAcumuladoContable">
       <Properties>
@@ -296,6 +309,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Acumulado Contable"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbAcumuladoContableActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbMovimientos">
       <Properties>
@@ -304,14 +320,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Movimientos"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="jbPrevisionesPago">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="MS Reference Sans Serif" size="14" style="1"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Prev.Pago"/>
-      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbMovimientosActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbAtras">
       <Properties>
@@ -322,6 +333,9 @@
           <Dimension value="[30, 30]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbAtrasActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbAdelante">
       <Properties>
@@ -332,6 +346,9 @@
           <Dimension value="[30, 30]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbAdelanteActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
