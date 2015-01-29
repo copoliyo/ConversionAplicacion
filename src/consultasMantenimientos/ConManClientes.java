@@ -71,7 +71,9 @@ public class ConManClientes {
 	// mismas pantallas.
 	private static boolean consulta;
 	private CuentaBancaria cb = null;
-	
+
+        private String cuentaCliente = "";
+        
 	IndicePoblaciones indicePoblaciones = null;
 	IndiceProvincias indiceProvincias = null;
 	IndicePaises indicePaises = null;
@@ -130,7 +132,16 @@ public class ConManClientes {
 		this.consulta = consultaOmantenimiento;
 		//this.consulta = false;
 		m = MysqlConnect.getDbCon();
+                cuentaCliente = "";
 		creaGui();
+	}
+        
+        public ConManClientes(boolean consultaOmantenimiento, String cuentaContableCliente){
+		this.consulta = consultaOmantenimiento;
+		//this.consulta = false;
+		m = MysqlConnect.getDbCon();    
+                cuentaCliente = cuentaContableCliente;
+		creaGui();                                
 	}
 	
 	public ConManClientes(JFrame parentFrame, boolean consultaOmantenimiento){
@@ -138,6 +149,7 @@ public class ConManClientes {
 		this.consulta = consultaOmantenimiento;
 		//this.consulta = false;
 		m = MysqlConnect.getDbCon();
+                cuentaCliente = "";
 		creaGui();
 	}
 	
@@ -1142,40 +1154,73 @@ public class ConManClientes {
 		pantalla.add(jbUnaFactura);
 		pantalla.add(jbPrevisionesCobro);
 		pantalla.add(jbPrevisionesPago);
-		
-		cargaInicial();
-		pantalla.setVisible(true);
-		
-		
-	}
-	
-	private void cargaInicial(){
-		// Carga inicial en el primer Cliente
-		if(jtnfCuentaContable.getText().length() == 0)
-			jtnfCuentaContable.setText("0");
-		
-		String strSql = "SELECT * FROM CLITES WHERE EMPRESA = '" + 
-         DatosComunes.eEmpresa + 
-         "' AND CLITES_CLIENTE > " + jtnfCuentaContable.getText();
-		
-		if(DatosComunes.centroCont != 0)
-			strSql += " AND CLITES_CENTRO = " + DatosComunes.centroCont;
-		
-        strSql += " LIMIT 1";
-		
-		cargaDatos(strSql);			
-	}
-	
-	class SalirListener implements ActionListener {
 
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			// Si pinchamos en el botón 'Salir', 'tiramos' la pantalla
-			//frameMenu.setEnabled(true);
-			//pantalla.dispose();
-			salir();
-		}
+                // Por si viene el Cliente como parámetro
+                if(cuentaCliente.length() > 0)
+                    jtnfCuentaContable.setText(cuentaCliente);
+                
+		cargaInicial();
+		pantalla.setVisible(true);				
 	}
+	
+    private void cargaInicial() {
+        // Si ya viene con un cliente como parámetro
+        if (cuentaCliente.length() > 0) {
+            String cuentaContable = jtnfCuentaContable.getText();
+            if (cuentaContable.startsWith("43")) {
+                cuentaContable = String.valueOf(Integer.valueOf(cuentaContable.substring(2)));
+            }
+
+            jtnfCuentaContable.setText(cuentaContable);
+
+            String strSql = "SELECT * FROM CLITES WHERE EMPRESA = '"
+                    + DatosComunes.eEmpresa
+                    + "' AND CLITES_CLIENTE = " + jtnfCuentaContable.getText();
+
+            if (DatosComunes.centroCont != 0) {
+                strSql += " AND CLITES_CENTRO = " + DatosComunes.centroCont;
+            }
+
+			// Si al cargar los datos nos devuelve que no se ha podido leer
+            // ese proveedor, damos por hecho que es un proveedor nuevo
+            if (cargaDatos(strSql) == 0) {
+                borrarPantalla();
+                jtnfCuentaContable.setText(cuentaContable);
+                jtnfCuentaContable.transferFocus();
+                cliente = new ClienteContable();
+
+            }
+        } else {
+
+            // Carga inicial en el primer Cliente
+            if (jtnfCuentaContable.getText().length() == 0) {
+                jtnfCuentaContable.setText("0");
+            }
+
+            String strSql = "SELECT * FROM CLITES WHERE EMPRESA = '"
+                    + DatosComunes.eEmpresa
+                    + "' AND CLITES_CLIENTE > " + jtnfCuentaContable.getText();
+
+            if (DatosComunes.centroCont != 0) {
+                strSql += " AND CLITES_CENTRO = " + DatosComunes.centroCont;
+            }
+
+            strSql += " LIMIT 1";
+
+            cargaDatos(strSql);
+        }
+    }
+
+    class SalirListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+			// Si pinchamos en el botón 'Salir', 'tiramos' la pantalla
+            //frameMenu.setEnabled(true);
+            //pantalla.dispose();
+            salir();
+        }
+    }
 
 	class CuentaContableListener implements ActionListener {
 
@@ -2169,7 +2214,7 @@ public class ConManClientes {
 	
 	private void salir(){
 		pantalla.dispose();
-		frameMenu.setEnabled(true);		
+		//frameMenu.setEnabled(true);		
 	}
 }
 

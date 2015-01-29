@@ -63,6 +63,8 @@ public class ConManProveedor {
 	private static boolean consulta;
 	private CuentaBancaria cb = null;
 	
+        private String cuentaProveedor = "";
+        
 	IndicePoblaciones indicePoblaciones = null;
 	IndiceProvincias indiceProvincias = null;
 	IndicePaises indicePaises = null;
@@ -107,10 +109,19 @@ public class ConManProveedor {
 	
 	Image imgBuscar, imgAtras, imgAdelante, imgSalir, imgNuevo;
 
-	public ConManProveedor(boolean consultaOmantenimiento){
+        public ConManProveedor(boolean consultaOmantenimiento){
 		this.consulta = consultaOmantenimiento;
 		//this.consulta = false;
 		m = MysqlConnect.getDbCon();
+                cuentaProveedor = "";
+		creaGui();
+	}
+        
+	public ConManProveedor(boolean consultaOmantenimiento, String cuentaContableProveedor){
+		this.consulta = consultaOmantenimiento;
+		//this.consulta = false;
+		m = MysqlConnect.getDbCon();
+                cuentaProveedor = cuentaContableProveedor;
 		creaGui();
 	}
 	
@@ -119,6 +130,7 @@ public class ConManProveedor {
 		this.consulta = consultaOmantenimiento;
 		//this.consulta = false;
 		m = MysqlConnect.getDbCon();
+                cuentaProveedor = "";
 		creaGui();
 	}
 	
@@ -855,28 +867,56 @@ public class ConManProveedor {
 		pantalla.add(jbPrevisionesCobro);
 		pantalla.add(jbPrevisionesPago);
 		
+                // Por si viene el Proveedor omo parámetro
+                if(cuentaProveedor.length() > 0)
+                    jtnfCuentaContable.setText(cuentaProveedor);
+                
 		cargaInicial();
 		pantalla.setVisible(true);
 		
 		
 	}
 	
-	private void cargaInicial(){
-		// Carga inicial en el primer Proveedor
-		if(jtnfCuentaContable.getText().length() == 0)
-			jtnfCuentaContable.setText("400000000");
-		
-		String strSql = "SELECT * FROM PROVAC WHERE EMPRESA = '" + 
-         DatosComunes.eEmpresa + 
-         "' AND PROVAC_PROVACRE > " + jtnfCuentaContable.getText();
-		
-		if(DatosComunes.centroCont != 0)
-			strSql += " AND PROVAC_CENTRO = " + DatosComunes.centroCont;
-		
-        strSql += " AND PROVAC_PROVACRE < 430000001 LIMIT 1";
-		
-		cargaDatos(strSql);			
-	}
+    private void cargaInicial() {
+        if (cuentaProveedor.length() > 0) {
+            String cuentaContable = jtnfCuentaContable.getText();
+
+            String strSql = "SELECT * FROM PROVAC WHERE EMPRESA = '"
+                    + DatosComunes.eEmpresa
+                    + "' AND PROVAC_PROVACRE = " + jtnfCuentaContable.getText();
+
+            if (DatosComunes.centroCont != 0) {
+                strSql += " AND PROVAC_CENTRO = " + DatosComunes.centroCont;
+            }
+
+			// Si al cargar los datos nos devuelve que no se ha podido leer
+            // ese proveedor, damos por hecho que es un proveedor nuevo
+            if (cargaDatos(strSql) == 0) {
+                borrarPantalla();
+                jtnfCuentaContable.setText(cuentaContable);
+                jtnfCuentaContable.transferFocus();
+                proveedor = new Proveedor();
+
+            }
+        } else {
+            // Carga inicial en el primer Proveedor
+            if (jtnfCuentaContable.getText().length() == 0) {
+                jtnfCuentaContable.setText("400000000");
+            }
+
+            String strSql = "SELECT * FROM PROVAC WHERE EMPRESA = '"
+                    + DatosComunes.eEmpresa
+                    + "' AND PROVAC_PROVACRE > " + jtnfCuentaContable.getText();
+
+            if (DatosComunes.centroCont != 0) {
+                strSql += " AND PROVAC_CENTRO = " + DatosComunes.centroCont;
+            }
+
+            strSql += " AND PROVAC_PROVACRE < 430000001 LIMIT 1";
+
+            cargaDatos(strSql);
+        }
+    }
 	
 	class SalirListener implements ActionListener {
 

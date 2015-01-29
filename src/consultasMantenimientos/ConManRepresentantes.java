@@ -58,6 +58,8 @@ public class ConManRepresentantes {
 
     private static boolean consulta;
     private static boolean enCreacion = false;
+    
+    private String cuentaRepresentante = "";
 
     IndicePoblaciones indicePoblaciones = null;
     IndiceProvincias indiceProvincias = null;
@@ -109,9 +111,20 @@ public class ConManRepresentantes {
         this.consulta = consultaOmantenimiento;
         //this.consulta = false;
         m = MysqlConnect.getDbCon();
+        cuentaRepresentante = "";
         creaGui();
     }
-
+    
+    public ConManRepresentantes(boolean consultaOmantenimiento, String strCuentaRepresentante) {
+        this.consulta = consultaOmantenimiento;
+        //this.consulta = false;
+        m = MysqlConnect.getDbCon();
+        if(strCuentaRepresentante.startsWith("417"))
+            strCuentaRepresentante = strCuentaRepresentante.substring(3);
+        this.cuentaRepresentante = strCuentaRepresentante;
+        creaGui();
+    }
+    
     /**
      *
      * @param parentFrame
@@ -122,6 +135,7 @@ public class ConManRepresentantes {
         this.consulta = consultaOmantenimiento;
         //this.consulta = false;
         m = MysqlConnect.getDbCon();
+        cuentaRepresentante = "";
         creaGui();
     }
 
@@ -557,27 +571,62 @@ public class ConManRepresentantes {
         }
 
         enCreacion = false;
+        
+        // Por si viene el Representante como parámetro
+        if(cuentaRepresentante.length() > 0)
+           jtfnfCodigo.setText(cuentaRepresentante);
         cargaInicial();
         pantalla.setVisible(true);
     }
 
     private void cargaInicial() {
-        // Carga inicial en el primer Proveedor
-        if (jtfnfCodigo.getText().length() == 0) {
-            jtfnfCodigo.setText("1");
+        if (cuentaRepresentante.length() > 0) {
+            String strSql = "SELECT * FROM REPRES WHERE EMPRESA = '"
+                    + DatosComunes.eEmpresa
+                    + "' AND REPRES_REPRE = " + cuentaRepresentante;
+
+            if (DatosComunes.centroCont != 0) {
+                strSql += " AND REPRES_CENTRO = " + DatosComunes.centroCont;
+            }
+
+            if (BaseDatos.countRows(strSql) == 0) {
+                if (!enCreacion) {
+                    JOptionPane.showMessageDialog(null, "<html><font size='4'><strong>"
+                            + "Representante inexistente!!!"
+                            + "</strong></font></html>");
+                    enCreacion = true;
+                }
+                borrarPantalla();
+            } else {
+                enCreacion = false;
+                cargaDatos(strSql);
+
+                Cuenta cuenta = new Cuenta();
+                cuenta.setCentro(DatosComunes.centroCont);
+                if (!cuenta.existenCuentasSuperiores("417" + Cadena.enteroCerosIzquierda(Integer.valueOf(jtfnfCodigo.getText()), 4))) {
+                    JOptionPane.showMessageDialog(null, "<html><font size='4'><strong>"
+                            + "Problema con cuentas superiores 417!!!"
+                            + "</strong></font></html>");
+                }
+            }
+        } else {
+            // Carga inicial en el primer Proveedor
+            if (jtfnfCodigo.getText().length() == 0) {
+                jtfnfCodigo.setText("1");
+            }
+
+            String strSql = "SELECT * FROM REPRES WHERE EMPRESA = '"
+                    + DatosComunes.eEmpresa
+                    + "' AND REPRES_REPRE >= " + jtfnfCodigo.getText();
+
+            if (DatosComunes.centroCont != 0) {
+                strSql += " AND REPRES_CENTRO = " + DatosComunes.centroCont;
+            }
+
+            strSql += " LIMIT 1";
+
+            cargaDatos(strSql);
         }
-
-        String strSql = "SELECT * FROM REPRES WHERE EMPRESA = '"
-                + DatosComunes.eEmpresa
-                + "' AND REPRES_REPRE >= " + jtfnfCodigo.getText();
-
-        if (DatosComunes.centroCont != 0) {
-            strSql += " AND REPRES_CENTRO = " + DatosComunes.centroCont;
-        }
-
-        strSql += " LIMIT 1";
-
-        cargaDatos(strSql);
     }
 
     private int cargaDatos(String strSql) {
@@ -1144,6 +1193,6 @@ public class ConManRepresentantes {
 
     private void salir() {
         pantalla.dispose();
-        frameMenu.setEnabled(true);
+        //frameMenu.setEnabled(true);
     }
 }
