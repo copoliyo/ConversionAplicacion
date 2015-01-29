@@ -136,6 +136,9 @@ public class ManNotas {
 				"NOTASF_CLAVE LIKE '" + strClave + "%' " ;
 		
 		
+                jtCodigo.setText(strClave);
+                lDesCripcionCodigo.setText(strDescripcionClave);
+                
 		m = MysqlConnect.getDbCon();
 
 		if(BaseDatos.countRows(strSql) == 0){
@@ -169,6 +172,18 @@ public class ManNotas {
 		nota.write();
 	}
 	
+        public void setVisible(boolean visible){
+            pantalla.setVisible(visible);
+        }
+        
+        public void recargaNota(String fichero, String clave, String descripcionClave){
+            this.strFichero = fichero.trim();
+            this.strClave = clave.trim();
+            this.strDescripcionClave = descripcionClave.trim();
+            cargaNota();
+            pantalla.setVisible(true);
+        }
+        
 	private void salir(){
 		pantalla.dispose();
 	}
