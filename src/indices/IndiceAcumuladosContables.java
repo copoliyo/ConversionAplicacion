@@ -332,4 +332,12 @@ public class IndiceAcumuladosContables {
 			   modelo.fireTableDataChanged();
 		}
 	}
+        
+        public void recargaAcumulados(String strCuenta, String strDescripcionCuenta){
+            this.strCuenta = strCuenta.trim();
+            this.strDescripcionCuenta = strDescripcionCuenta;
+            borrarTabla();
+            cargaDebeHaber();
+            pantalla.setVisible(true);
+        }
 }

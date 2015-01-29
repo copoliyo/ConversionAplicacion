@@ -89,6 +89,7 @@ public class IndiceMovimientosContables {
 	ResultSet rs = null;
 	MysqlConnect m = null;
 	
+        Cuenta cuenta;
 	// Consulta SQL
 	String strSql = "";
 	String strCuenta = "";
@@ -112,7 +113,7 @@ public class IndiceMovimientosContables {
 	private void creaGui(){
 		pantalla = new EscapeDialog();
 		
-		Cuenta cuenta = new Cuenta();		
+		cuenta = new Cuenta();		
 		dSaldo = cuenta.getSaldoCuenta(strCuenta, DatosComunes.centroCont);
 		
 		pantalla.setTitle("Movimientos Contables - " + strCuenta + " - " + cuenta.getTitulo());
@@ -260,6 +261,7 @@ public class IndiceMovimientosContables {
 		int fecha = jtfeFecha.getFechaAAAAMMDD();
 		String strDesdeFecha = jtfeFecha.getStrFechaAAAAMMDD();
 		int asiento = Integer.valueOf(jtnfAsiento.getText().trim());
+                lSaldo.setText("Saldo : 0,00");
 		
 		String claveFechaAsientoApunte = String.valueOf(strDesdeFecha) + 
 		                                 String.format("%05d", asiento) + 
@@ -406,6 +408,12 @@ public class IndiceMovimientosContables {
 			DefaultTableModel modelo = (DefaultTableModel)jtMovimientosContables.getModel();
 			   modelo.fireTableDataChanged();
 		}
+                dSaldo = cuenta.getSaldoCuenta(strCuenta, DatosComunes.centroCont);
+                
+                lSaldo.setText("Saldo : " + Cadena.formatoConComaDecimal(dSaldo));
+		if(dSaldo < 0.0)
+			lSaldo.setForeground(Color.RED);
+		pantalla.add(lSaldo);
 		
 	}
 	
@@ -424,6 +432,7 @@ public class IndiceMovimientosContables {
 		public void actionPerformed(ActionEvent arg0) {
 			borrarTabla();
 			cargaMovimientos();
+                        
 		}
 		
 	}
@@ -436,4 +445,11 @@ public class IndiceMovimientosContables {
 			cargaMovimientos();		
 		}		
 	}
+        
+        public void recargarMovimientos(String strCuenta){
+		this.strCuenta = strCuenta.trim();
+                borrarTabla();
+                cargaMovimientos();
+                pantalla.setVisible(true);
+        }
 }
