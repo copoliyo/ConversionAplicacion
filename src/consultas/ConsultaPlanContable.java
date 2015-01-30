@@ -20,6 +20,8 @@ import javax.swing.table.TableColumn;
 import tablas.Cuenta;
 import util.Apariencia;
 import util.BaseDatos;
+import util.Cadena;
+import util.Fecha;
 
 /**
  *
@@ -33,6 +35,7 @@ public class ConsultaPlanContable extends util.EscapeDialog {
     public ConsultaPlanContable(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        jtffeFecha.setText(Cadena.fechaAcadena(Fecha.fechaDia()));
         inicializaTabla();
         this.setVisible(true);
     }
@@ -55,8 +58,10 @@ public class ConsultaPlanContable extends util.EscapeDialog {
         
     private String strSql = "";      
     private Cuenta cuenta;        
+    private String tipoConsulta = "PRIMER_GRADO";
     
     ResultSet rs = null;
+    ResultSet rsDebeHaber = null;
     MysqlConnect m = null;
    
     private DefaultTableCellRenderer dtcrIzquierda, dtcrDerecha;
@@ -109,6 +114,16 @@ public class ConsultaPlanContable extends util.EscapeDialog {
 
         jtffeFecha.setText("00.00.00");
         jtffeFecha.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtffeFecha.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtffeFechaFocusLost(evt);
+            }
+        });
+        jtffeFecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtffeFechaActionPerformed(evt);
+            }
+        });
 
         jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/SALIR.gif"))); // NOI18N
         jbSalir.setPreferredSize(new java.awt.Dimension(30, 30));
@@ -123,18 +138,38 @@ public class ConsultaPlanContable extends util.EscapeDialog {
 
         jtfnf2DDeSaldo.setText("jTextFieldNumero2Decimales1");
         jtfnf2DDeSaldo.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtfnf2DDeSaldo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfnf2DDeSaldoFocusLost(evt);
+            }
+        });
 
         jlASaldo.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlASaldo.setText("A Saldo");
 
         jtfnf2DASaldo.setText("jTextFieldNumero2Decimales2");
         jtfnf2DASaldo.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtfnf2DASaldo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfnf2DASaldoFocusLost(evt);
+            }
+        });
 
         jbPrimerGrado.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbPrimerGrado.setText("Primer Grado");
+        jbPrimerGrado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbPrimerGradoActionPerformed(evt);
+            }
+        });
 
         jbTodas.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbTodas.setText("Todas");
+        jbTodas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbTodasActionPerformed(evt);
+            }
+        });
 
         jbBuscarCuenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BUSCAR.gif"))); // NOI18N
         jbBuscarCuenta.setPreferredSize(new java.awt.Dimension(30, 30));
@@ -263,16 +298,24 @@ public class ConsultaPlanContable extends util.EscapeDialog {
         // srtQueCuentas = "TODAS"
         // strQueCuentas = "PRIMER_GRADO"
         // strQueCuentas = Código de cuenta -> esa y sus 'inferiores'
-        
+         
         int numeroDeFilas = 0;
-        int clave;        
+        int clave, mes, any;        
         String strSqlListaCuentas;
-        String strFecha, strAny, strMes;
-        double dTotalDebe, dTotalHaber;
+        String strFecha, strAny, strMes, strSaldo;
+        double dTotalDebe, dTotalHaber, dSaldo, dDeSaldo, aSaldo;
+        
+        dSaldo = dDeSaldo = aSaldo =  0.0;
+        dDeSaldo = jtfnf2DDeSaldo.getDouble();
+        aSaldo = jtfnf2DASaldo.getDouble();
         
         strFecha = jtffeFecha.getStrFechaAAAAMMDD();
+        if(strFecha.length() == 0)
+            strFecha = String.valueOf(Fecha.fechaDia());
         strAny = strFecha.substring(0, 4);
         strMes = strFecha.substring(4, 6);
+        any = Integer.valueOf(strAny);
+        mes = Integer.valueOf(strMes);
         
         Object fila[] = {"", "", "", ""};       
 
@@ -290,12 +333,13 @@ public class ConsultaPlanContable extends util.EscapeDialog {
                 // Tenemos un código de cuenta
                 strSqlListaCuentas += "CONTAB_CUENTA LIKE '" + strQueCuentas + "%'";
             }
-        }
+        }               
+            
         
         strSqlListaCuentas += " ORDER BY CONTAB_CUENTA ASC, CONTAB_GRADO ASC";
         
         
-
+        cuenta = new Cuenta();
         dTotalDebe = dTotalHaber = 0.0;
         numeroDeFilas = BaseDatos.countRows(strSqlListaCuentas);
         if (numeroDeFilas > 0) {
@@ -309,15 +353,45 @@ public class ConsultaPlanContable extends util.EscapeDialog {
 
                     fila[Columna.CUENTA.value] = cuenta.getCuenta();
                     fila[Columna.TITULO.value] = cuenta.getTitulo();
-                    fila[Columna.SALDO_DEUDOR.value] = "Saldo Deudor";
-                    fila[Columna.SALDO_ACREEDOR.value] = "Saldo Acreedor";
-                    modeloTablaPlanContable.addRow(fila);
+                   
+                    if(cuenta.getCuenta().equalsIgnoreCase("608")){
+                        strSaldo = "0.00";
+                    }
+                    // Ahora tenemos que calcular los saldos a la fecha dada
+                    dSaldo = cuenta.getSaldoCuentaMesAny(cuenta.getCuenta().trim(), mes, any);
+                    strSaldo = "0.00";
+                    strSaldo = Cadena.formatear2Decimales(dSaldo);
+                    
+                    if(dDeSaldo > 0.0 && Math.abs(dSaldo) < dDeSaldo){
+                        strSaldo = "0,00";
+                        dSaldo = 0.0;
+                    }
+                    
+                    if(aSaldo > 0.0 && Math.abs(dSaldo) > aSaldo){
+                        strSaldo = "0,00";
+                        dSaldo = 0.0;
+                    }
+                        
+                    if (!strSaldo.equalsIgnoreCase("0,00")) {                        
+                        strSaldo = strSaldo.replaceAll("-", "");
+                        if (dSaldo < 0.0) {
+                            dTotalHaber += Math.abs(dSaldo);                            
+                            fila[Columna.SALDO_DEUDOR.value] = "";
+                            fila[Columna.SALDO_ACREEDOR.value] = strSaldo;
+                        } else {
+                            dTotalDebe += Math.abs(dSaldo);
+                            fila[Columna.SALDO_DEUDOR.value] = strSaldo;
+                            fila[Columna.SALDO_ACREEDOR.value] = "";
+                        }
+                        modeloTablaPlanContable.addRow(fila);
+                    }
+                    
                 }
                 // Añadimos una fila con el total
                 fila[Columna.CUENTA.value] = "";
                 fila[Columna.TITULO.value] = "Total";
-                fila[Columna.SALDO_DEUDOR.value] = dTotalDebe;
-                fila[Columna.SALDO_ACREEDOR.value] = dTotalHaber;
+                fila[Columna.SALDO_DEUDOR.value] = Cadena.formatear2Decimales(dTotalDebe);
+                fila[Columna.SALDO_ACREEDOR.value] = Cadena.formatear2Decimales(dTotalHaber);
                 modeloTablaPlanContable.addRow(fila);
                 
             } catch (SQLException e1) {
@@ -336,6 +410,42 @@ public class ConsultaPlanContable extends util.EscapeDialog {
        
         this.setVisible(false);
     }//GEN-LAST:event_jbSalirActionPerformed
+
+    private void jbPrimerGradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPrimerGradoActionPerformed
+        
+        limpiarTabla();
+        tipoConsulta = "PRIMER_GRADO";
+        cargaPlanContable("PRIMER_GRADO");
+    }//GEN-LAST:event_jbPrimerGradoActionPerformed
+
+    private void jbTodasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbTodasActionPerformed
+        
+        limpiarTabla();
+        tipoConsulta = "TODAS";
+        cargaPlanContable("TODAS");
+    }//GEN-LAST:event_jbTodasActionPerformed
+
+    private void jtffeFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtffeFechaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtffeFechaActionPerformed
+
+    private void jtffeFechaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtffeFechaFocusLost
+        
+        limpiarTabla();
+        cargaPlanContable(tipoConsulta);
+    }//GEN-LAST:event_jtffeFechaFocusLost
+
+    private void jtfnf2DDeSaldoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnf2DDeSaldoFocusLost
+        
+        limpiarTabla();        
+        cargaPlanContable(tipoConsulta);
+    }//GEN-LAST:event_jtfnf2DDeSaldoFocusLost
+
+    private void jtfnf2DASaldoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnf2DASaldoFocusLost
+        
+        limpiarTabla();        
+        cargaPlanContable(tipoConsulta);
+    }//GEN-LAST:event_jtfnf2DASaldoFocusLost
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
