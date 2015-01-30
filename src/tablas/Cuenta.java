@@ -296,7 +296,68 @@ public class Cuenta {
 
     /**
      *
-     * @param strCuenta
+     * @param strCuenta String - Cuenta contable     
+     * @param mes Int - Hasta Mes 
+     * @return any Int - Hasta Año
+     */            
+    public double getSaldoCuentaMesAny(String strCuenta, int mes, int any){
+        double dSaldo = 0.0, dDebe = 0.0, dHaber = 0.0;
+        String strHastaMes, strHastaAny, strClaveDebeHaberHasta, strClaveDebeHaberDesde;
+        String strEspacios = "        ";
+
+        strHastaMes = Cadena.enteroCerosIzquierda(mes, 2);
+        strHastaAny = String.valueOf(any);
+        
+        ResultSet rsSql = null;
+        MysqlConnect m = null;
+        
+        m = MysqlConnect.getDbCon();
+
+        // 43000..........    -> Cuenta (9) + Año(4) + Mes(2) en este caso espacios (Año y Mes) -> 6 espacios
+        strClaveDebeHaberDesde = strCuenta + strEspacios.substring(0, 9 - strCuenta.trim().length()) + "      ";
+        
+        strClaveDebeHaberHasta = strCuenta;
+       
+        if(strCuenta.length() < 9)
+            strClaveDebeHaberHasta += strEspacios.substring(0, 9 - strCuenta.trim().length());
+                                 
+        strClaveDebeHaberHasta += String.valueOf(any) + Cadena.enteroCerosIzquierda(mes, 2);                        
+        
+        String strSqlCuenta = "SELECT SUM(DEBHAB_DEBE), SUM(DEBHAB_HABER) FROM DEBHAB WHERE "
+                + "EMPRESA = '" + DatosComunes.eEmpresa + "' AND "                
+                + "DEBHAB_CTA_ANYMES <= '" + strClaveDebeHaberHasta + "' AND "
+                + "DEBHAB_CTA_ANYMES >= '" + strClaveDebeHaberDesde + "'";
+        
+        String strSqlCuentaCuentaRegistros = "SELECT * FROM DEBHAB WHERE "
+                + "EMPRESA = '" + DatosComunes.eEmpresa + "' AND "                
+                + "DEBHAB_CTA_ANYMES <= '" + strClaveDebeHaberHasta + "' AND "
+                + "DEBHAB_CTA_ANYMES >= '" + strClaveDebeHaberDesde + "'";
+        
+        if (BaseDatos.countRows(strSqlCuentaCuentaRegistros) > 0) {
+            try {
+                rsSql = m.query(strSqlCuenta);
+                // Como ya tenemos el ResultSet se lo pasamos al mñtodo 'read(ResultSet rs)'.
+                if (rsSql.next()) {                    
+                    dSaldo = rsSql.getDouble(1) - rsSql.getDouble(2);
+                    dSaldo = Double.valueOf(Cadena.redondear2Decimales(dSaldo));
+                }
+                // Cerramos para evitar gastar memoria
+                rsSql.close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block				
+                if (DatosComunes.enDebug) {
+                    e.printStackTrace();
+                }
+                Apariencia.mensajeInformativo(4, "<center>Error en lectura de Saldo<br>en el fichero de Debe/Haber<center>");
+            }
+        }
+        
+        return dSaldo;
+    }
+
+    /**
+     *
+     * @param strCuenta Código de cuenta 
      * @param centro
      * @param fechaAsientoApunte
      * @return
