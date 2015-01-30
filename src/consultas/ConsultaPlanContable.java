@@ -7,6 +7,7 @@ package consultas;
 
 import general.DatosComunes;
 import general.MysqlConnect;
+import indices.IndiceCuentas;
 import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -55,11 +56,12 @@ public class ConsultaPlanContable extends util.EscapeDialog {
     }
 
     // Definiciones de componentes de pantalla
-        
+    private IndiceCuentas indiceCuentas = null; 
+     
     private String strSql = "";      
-    private Cuenta cuenta;        
+    private Cuenta cuenta = new Cuenta();        
     private String tipoConsulta = "PRIMER_GRADO";
-    
+   
     ResultSet rs = null;
     ResultSet rsDebeHaber = null;
     MysqlConnect m = null;
@@ -103,11 +105,19 @@ public class ConsultaPlanContable extends util.EscapeDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consulta Plan Contable");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setModal(true);
+        setResizable(false);
 
         jlCuenta.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlCuenta.setText("Cuenta");
 
         jtfnfCuenta.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
+        jtfnfCuenta.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfnfCuentaFocusLost(evt);
+            }
+        });
 
         jlFecha.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jlFecha.setText("Fecha");
@@ -173,9 +183,19 @@ public class ConsultaPlanContable extends util.EscapeDialog {
 
         jbBuscarCuenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BUSCAR.gif"))); // NOI18N
         jbBuscarCuenta.setPreferredSize(new java.awt.Dimension(30, 30));
+        jbBuscarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBuscarCuentaActionPerformed(evt);
+            }
+        });
 
         jbOk.setFont(new java.awt.Font("MS Reference Sans Serif", 1, 14)); // NOI18N
         jbOk.setText("Ok");
+        jbOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbOkActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -241,7 +261,7 @@ public class ConsultaPlanContable extends util.EscapeDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void inicializaTabla(){
-        cuenta = new Cuenta();
+       
         m = MysqlConnect.getDbCon();
         
         // La tabla contendra estas columnas
@@ -415,6 +435,7 @@ public class ConsultaPlanContable extends util.EscapeDialog {
         
         limpiarTabla();
         tipoConsulta = "PRIMER_GRADO";
+        jtfnfCuenta.setText("");
         cargaPlanContable("PRIMER_GRADO");
     }//GEN-LAST:event_jbPrimerGradoActionPerformed
 
@@ -422,6 +443,7 @@ public class ConsultaPlanContable extends util.EscapeDialog {
         
         limpiarTabla();
         tipoConsulta = "TODAS";
+        jtfnfCuenta.setText("");
         cargaPlanContable("TODAS");
     }//GEN-LAST:event_jbTodasActionPerformed
 
@@ -446,6 +468,39 @@ public class ConsultaPlanContable extends util.EscapeDialog {
         limpiarTabla();        
         cargaPlanContable(tipoConsulta);
     }//GEN-LAST:event_jtfnf2DASaldoFocusLost
+
+    private void jtfnfCuentaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnfCuentaFocusLost
+       
+        limpiarTabla();
+        tipoConsulta = jtfnfCuenta.getText().trim();
+        cargaPlanContable(tipoConsulta);
+    }//GEN-LAST:event_jtfnfCuentaFocusLost
+
+    private void jbOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbOkActionPerformed
+        
+        limpiarTabla();
+        tipoConsulta = jtfnfCuenta.getText().trim();
+        cargaPlanContable(tipoConsulta);
+    }//GEN-LAST:event_jbOkActionPerformed
+
+    private void jbBuscarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarCuentaActionPerformed
+                        
+        if (indiceCuentas == null) {
+            indiceCuentas = new IndiceCuentas();
+        } else {
+            indiceCuentas.setVisible(true);
+        }
+
+        String strCuenta = indiceCuentas.getCuenta();
+        if (strCuenta != null) {
+            jtfnfCuenta.setText(indiceCuentas.getCuenta().trim());
+            limpiarTabla();
+            tipoConsulta = jtfnfCuenta.getText().trim();
+            cargaPlanContable(tipoConsulta);
+        }
+
+            
+    }//GEN-LAST:event_jbBuscarCuentaActionPerformed
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
