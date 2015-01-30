@@ -24,13 +24,15 @@ public class BaseDatos {
 		int rowCount = -1;
 
 		m = MysqlConnect.getDbCon();
-		String sqlQueryCount = consulta.replaceFirst("\\*", "COUNT(*)");
+		//String sqlQueryCount = consulta.replaceFirst("\\*", "COUNT(*)");
 
 		try {
-			rs = m.query(sqlQueryCount);
-			rs.first();
+                        rs = m.query(consulta);
+			//rs = m.query(sqlQueryCount);
+			//rs.first();
 			// La primera y única columna que devuelve es el número de registros.
-			rowCount =  rs.getInt(1);
+			//rowCount =  rs.getInt(1);
+                        rowCount = rs.getMetaData().getColumnCount();
 		} catch (SQLException e){
 			JOptionPane.showMessageDialog(null,
 					"Error en recuento registros (countRows)!!!");
