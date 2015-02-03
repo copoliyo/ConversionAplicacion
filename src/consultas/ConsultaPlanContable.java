@@ -9,12 +9,18 @@ import general.DatosComunes;
 import general.MysqlConnect;
 import indices.IndiceCuentas;
 import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -28,8 +34,8 @@ import util.Fecha;
  *
  * @author Txus
  */
-public class ConsultaPlanContable extends util.EscapeDialog {    
-    
+public class ConsultaPlanContable extends util.EscapeDialog implements ActionListener, PropertyChangeListener {
+
     /**
      * Creates new form ConsultaPlanContable
      */
@@ -40,13 +46,28 @@ public class ConsultaPlanContable extends util.EscapeDialog {
         inicializaTabla();
         this.setVisible(true);
     }
-    
-     public enum Columna {
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        System.out.println(evt.getPropertyName());
+        if ("progress".equalsIgnoreCase(evt.getPropertyName())) {
+            int progress = (Integer) evt.getNewValue();
+            jpbProgreso.setValue(progress);
+            System.out.println(progress);
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public enum Columna {
 
         CUENTA(0),
         TITULO(1),
         SALDO_DEUDOR(2),
-        SALDO_ACREEDOR(3);        
+        SALDO_ACREEDOR(3);
 
         private int value;
 
@@ -55,22 +76,25 @@ public class ConsultaPlanContable extends util.EscapeDialog {
         }
     }
 
+    // Para SwingWorker
+    TareaCargarPlan tareaCargaPlan;
+
     // Definiciones de componentes de pantalla
-    private IndiceCuentas indiceCuentas = null; 
-     
-    private String strSql = "";      
-    private Cuenta cuenta = new Cuenta();        
+    private IndiceCuentas indiceCuentas = null;
+
+    private String strSql = "";
+    private Cuenta cuenta = new Cuenta();
     private String tipoConsulta = "PRIMER_GRADO";
-   
+
     ResultSet rs = null;
     ResultSet rsDebeHaber = null;
     MysqlConnect m = null;
-   
+
     private DefaultTableCellRenderer dtcrIzquierda, dtcrDerecha;
     //private TableCellRenderer tcr;
     JTable jtPlanContable;
     JScrollPane spPlanContable;
-    
+
     DefaultTableModel modeloTablaPlanContable = new DefaultTableModel() {
         @Override
         public boolean isCellEditable(int row, int column) {
@@ -78,8 +102,7 @@ public class ConsultaPlanContable extends util.EscapeDialog {
             return false;
         }
     };
-      
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -102,6 +125,7 @@ public class ConsultaPlanContable extends util.EscapeDialog {
         jbTodas = new javax.swing.JButton();
         jbBuscarCuenta = new javax.swing.JButton();
         jbOk = new javax.swing.JButton();
+        jpbProgreso = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consulta Plan Contable");
@@ -197,6 +221,8 @@ public class ConsultaPlanContable extends util.EscapeDialog {
             }
         });
 
+        jpbProgreso.setStringPainted(true);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -217,20 +243,23 @@ public class ConsultaPlanContable extends util.EscapeDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jtffeFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(41, 41, 41))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jlDeSaldo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jtfnf2DDeSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jlASaldo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtfnf2DASaldo, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jbPrimerGrado)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbTodas)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jpbProgreso, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jlDeSaldo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jtfnf2DDeSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jlASaldo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jtfnf2DASaldo, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jbPrimerGrado)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbTodas)))
                         .addGap(26, 26, 26))))
         );
         layout.setVerticalGroup(
@@ -244,7 +273,9 @@ public class ConsultaPlanContable extends util.EscapeDialog {
                     .addComponent(jtffeFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbBuscarCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbOk, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 480, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 473, Short.MAX_VALUE)
+                .addComponent(jpbProgreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jbSalir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -260,21 +291,20 @@ public class ConsultaPlanContable extends util.EscapeDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void inicializaTabla(){
-       
+    private void inicializaTabla() {
+
         m = MysqlConnect.getDbCon();
-        
+
         // La tabla contendra estas columnas
         modeloTablaPlanContable.addColumn("Cuenta");
         modeloTablaPlanContable.addColumn("Título");
         modeloTablaPlanContable.addColumn("Saldo Deudor");
-        modeloTablaPlanContable.addColumn("Saldo Acreedor");        
-        
-        
-        jtPlanContable = new JTable(modeloTablaPlanContable);     
-        
-        jtPlanContable.setFont(Apariencia.cambiaFuente(Font.PLAIN, 13));      
-        
+        modeloTablaPlanContable.addColumn("Saldo Acreedor");
+
+        jtPlanContable = new JTable(modeloTablaPlanContable);
+
+        jtPlanContable.setFont(Apariencia.cambiaFuente(Font.PLAIN, 13));
+
         TableColumn columna = new TableColumn();
         // Establecemos el ancho
         jtPlanContable.getColumn("Cuenta").setMaxWidth(100);
@@ -282,8 +312,6 @@ public class ConsultaPlanContable extends util.EscapeDialog {
         jtPlanContable.getColumn("Saldo Deudor").setMaxWidth(120);
         jtPlanContable.getColumn("Saldo Acreedor").setMaxWidth(120);
         jtPlanContable.setRowHeight(20);
-        
-      
 
         // Hacemos que las columnas se alineen a la IZQUIERDA
         dtcrIzquierda = new DefaultTableCellRenderer();
@@ -291,148 +319,192 @@ public class ConsultaPlanContable extends util.EscapeDialog {
         // Hacemos que las columnas se alineen a la DERECHA
         dtcrDerecha = new DefaultTableCellRenderer();
         dtcrDerecha.setHorizontalAlignment(SwingConstants.RIGHT);
-        
-        
+
         jtPlanContable.getColumn("Cuenta").setCellRenderer(dtcrIzquierda);
         jtPlanContable.getColumn("Título").setCellRenderer(dtcrIzquierda);
         jtPlanContable.getColumn("Saldo Deudor").setCellRenderer(dtcrDerecha);
-        jtPlanContable.getColumn("Saldo Acreedor").setCellRenderer(dtcrDerecha);  
-                
+        jtPlanContable.getColumn("Saldo Acreedor").setCellRenderer(dtcrDerecha);
+
         // Creamos un JscrollPane y le agregamos la JTable
-        spPlanContable = new JScrollPane(jtPlanContable);        
+        spPlanContable = new JScrollPane(jtPlanContable);
         // Si quisieramos barra horizontal, descomentar la linea siguiente
-        spPlanContable.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);        
+        spPlanContable.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         // Agregamos el JScrollPane al contenedor
-        spPlanContable.setBounds(10, 40, 740, 470);
-        spPlanContable.setFont(Apariencia.cambiaFuente());                
-        
-        this.add(spPlanContable);	        
-        
+        spPlanContable.setBounds(20, 40, 740, 470);
+        spPlanContable.setFont(Apariencia.cambiaFuente());
+
+        this.add(spPlanContable);
+
         // Primero cargamos las de Debe
-        cargaPlanContable("PRIMER_GRADO");                                        
+        cargaPlanContable("PRIMER_GRADO");
         //cargaPlanContable("TODAS");                                        
         //cargaPlanContable("300");                                        
     }
-    
-    private void cargaPlanContable(String strQueCuentas){
+
+    private void cargaPlanContable(String strQueCuentas) {
         // srtQueCuentas = "TODAS"
         // strQueCuentas = "PRIMER_GRADO"
         // strQueCuentas = Código de cuenta -> esa y sus 'inferiores'
-         
-        int numeroDeFilas = 0;
-        int clave, mes, any;        
-        String strSqlListaCuentas;
-        String strFecha, strAny, strMes, strSaldo;
-        double dTotalDebe, dTotalHaber, dSaldo, dDeSaldo, aSaldo;
-        
-        dSaldo = dDeSaldo = aSaldo =  0.0;
-        dDeSaldo = jtfnf2DDeSaldo.getDouble();
-        aSaldo = jtfnf2DASaldo.getDouble();
-        
-        strFecha = jtffeFecha.getStrFechaAAAAMMDD();
-        if(strFecha.length() == 0)
-            strFecha = String.valueOf(Fecha.fechaDia());
-        strAny = strFecha.substring(0, 4);
-        strMes = strFecha.substring(4, 6);
-        any = Integer.valueOf(strAny);
-        mes = Integer.valueOf(strMes);
-        
-        Object fila[] = {"", "", "", ""};       
 
-        strSqlListaCuentas = "";
+        // Instances of javax.swing.SwingWorker are not reusuable, so
+        // we create new instances as needed.
+
+        tareaCargaPlan = new TareaCargarPlan();
+        tareaCargaPlan.addPropertyChangeListener(this);
+        tareaCargaPlan.setTipoCarga(strQueCuentas);
+        tareaCargaPlan.execute();                
         
-        strSqlListaCuentas = "SELECT * FROM CONTAB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
-             + "CONTAB_CENTRO = " + DatosComunes.centroCont + " AND ";
-        
-        if(strQueCuentas.equalsIgnoreCase("TODAS")){
-            strSqlListaCuentas += "CONTAB_CUENTA > ''";
-        }else{        
-            if(strQueCuentas.equalsIgnoreCase("PRIMER_GRADO")){
-                strSqlListaCuentas += "CONTAB_GRADO = '1'";
-            }else{
-                // Tenemos un código de cuenta
-                strSqlListaCuentas += "CONTAB_CUENTA LIKE '" + strQueCuentas + "%'";
+    }
+
+    class TareaCargarPlan extends SwingWorker<Void, Void> {
+
+        private String strTipoCarga;
+        /*
+         * Main task. Executed in background thread.
+         */
+
+        @Override
+        public Void doInBackground() {
+            int progreso = 0;
+            int numeroDeFilas = 0;
+            int registrosLeidos = 0;
+            int clave, mes, any;
+            String strSqlListaCuentas;
+            String strFecha, strAny, strMes, strSaldo;
+            double dTotalDebe, dTotalHaber, dSaldo, dDeSaldo, aSaldo;
+
+            dSaldo = dDeSaldo = aSaldo = 0.0;
+            dDeSaldo = jtfnf2DDeSaldo.getDouble();
+            aSaldo = jtfnf2DASaldo.getDouble();
+
+            strFecha = jtffeFecha.getStrFechaAAAAMMDD();
+            if (strFecha.length() == 0) {
+                strFecha = String.valueOf(Fecha.fechaDia());
             }
-        }               
-            
-        
-        strSqlListaCuentas += " ORDER BY CONTAB_CUENTA ASC, CONTAB_GRADO ASC";
-        
-        
-        cuenta = new Cuenta();
-        dTotalDebe = dTotalHaber = 0.0;
-        numeroDeFilas = BaseDatos.countRows(strSqlListaCuentas);
-        if (numeroDeFilas > 0) {
-            try {
-                limpiarTabla();                
-                rs = (ResultSet) m.query(strSqlListaCuentas);
+            strAny = strFecha.substring(0, 4);
+            strMes = strFecha.substring(4, 6);
+            any = Integer.valueOf(strAny);
+            mes = Integer.valueOf(strMes);
 
-                // Recorremos el recodSet para ir rellenando la tabla de marcas
-                while (rs.next() == true) {
-                    cuenta.read(rs);                                        
+            Object fila[] = {"", "", "", ""};
 
-                    fila[Columna.CUENTA.value] = cuenta.getCuenta();
-                    fila[Columna.TITULO.value] = cuenta.getTitulo();
-                   
-                    if(cuenta.getCuenta().equalsIgnoreCase("608")){
-                        strSaldo = "0.00";
-                    }
-                    // Ahora tenemos que calcular los saldos a la fecha dada
-                    dSaldo = cuenta.getSaldoCuentaMesAny(cuenta.getCuenta().trim(), mes, any);
-                    strSaldo = "0.00";
-                    strSaldo = Cadena.formatear2Decimales(dSaldo);
-                    
-                    if(dDeSaldo > 0.0 && Math.abs(dSaldo) < dDeSaldo){
-                        strSaldo = "0,00";
-                        dSaldo = 0.0;
-                    }
-                    
-                    if(aSaldo > 0.0 && Math.abs(dSaldo) > aSaldo){
-                        strSaldo = "0,00";
-                        dSaldo = 0.0;
-                    }
-                        
-                    if (!strSaldo.equalsIgnoreCase("0,00")) {                        
-                        strSaldo = strSaldo.replaceAll("-", "");
-                        if (dSaldo < 0.0) {
-                            dTotalHaber += Math.abs(dSaldo);                            
-                            fila[Columna.SALDO_DEUDOR.value] = "";
-                            fila[Columna.SALDO_ACREEDOR.value] = strSaldo;
-                        } else {
-                            dTotalDebe += Math.abs(dSaldo);
-                            fila[Columna.SALDO_DEUDOR.value] = strSaldo;
-                            fila[Columna.SALDO_ACREEDOR.value] = "";
-                        }
-                        modeloTablaPlanContable.addRow(fila);
-                    }
-                    
+            strSqlListaCuentas = "";
+
+            strSqlListaCuentas = "SELECT * FROM CONTAB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                    + "CONTAB_CENTRO = " + DatosComunes.centroCont + " AND ";
+
+            System.out.println(strTipoCarga);
+            if (strTipoCarga.equalsIgnoreCase("TODAS")) {
+                strSqlListaCuentas += "CONTAB_CUENTA > ''";
+            } else {
+                if (strTipoCarga.equalsIgnoreCase("PRIMER_GRADO")) {
+                    strSqlListaCuentas += "CONTAB_GRADO = '1'";
+                } else {
+                    // Tenemos un código de cuenta
+                    strSqlListaCuentas += "CONTAB_CUENTA LIKE '" + strTipoCarga + "%'";
                 }
-                // Añadimos una fila con el total
-                fila[Columna.CUENTA.value] = "";
-                fila[Columna.TITULO.value] = "Total";
-                fila[Columna.SALDO_DEUDOR.value] = Cadena.formatear2Decimales(dTotalDebe);
-                fila[Columna.SALDO_ACREEDOR.value] = Cadena.formatear2Decimales(dTotalHaber);
-                modeloTablaPlanContable.addRow(fila);
-                
-            } catch (SQLException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
             }
+
+            strSqlListaCuentas += " ORDER BY CONTAB_CUENTA ASC, CONTAB_GRADO ASC";
+
+            cuenta = new Cuenta();
+            dTotalDebe = dTotalHaber = 0.0;
+            numeroDeFilas = BaseDatos.countRows(strSqlListaCuentas);
+            if (numeroDeFilas > 0) {
+                try {
+                    limpiarTabla();
+                    int progress = 0;
+                    setProgress(0);
+                    rs = (ResultSet) m.query(strSqlListaCuentas);
+
+                    // Recorremos el recodSet para ir rellenando la tabla de marcas
+                    while (rs.next() == true) {
+                        cuenta.read(rs);
+
+                        registrosLeidos++;
+
+                        fila[Columna.CUENTA.value] = cuenta.getCuenta();
+                        fila[Columna.TITULO.value] = cuenta.getTitulo();
+
+                        if (cuenta.getCuenta().equalsIgnoreCase("608")) {
+                            strSaldo = "0.00";
+                        }
+                        // Ahora tenemos que calcular los saldos a la fecha dada
+                        dSaldo = cuenta.getSaldoCuentaMesAny(cuenta.getCuenta().trim(), mes, any);
+                        strSaldo = "0.00";
+                        strSaldo = Cadena.formatear2Decimales(dSaldo);
+
+                        if (dDeSaldo > 0.0 && Math.abs(dSaldo) < dDeSaldo) {
+                            strSaldo = "0,00";
+                            dSaldo = 0.0;
+                        }
+
+                        if (aSaldo > 0.0 && Math.abs(dSaldo) > aSaldo) {
+                            strSaldo = "0,00";
+                            dSaldo = 0.0;
+                        }
+
+                        if (!strSaldo.equalsIgnoreCase("0,00")) {
+                            strSaldo = strSaldo.replaceAll("-", "");
+                            if (dSaldo < 0.0) {
+                                dTotalHaber += Math.abs(dSaldo);
+                                fila[Columna.SALDO_DEUDOR.value] = "";
+                                fila[Columna.SALDO_ACREEDOR.value] = strSaldo;
+                            } else {
+                                dTotalDebe += Math.abs(dSaldo);
+                                fila[Columna.SALDO_DEUDOR.value] = strSaldo;
+                                fila[Columna.SALDO_ACREEDOR.value] = "";
+                            }
+                            modeloTablaPlanContable.addRow(fila);
+                        }
+                        progress = (registrosLeidos * 100) / numeroDeFilas;
+                        setProgress(progress);
+                    }
+                    // Añadimos una fila con el total
+                    fila[Columna.CUENTA.value] = "";
+                    fila[Columna.TITULO.value] = "Total";
+                    fila[Columna.SALDO_DEUDOR.value] = Cadena.formatear2Decimales(dTotalDebe);
+                    fila[Columna.SALDO_ACREEDOR.value] = Cadena.formatear2Decimales(dTotalHaber);
+                    modeloTablaPlanContable.addRow(fila);
+
+                    
+                    //tareaCargaPlan.cancel(true);
+                } catch (SQLException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            }
+            return null;
+
+        }
+
+        /*
+         * Executed in event dispatching thread
+         */
+        @Override
+        public void done() {
+            Toolkit.getDefaultToolkit().beep();
+            System.out.println("Hecho!!!");
+            tareaCargaPlan.cancel(true);
+        }
+
+        public void setTipoCarga(String strQueCuentas) {
+            strTipoCarga = strQueCuentas;
         }
     }
-    
- public void limpiarTabla(){
+
+    public void limpiarTabla() {
         // Vaciamos la tabla        
-        modeloTablaPlanContable.setRowCount(0);       
-    }    
-    
+        modeloTablaPlanContable.setRowCount(0);
+    }
+
     private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
-       
+
         this.setVisible(false);
     }//GEN-LAST:event_jbSalirActionPerformed
 
     private void jbPrimerGradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPrimerGradoActionPerformed
-        
+
         limpiarTabla();
         tipoConsulta = "PRIMER_GRADO";
         jtfnfCuenta.setText("");
@@ -440,7 +512,6 @@ public class ConsultaPlanContable extends util.EscapeDialog {
     }//GEN-LAST:event_jbPrimerGradoActionPerformed
 
     private void jbTodasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbTodasActionPerformed
-        
         limpiarTabla();
         tipoConsulta = "TODAS";
         jtfnfCuenta.setText("");
@@ -452,39 +523,39 @@ public class ConsultaPlanContable extends util.EscapeDialog {
     }//GEN-LAST:event_jtffeFechaActionPerformed
 
     private void jtffeFechaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtffeFechaFocusLost
-        
+
         limpiarTabla();
         cargaPlanContable(tipoConsulta);
     }//GEN-LAST:event_jtffeFechaFocusLost
 
     private void jtfnf2DDeSaldoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnf2DDeSaldoFocusLost
-        
-        limpiarTabla();        
+
+        limpiarTabla();
         cargaPlanContable(tipoConsulta);
     }//GEN-LAST:event_jtfnf2DDeSaldoFocusLost
 
     private void jtfnf2DASaldoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnf2DASaldoFocusLost
-        
-        limpiarTabla();        
+
+        limpiarTabla();
         cargaPlanContable(tipoConsulta);
     }//GEN-LAST:event_jtfnf2DASaldoFocusLost
 
     private void jtfnfCuentaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnfCuentaFocusLost
-       
+
         limpiarTabla();
         tipoConsulta = jtfnfCuenta.getText().trim();
         cargaPlanContable(tipoConsulta);
     }//GEN-LAST:event_jtfnfCuentaFocusLost
 
     private void jbOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbOkActionPerformed
-        
+
         limpiarTabla();
         tipoConsulta = jtfnfCuenta.getText().trim();
         cargaPlanContable(tipoConsulta);
     }//GEN-LAST:event_jbOkActionPerformed
 
     private void jbBuscarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarCuentaActionPerformed
-                        
+
         if (indiceCuentas == null) {
             indiceCuentas = new IndiceCuentas();
         } else {
@@ -499,9 +570,9 @@ public class ConsultaPlanContable extends util.EscapeDialog {
             cargaPlanContable(tipoConsulta);
         }
 
-            
+
     }//GEN-LAST:event_jbBuscarCuentaActionPerformed
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jbBuscarCuenta;
@@ -513,6 +584,7 @@ public class ConsultaPlanContable extends util.EscapeDialog {
     private javax.swing.JLabel jlCuenta;
     private javax.swing.JLabel jlDeSaldo;
     private javax.swing.JLabel jlFecha;
+    private javax.swing.JProgressBar jpbProgreso;
     private util.JTextFieldFecha jtffeFecha;
     private util.JTextFieldNumero2Decimales jtfnf2DASaldo;
     private util.JTextFieldNumero2Decimales jtfnf2DDeSaldo;
