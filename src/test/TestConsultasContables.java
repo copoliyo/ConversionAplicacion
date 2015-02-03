@@ -8,6 +8,7 @@ package test;
 import consultas.ConsultaCuentas;
 import consultas.ConsultaPlanContable;
 import general.DatosComunes;
+import indices.IndiceMovimientosContables;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -39,6 +40,7 @@ public class TestConsultasContables extends javax.swing.JFrame {
         jbTestConsultaCuentas = new javax.swing.JButton();
         jbSalir = new javax.swing.JButton();
         jbConsultaPlanContable = new javax.swing.JButton();
+        jbIndiceMovimientosContables = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,6 +65,13 @@ public class TestConsultasContables extends javax.swing.JFrame {
             }
         });
 
+        jbIndiceMovimientosContables.setText("Indice Movimientos Contables");
+        jbIndiceMovimientosContables.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbIndiceMovimientosContablesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -70,14 +79,17 @@ public class TestConsultasContables extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(137, 137, 137)
-                        .addComponent(jbSalir))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(111, 111, 111)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jbConsultaPlanContable)
-                            .addComponent(jbTestConsultaCuentas))))
-                .addContainerGap(144, Short.MAX_VALUE))
+                            .addComponent(jbTestConsultaCuentas)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(137, 137, 137)
+                        .addComponent(jbSalir))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(100, 100, 100)
+                        .addComponent(jbIndiceMovimientosContables)))
+                .addContainerGap(123, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -86,7 +98,9 @@ public class TestConsultasContables extends javax.swing.JFrame {
                 .addComponent(jbTestConsultaCuentas)
                 .addGap(18, 18, 18)
                 .addComponent(jbConsultaPlanContable)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jbIndiceMovimientosContables)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
                 .addComponent(jbSalir)
                 .addGap(70, 70, 70))
         );
@@ -116,6 +130,11 @@ public class TestConsultasContables extends javax.swing.JFrame {
             consultaPlanContable.setVisible(true);
         }        
     }//GEN-LAST:event_jbConsultaPlanContableActionPerformed
+
+    private void jbIndiceMovimientosContablesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbIndiceMovimientosContablesActionPerformed
+        
+        IndiceMovimientosContables imc = new IndiceMovimientosContables();
+    }//GEN-LAST:event_jbIndiceMovimientosContablesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -161,6 +180,7 @@ public class TestConsultasContables extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jbConsultaPlanContable;
+    private javax.swing.JButton jbIndiceMovimientosContables;
     private javax.swing.JButton jbSalir;
     private javax.swing.JButton jbTestConsultaCuentas;
     // End of variables declaration//GEN-END:variables
