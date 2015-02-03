@@ -362,4 +362,23 @@ public class Cadena {
         
         return strDouble;
     }
+    
+    public static String formateaCuentaContable(String strCuenta){
+        String strCuentaFormateada = "";
+        
+        // Tenemos una cuenta de grado 1? - > 1 - 3 dígitos
+        if (strCuenta.length() <= 3) {
+            strCuentaFormateada = strCuenta;
+        } else {
+            // Tenemos una Cuenta de grado 2? -> 4 - 5
+            if (strCuenta.length() == 4 || strCuenta.length() == 5) {
+                strCuentaFormateada = strCuenta.substring(0, 3) + " " + strCuenta.substring(3);
+            } else {
+                // Tenemos una cuenta con más de 5 dígitos
+                strCuentaFormateada = strCuenta.substring(0, 3) + " " + strCuenta.substring(3, 5) + " " + strCuenta.substring(5);
+            }
+        }
+        
+        return strCuentaFormateada;
+    }
 }
