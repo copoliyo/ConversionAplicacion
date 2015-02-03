@@ -322,12 +322,12 @@ public class Cuenta {
             strClaveDebeHaberHasta += strEspacios.substring(0, 9 - strCuenta.trim().length());
                                  
         strClaveDebeHaberHasta += String.valueOf(any) + Cadena.enteroCerosIzquierda(mes, 2);                        
-        
+        // No lo hacemos así....
         String strSqlCuenta = "SELECT SUM(DEBHAB_DEBE), SUM(DEBHAB_HABER) FROM DEBHAB WHERE "
                 + "EMPRESA = '" + DatosComunes.eEmpresa + "' AND "                
                 + "DEBHAB_CTA_ANYMES <= '" + strClaveDebeHaberHasta + "' AND "
                 + "DEBHAB_CTA_ANYMES >= '" + strClaveDebeHaberDesde + "'";
-        
+        // Lo hacemos así
         String strSqlCuentaCuentaRegistros = "SELECT * FROM DEBHAB WHERE "
                 + "EMPRESA = '" + DatosComunes.eEmpresa + "' AND "                
                 + "DEBHAB_CTA_ANYMES <= '" + strClaveDebeHaberHasta + "' AND "
