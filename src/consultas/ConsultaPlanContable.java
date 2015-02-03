@@ -49,11 +49,11 @@ public class ConsultaPlanContable extends util.EscapeDialog implements ActionLis
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println(evt.getPropertyName());
+        //System.out.println(evt.getPropertyName());
         if ("progress".equalsIgnoreCase(evt.getPropertyName())) {
             int progress = (Integer) evt.getNewValue();
             jpbProgreso.setValue(progress);
-            System.out.println(progress);
+            //System.out.println(progress);
         }
     }
 
@@ -393,7 +393,7 @@ public class ConsultaPlanContable extends util.EscapeDialog implements ActionLis
             strSqlListaCuentas = "SELECT * FROM CONTAB WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
                     + "CONTAB_CENTRO = " + DatosComunes.centroCont + " AND ";
 
-            System.out.println(strTipoCarga);
+            //System.out.println(strTipoCarga);
             if (strTipoCarga.equalsIgnoreCase("TODAS")) {
                 strSqlListaCuentas += "CONTAB_CUENTA > ''";
             } else {
@@ -467,7 +467,7 @@ public class ConsultaPlanContable extends util.EscapeDialog implements ActionLis
                     fila[Columna.SALDO_ACREEDOR.value] = Cadena.formatear2Decimales(dTotalHaber);
                     modeloTablaPlanContable.addRow(fila);
 
-                    
+                    rs.close();
                     //tareaCargaPlan.cancel(true);
                 } catch (SQLException e1) {
                     // TODO Auto-generated catch block
@@ -484,7 +484,7 @@ public class ConsultaPlanContable extends util.EscapeDialog implements ActionLis
         @Override
         public void done() {
             Toolkit.getDefaultToolkit().beep();
-            System.out.println("Hecho!!!");
+            //System.out.println("Hecho!!!");
             tareaCargaPlan.cancel(true);
         }
 
