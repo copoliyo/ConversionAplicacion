@@ -21,6 +21,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -157,7 +159,7 @@ public class IndiceMovimientosContables implements ActionListener, PropertyChang
 
         pantalla.setModal(true);
         pantalla.setSize(1000, 630);
-        //pantalla.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);		 
+        pantalla.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);		 
         pantalla.setDefaultCloseOperation(0);
         pantalla.setLayout(null);
 
@@ -322,10 +324,12 @@ public class IndiceMovimientosContables implements ActionListener, PropertyChang
     }
 
     private void cargaMovimientos() {
+        
         tareaCargaMovimientos = new TareaCargaMovimientos();
         tareaCargaMovimientos.addPropertyChangeListener(this);
         tareaCargaMovimientos.setTipoCarga(strCuenta);
-        tareaCargaMovimientos.execute();
+        tareaCargaMovimientos.execute();        
+                
     }
 
     class TareaCargaMovimientos extends SwingWorker<Void, Void> {
@@ -452,15 +456,20 @@ public class IndiceMovimientosContables implements ActionListener, PropertyChang
 
                         modeloTabla.addRow(fila);
                         
+                                                
+                        
                         progress = (registrosLeidos * 100) / numeroRegistros;
                         /*
                         if(progress != progressAnt){
                             progressAnt = progress;
                             setProgress(progress);
                         }*/
-                        setProgress(progress);
+                        if(registrosLeidos % (numeroRegistros /100) == 0)
+                            setProgress(progress);
                     }
+                    setProgress(progress);
                     rs.close();
+                    rs = null;
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -555,11 +564,11 @@ public class IndiceMovimientosContables implements ActionListener, PropertyChang
 
     private void borrarTabla() {
 		// Vaciamos la tabla
-        //int a = modeloTabla.getRowCount() - 1;
+        int a = modeloTabla.getRowCount() - 1;
 
-        //for (int i = a; i >= 0; i--)
-        //	modeloTabla.removeRow(i);
-        modeloTabla.setRowCount(0);
+        for (int i = a; i >= 0; i--)
+        	modeloTabla.removeRow(i);
+        //modeloTabla.setRowCount(0);
     }
 
     class FechaListener implements ActionListener {

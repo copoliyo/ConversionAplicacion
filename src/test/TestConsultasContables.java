@@ -9,8 +9,10 @@ import consultas.ConsultaCuentas;
 import consultas.ConsultaPlanContable;
 import general.DatosComunes;
 import indices.IndiceMovimientosContables;
+import indices.IndiceMovimientosContablesPaginado;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 /**
@@ -20,12 +22,13 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class TestConsultasContables extends javax.swing.JFrame {
 
     ConsultaCuentas consultaCuentas = null;
-    ConsultaPlanContable consultaPlanContable = null;
+    final ConsultaPlanContable consultaPlanContable = new ConsultaPlanContable(new JFrame(), true);
     /**
      * Creates new form TestConsultaCuentas
      */
     public TestConsultasContables() {
         initComponents();
+                
     }
 
     /**
@@ -41,6 +44,7 @@ public class TestConsultasContables extends javax.swing.JFrame {
         jbSalir = new javax.swing.JButton();
         jbConsultaPlanContable = new javax.swing.JButton();
         jbIndiceMovimientosContables = new javax.swing.JButton();
+        jbIndiceMovContablesPaginado = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,6 +76,13 @@ public class TestConsultasContables extends javax.swing.JFrame {
             }
         });
 
+        jbIndiceMovContablesPaginado.setText("Indice Movimientos Contables Paginado");
+        jbIndiceMovContablesPaginado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbIndiceMovContablesPaginadoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -84,12 +95,15 @@ public class TestConsultasContables extends javax.swing.JFrame {
                             .addComponent(jbConsultaPlanContable)
                             .addComponent(jbTestConsultaCuentas)))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(100, 100, 100)
+                        .addComponent(jbIndiceMovimientosContables))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(137, 137, 137)
                         .addComponent(jbSalir))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(100, 100, 100)
-                        .addComponent(jbIndiceMovimientosContables)))
-                .addContainerGap(123, Short.MAX_VALUE))
+                        .addGap(80, 80, 80)
+                        .addComponent(jbIndiceMovContablesPaginado)))
+                .addContainerGap(97, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -100,7 +114,9 @@ public class TestConsultasContables extends javax.swing.JFrame {
                 .addComponent(jbConsultaPlanContable)
                 .addGap(18, 18, 18)
                 .addComponent(jbIndiceMovimientosContables)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jbIndiceMovContablesPaginado)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addComponent(jbSalir)
                 .addGap(70, 70, 70))
         );
@@ -123,18 +139,31 @@ public class TestConsultasContables extends javax.swing.JFrame {
     }//GEN-LAST:event_jbSalirActionPerformed
 
     private void jbConsultaPlanContableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbConsultaPlanContableActionPerformed
-        
-        if(consultaPlanContable == null)
+        consultaPlanContable.setVisible(true);
+        /*
+        if(consultaPlanContable == null){
             consultaPlanContable = new ConsultaPlanContable(new javax.swing.JFrame(), true);
-        else{
             consultaPlanContable.setVisible(true);
-        }        
+        }else{
+            consultaPlanContable.setVisible(true);
+        } */       
     }//GEN-LAST:event_jbConsultaPlanContableActionPerformed
 
     private void jbIndiceMovimientosContablesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbIndiceMovimientosContablesActionPerformed
         
         IndiceMovimientosContables imc = new IndiceMovimientosContables();
+        if(imc != null)
+            imc = null;
+        
+        
     }//GEN-LAST:event_jbIndiceMovimientosContablesActionPerformed
+
+    private void jbIndiceMovContablesPaginadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbIndiceMovContablesPaginadoActionPerformed
+        
+        IndiceMovimientosContablesPaginado imcp = new IndiceMovimientosContablesPaginado("");
+        if(imcp != null)
+            imcp = null;
+    }//GEN-LAST:event_jbIndiceMovContablesPaginadoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -180,6 +209,7 @@ public class TestConsultasContables extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jbConsultaPlanContable;
+    private javax.swing.JButton jbIndiceMovContablesPaginado;
     private javax.swing.JButton jbIndiceMovimientosContables;
     private javax.swing.JButton jbSalir;
     private javax.swing.JButton jbTestConsultaCuentas;
