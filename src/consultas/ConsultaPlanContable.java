@@ -16,6 +16,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
@@ -44,7 +46,7 @@ public class ConsultaPlanContable extends util.EscapeDialog implements ActionLis
         initComponents();
         jtffeFecha.setText(Cadena.fechaAcadena(Fecha.fechaDia()));
         inicializaTabla();
-        this.setVisible(true);
+        //this.setVisible(true);
     }
 
     @Override
@@ -127,7 +129,6 @@ public class ConsultaPlanContable extends util.EscapeDialog implements ActionLis
         jbOk = new javax.swing.JButton();
         jpbProgreso = new javax.swing.JProgressBar();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consulta Plan Contable");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setModal(true);
@@ -291,6 +292,7 @@ public class ConsultaPlanContable extends util.EscapeDialog implements ActionLis
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
     private void inicializaTabla() {
 
         m = MysqlConnect.getDbCon();
@@ -349,10 +351,13 @@ public class ConsultaPlanContable extends util.EscapeDialog implements ActionLis
         // Instances of javax.swing.SwingWorker are not reusuable, so
         // we create new instances as needed.
 
+        if(tareaCargaPlan != null)
+            tareaCargaPlan = null;
         tareaCargaPlan = new TareaCargarPlan();
-        tareaCargaPlan.addPropertyChangeListener(this);
+        tareaCargaPlan.addPropertyChangeListener(this);  
         tareaCargaPlan.setTipoCarga(strQueCuentas);
-        tareaCargaPlan.execute();                
+        tareaCargaPlan.execute();  
+
         
     }
 
@@ -468,6 +473,7 @@ public class ConsultaPlanContable extends util.EscapeDialog implements ActionLis
                     modeloTablaPlanContable.addRow(fila);
 
                     rs.close();
+                    rs = null;
                     //tareaCargaPlan.cancel(true);
                 } catch (SQLException e1) {
                     // TODO Auto-generated catch block
@@ -485,7 +491,8 @@ public class ConsultaPlanContable extends util.EscapeDialog implements ActionLis
         public void done() {
             Toolkit.getDefaultToolkit().beep();
             //System.out.println("Hecho!!!");
-            tareaCargaPlan.cancel(true);
+            //tareaCargaPlan.cancel(true);
+            
         }
 
         public void setTipoCarga(String strQueCuentas) {
@@ -499,7 +506,7 @@ public class ConsultaPlanContable extends util.EscapeDialog implements ActionLis
     }
 
     private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
-
+        
         this.setVisible(false);
     }//GEN-LAST:event_jbSalirActionPerformed
 
