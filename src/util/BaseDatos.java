@@ -41,12 +41,14 @@ public class BaseDatos {
                         rs = m.query(sqlQueryCount);
                         rowCount = rs.getMetaData().getColumnCount();
                     }
+                    rs.close();
 		} catch (SQLException e){
 			JOptionPane.showMessageDialog(null,
 					"Error en recuento registros (countRows)!!!");
 			if(DatosComunes.enDebug)
 				e.printStackTrace();
 		}
+                
 
 		return rowCount;
 	}
