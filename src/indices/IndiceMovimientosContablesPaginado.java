@@ -288,14 +288,15 @@ public class IndiceMovimientosContablesPaginado {
         ResultSet rsConceptoMovContable = null;
         ConceptoMovContable concepto = new ConceptoMovContable();
         
-        vectorMovimientos.clear();
+        
 
         MovimientoContable movimientoContable = new MovimientoContable();
         
         int numeroRegistros = BaseDatos.countRows(strSql);
         System.out.println("Numerode registros leidos del movcon: " + numeroRegistros);
         int i = 0;
-        if (numeroRegistros != 0) {
+        if(numeroRegistros > 0) {
+            vectorMovimientos.clear();
             String strFechaTabla = "", strAsientoTabla = "", strApunteTabla = "";
             try {
                 rs = m.query(strSql);
@@ -353,7 +354,7 @@ public class IndiceMovimientosContablesPaginado {
                 if (direccion == HACIA_ADELANTE) {
                     punteroVector = 0;
                 } else {
-                    punteroVector = REGISTROS_EN_BUFFER - 1;
+                    punteroVector = vectorMovimientos.size() - LINEAS_POR_PANTALLA;
                 }
                 rs.close();
             } catch (SQLException e) {
@@ -362,6 +363,9 @@ public class IndiceMovimientosContablesPaginado {
                 Apariencia.mensajeInformativo(5, "Error en lectura fichero de DebeHaber<BR>Consulta Acumulados Contables");
             }
             System.out.println("Tamaño vector: " + vectorMovimientos.size());
+        }else{
+            if(direccion == HACIA_ATRAS && punteroVector < 0)
+                punteroVector = 0;
         }
 
     }
@@ -394,40 +398,7 @@ public class IndiceMovimientosContablesPaginado {
         //}
         if (numeroRegistros != 0) {
             String strFechaTabla = "", strAsientoTabla = "", strApunteTabla = "";
-            try {
-                FilaMovimiento filaMovimiento = new FilaMovimiento();
-
-                for (int i = 0; i < LINEAS_POR_PANTALLA; i++) {
-                    if (punteroVector < vectorMovimientos.size()) {
-
-                        filaMovimiento = vectorMovimientos.get(punteroVector);
-
-                        cargaFila(fila, filaMovimiento);
-                        
-                        modeloTabla.addRow(fila);
-                        punteroVector++;
-                    }
-
-                }
-                rs.close();
-                rs = null;
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                Apariencia.mensajeInformativo(5, "Error en lectura fichero de DebeHaber<BR>Consulta Acumulados Contables");
-            }
-            
-            /*
-            // Vamos al final de la trabla
-            jtMovimientosContables.clearSelection();
-            jtMovimientosContables.setRowSelectionInterval(numeroDeFilas, numeroDeFilas);
-            Rectangle rect = jtMovimientosContables.getCellRect(numeroDeFilas, 0, true);
-            jtMovimientosContables.scrollRectToVisible(rect);
-            jtMovimientosContables.clearSelection();
-            jtMovimientosContables.setRowSelectionInterval(numeroDeFilas, numeroDeFilas);
-            DefaultTableModel modelo = (DefaultTableModel) jtMovimientosContables.getModel();
-            modelo.fireTableDataChanged();
-            */
+            cargaJTable();                       
         }
         dSaldo = cuenta.getSaldoCuenta(strCuenta, DatosComunes.centroCont);
 
@@ -439,175 +410,23 @@ public class IndiceMovimientosContablesPaginado {
 
     }
 
-    private void cargaMovimientosAntiguo() {
+    private void cargaJTable() {
+        int i = 0;
 
-        int fecha = jtfeFecha.getFechaAAAAMMDD();
-        String strDesdeFecha = jtfeFecha.getStrFechaAAAAMMDD();
-        int asiento = Integer.valueOf(jtnfAsiento.getText().trim());
-        lSaldo.setText("Saldo : 0,00");
+        Object fila[] = {"", "", "", "", "", "", "", "", "", "", "", ""};
+        FilaMovimiento filaMovimiento = new FilaMovimiento();
 
-        String claveFechaAsientoApunte = String.valueOf(strDesdeFecha)
-                + String.format("%05d", asiento)
-                + "00000";
+        while (i < LINEAS_POR_PANTALLA) {
+            if (punteroVector + i < vectorMovimientos.size()) {
+                filaMovimiento = vectorMovimientos.get(punteroVector + i);
 
-        Object fila[] = {"", "", "", "", "", "", "", "", "", "", ""};
-
-        String strSql = "SELECT * FROM MOVCON WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
-                + " MOVCON_CENTRO = " + DatosComunes.centroCont + " AND "
-                + " MOVCON_CUENTA = '" + strCuenta + "' AND "
-                + " MOVCON_FECH_ASTO_APT >= '" + claveFechaAsientoApunte + "' LIMIT " + REGISTROS_EN_BUFFER + " OFFSET 0";
-
-        String strSqlConcepto = "";
-
-        // Aquí meteremos el Concepto del Movimiento Contable
-        ResultSet rsConceptoMovContable = null;
-        ConceptoMovContable concepto = new ConceptoMovContable();
-
-        m = MysqlConnect.getDbCon();
-
-        int numeroRegistros = 0;
-         //int numeroRegistros = BaseDatos.countRows(strSql);
-
-        //if (numeroRegistros > 5000){
-        //	Apariencia.mensajeInformativo(5, "Son demasiados Registros!!!<BR>Sólo se mostrarán los 5000 primeros.<BR>Cambiar la fecha para ver los demás.");
-        strSql = "SELECT * FROM MOVCON WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
-                + " MOVCON_CENTRO = " + DatosComunes.centroCont + " AND "
-                + " MOVCON_CUENTA = '" + strCuenta + "' AND "
-                + " MOVCON_FECH_ASTO_APT >= '" + claveFechaAsientoApunte + "' ORDER BY MOVCON_FECH_ASTO_APT ASC LIMIT " + REGISTROS_EN_BUFFER + " OFFSET 0";
-
-        numeroRegistros = BaseDatos.countRows(strSql);
-        System.out.println("Numerode registros leidos del movcon: " + numeroRegistros);
-
-        //}
-        if (numeroRegistros != 0) {
-            String strFechaTabla = "", strAsientoTabla = "", strApunteTabla = "";
-            try {
-                MovimientoContable movimiento = new MovimientoContable();
-                rs = m.query(strSql);
-                int i = 0;
-                while (rs.next() || rs.isLast()) {
-
-                    movimiento.read(rs);
-
-                    claveFechaAsientoApunte = String.valueOf(movimiento.getFechaAsientoApunte());
-
-                    // Leemos el concepto ahora que sabemos la clave
-                    strSqlConcepto = "SELECT * FROM MOCCEP WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
-                            + " MOCCEP_FECH_ASTO_APT = '" + movimiento.getFechaAsientoApunte() + "'";
-
-                    if (BaseDatos.countRows(strSqlConcepto) != 0) {
-                        rsConceptoMovContable = m.query(strSqlConcepto);
-                        if (rsConceptoMovContable.next()) {
-                            concepto.read(rsConceptoMovContable);
-                        }
-                    }
-
-                    strFechaTabla = claveFechaAsientoApunte.substring(0, 8);
-                    strAsientoTabla = claveFechaAsientoApunte.substring(8, 13);
-                    strApunteTabla = claveFechaAsientoApunte.substring(13, 18);
-
-                    fila[Columna.FECHA.value] = Cadena.fechaAcadena(Integer.valueOf(strFechaTabla));
-                    fila[Columna.ASIENTO.value] = Integer.valueOf(strAsientoTabla);
-                    fila[Columna.APUNTE.value] = Integer.valueOf(strApunteTabla);
-                    fila[Columna.CUENTA.value] = movimiento.getCuenta();
-                    if (movimiento.getDocumento() == 0) {
-                        fila[Columna.DOCUMENTO.value] = "";
-                    } else {
-                        fila[Columna.DOCUMENTO.value] = movimiento.getDocumento();
-                    }
-                    fila[Columna.CLAVE.value] = movimiento.getClave();
-                    fila[Columna.DESCRIPCION.value] = concepto.getConcepto();
-                    if (movimiento.getClave() < 50) {
-                        fila[Columna.DEBE.value] = Cadena.formatoConComaDecimal(movimiento.getImporte());
-                        fila[Columna.HABER.value] = "";
-                    } else {
-                        fila[Columna.DEBE.value] = "";
-                        fila[Columna.HABER.value] = Cadena.formatoConComaDecimal(movimiento.getImporte());
-                    }
-
-                    fila[Columna.SALDO.value] = "Saldo";
-                    if (movimiento.getClave() < 50) {
-                        fila[Columna.DEBE_DOUBLE.value] = movimiento.getImporte();
-                        fila[Columna.HABER_DOUBLE.value] = 0.0;
-                    } else {
-                        fila[Columna.DEBE_DOUBLE.value] = 0.0;
-                        fila[Columna.HABER_DOUBLE.value] = movimiento.getImporte();
-                    }
-
-                    modeloTabla.addRow(fila);
-
-                    i++;
-
-                    if (i > LINEAS_POR_PANTALLA) {
-                        break;
-                    }
-
-                }
-                rs.close();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                Apariencia.mensajeInformativo(5, "Error en lectura fichero de DebeHaber<BR>Consulta Acumulados Contables");
+                cargaFila(fila, filaMovimiento);
+                modeloTabla.addRow(fila);
+            }else{
+                break;
             }
-
-            int numeroDeFilas = modeloTabla.getRowCount() - 1;
-
-            int topeFecha = 0;
-            int topeAsiento = 0;
-            int topeApunte = 0;
-
-            topeFecha = Cadena.cadenaAfecha((String) modeloTabla.getValueAt(numeroDeFilas, Columna.FECHA.value));
-            topeAsiento = (Integer) modeloTabla.getValueAt(numeroDeFilas, Columna.ASIENTO.value);
-            topeApunte = (Integer) modeloTabla.getValueAt(numeroDeFilas, Columna.APUNTE.value);
-
-            claveFechaAsientoApunte = String.valueOf(topeFecha)
-                    + String.format("%05d", topeAsiento)
-                    + String.format("%05d", topeApunte);
-
-            Cuenta cSaldoFecha = new Cuenta();
-            dSaldo = cSaldoFecha.getSaldoCuentaEnFecha(strCuenta, DatosComunes.centroCont, claveFechaAsientoApunte);
-
-            // Una vez conocemos el saldo a HOY, tenemos que ir recalculando hacia atrás.
-            // Saldo = SaldoAnterior + Debe - Haber
-            double saldo = dSaldo;
-            double debe = 0.0;
-            double haber = 0.0;
-
-            if (saldo == 0.0) {
-                modeloTabla.setValueAt("", numeroDeFilas, Columna.SALDO.value);
-            } else {
-                modeloTabla.setValueAt(Cadena.formatoConComaDecimal(saldo), numeroDeFilas, Columna.SALDO.value);
-            }
-
-            for (int i = numeroDeFilas - 1; i >= 0; i--) {
-                debe = (Double) modeloTabla.getValueAt(i + 1, Columna.DEBE_DOUBLE.value);
-                haber = (Double) modeloTabla.getValueAt(i + 1, Columna.HABER_DOUBLE.value);
-                saldo = saldo - debe + haber;
-                //modeloTabla.setValueAt(String.valueOf(saldo), i, 7);
-                if (saldo <= 0.01 && saldo >= -0.01) {
-                    modeloTabla.setValueAt("", i, Columna.SALDO.value);
-                } else {
-                    modeloTabla.setValueAt(Cadena.formatoConComaDecimal(saldo), i, Columna.SALDO.value);
-                }
-            }
-            // Vamos al final de la trabla
-            jtMovimientosContables.clearSelection();
-            jtMovimientosContables.setRowSelectionInterval(numeroDeFilas, numeroDeFilas);
-            Rectangle rect = jtMovimientosContables.getCellRect(numeroDeFilas, 0, true);
-            jtMovimientosContables.scrollRectToVisible(rect);
-            jtMovimientosContables.clearSelection();
-            jtMovimientosContables.setRowSelectionInterval(numeroDeFilas, numeroDeFilas);
-            DefaultTableModel modelo = (DefaultTableModel) jtMovimientosContables.getModel();
-            modelo.fireTableDataChanged();
+            i++;
         }
-        dSaldo = cuenta.getSaldoCuenta(strCuenta, DatosComunes.centroCont);
-
-        lSaldo.setText("Saldo : " + Cadena.formatoConComaDecimal(dSaldo));
-        if (dSaldo < 0.0) {
-            lSaldo.setForeground(Color.RED);
-        }
-        pantalla.add(lSaldo);
-
     }
 
     private void borrarTabla() {
@@ -654,16 +473,19 @@ public class IndiceMovimientosContablesPaginado {
             Object fila[] = {"", "", "", "", "", "", "", "", "", "", "", ""};
             FilaMovimiento filaMovimiento = new FilaMovimiento();
 
-            if (punteroVector >= vectorMovimientos.size()) {
-                punteroVector--;
+            punteroVector += LINEAS_POR_PANTALLA;
+            
+            if (punteroVector >= vectorMovimientos.size()) {                
                 System.out.println("Recargo buffer....");
                 // Nos hemos salido del buffer de REGISTROS_EN_BUFFER filas por abajo, tenemos que cargar otras REGISTROS_EN_BUFFER
                 // a partir de la última.
                 
                 System.out.println("Número de filas en JTable: " + jtMovimientosContables.getRowCount());
-                String claveFechaAsientoApunte = Cadena.cadenaAfecha(vectorMovimientos.get(punteroVector).getFecha())
-                        + String.format("%05d", vectorMovimientos.get(punteroVector).getAsiento())
-                        + String.format("%05d", vectorMovimientos.get(punteroVector).getApunte());
+                int ultimaFila = jtMovimientosContables.getRowCount() - 1;
+                
+                String claveFechaAsientoApunte = Cadena.cadenaAfecha((String)jtMovimientosContables.getValueAt(ultimaFila, Columna.FECHA.value))
+                        + String.format("%05d", Integer.valueOf((String)jtMovimientosContables.getValueAt(ultimaFila, Columna.ASIENTO.value)))
+                        + String.format("%05d", Integer.valueOf((String)jtMovimientosContables.getValueAt(ultimaFila, Columna.APUNTE.value)));
 
                 strSql = "SELECT * FROM MOVCON WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
                         + " MOVCON_CENTRO = " + DatosComunes.centroCont + " AND "
@@ -676,22 +498,7 @@ public class IndiceMovimientosContablesPaginado {
 
             if (punteroVector < vectorMovimientos.size()) {
                 modeloTabla.setRowCount(0);
-                String strFechaTabla = "", strAsientoTabla = "", strApunteTabla = "";
-
-                for (int i = 0; i < LINEAS_POR_PANTALLA; i++) {
-                    if (punteroVector < vectorMovimientos.size()) {
-
-                        filaMovimiento = vectorMovimientos.get(punteroVector);
-
-                        cargaFila(fila, filaMovimiento);
-
-                        modeloTabla.addRow(fila);
-                        punteroVector++;
-
-                    } else {
-                        break;
-                    }
-                }
+                cargaJTable();
                 System.out.println("Adelante - Puntero Vector : " + punteroVector);
             }
         }
@@ -705,11 +512,9 @@ public class IndiceMovimientosContablesPaginado {
 
             Object fila[] = {"", "", "", "", "", "", "", "", "", "", "", ""};
             FilaMovimiento filaMovimiento = new FilaMovimiento();
-
-            int i = 0;
             
-            punteroVector -= LINEAS_POR_PANTALLA + 1;
-            if(punteroVector <= 0){
+            punteroVector -= LINEAS_POR_PANTALLA;
+            if(punteroVector < 0){
                 System.out.println("Recargo buffer HACIA ATRAS....");
                 // Nos hemos salido del buffer de " REGISTROS_EN_BUFFER filas por abajo, tenemos que cargar otras REGISTROS_EN_BUFFER
                 // a partir de la última.
@@ -723,31 +528,17 @@ public class IndiceMovimientosContablesPaginado {
 
                 //punteroVector = vectorMovimientos.size() - LINEAS_POR_PANTALLA;
                 cargaVector(strSql, HACIA_ATRAS);
+                
                 System.out.println("Atras Buffer - Puntero Vector : " + punteroVector);
             }
             
             
-            if (punteroVector > 0) {
-                modeloTabla.setRowCount(0);
-                String strFechaTabla = "", strAsientoTabla = "", strApunteTabla = "";
-
-                for (i = 0; i < LINEAS_POR_PANTALLA; i++) {
-                    if (punteroVector >= 0) {
-
-                        filaMovimiento = vectorMovimientos.get(punteroVector);
-
-                        cargaFila(fila, filaMovimiento);
-
-                        modeloTabla.insertRow(0, fila);
-                        punteroVector--;
-
-                    } else {
-                        break;
-                    }
-                }
+            if (punteroVector >= 0) {
+                modeloTabla.setRowCount(0);                
+                cargaJTable();
                 System.out.println("Atras - Puntero Vector : " + punteroVector);                
             } 
-            punteroVector += LINEAS_POR_PANTALLA + 1;
+            
             
         }
     }
