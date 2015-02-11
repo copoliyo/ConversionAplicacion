@@ -86,6 +86,8 @@ public class IndiceMovimientosContablesPaginado {
     JButton jbSalir;
     JButton jbPaginaAdelante;
     JButton jbPaginaAtras;
+    JButton jbLineaAdelante;
+    JButton jbLineaAtras;
 
     Image imgSalir;
     DefaultTableCellRenderer tcr;
@@ -227,6 +229,18 @@ public class IndiceMovimientosContablesPaginado {
         //jbPaginaAtras.setFont(Apariencia.cambiaFuente());
         jbPaginaAtras.addActionListener(new BotonPaginaAtrasListener());
         pantalla.add(jbPaginaAtras);
+        
+        jbLineaAdelante = new JButton("Lin. Adelante");
+        jbLineaAdelante.setBounds(975, 500, 110, 45);
+        //jbPaginaAdelante.setFont(Apariencia.cambiaFuente());
+        jbLineaAdelante.addActionListener(new BotonLineaAdelanteListener());
+        pantalla.add(jbLineaAdelante);
+        
+        jbLineaAtras = new JButton("Lin. Atrás");
+        jbLineaAtras.setBounds(975, 200, 110, 45);
+        //jbLineaAtras.setFont(Apariencia.cambiaFuente());
+        jbLineaAtras.addActionListener(new BotonLineaAtrasListener());
+        pantalla.add(jbLineaAtras);
 
         lSaldo = new JLabel("Saldo : ");
         lSaldo.setBounds(360, 15, 200, 20);
@@ -465,15 +479,52 @@ public class IndiceMovimientosContablesPaginado {
         pantalla.setVisible(true);
     }
 
+    class BotonLineaAtrasListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+
+            scrollUp(1);
+            
+        }
+    }
+    
+    class BotonPaginaAtrasListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+
+            scrollUp(LINEAS_POR_PANTALLA);
+            
+        }
+    }
+    
     class BotonPaginaAdelanteListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent arg0) {
 
-            Object fila[] = {"", "", "", "", "", "", "", "", "", "", "", ""};
+            scrollDown(LINEAS_POR_PANTALLA);
+        }
+    }
+    
+    class BotonLineaAdelanteListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+
+            scrollDown(1);
+        }
+    }
+    
+    
+    
+    
+    private void scrollDown(int lineas){
+        Object fila[] = {"", "", "", "", "", "", "", "", "", "", "", ""};
             FilaMovimiento filaMovimiento = new FilaMovimiento();
 
-            punteroVector += LINEAS_POR_PANTALLA;
+            punteroVector += lineas;
             
             if (punteroVector >= vectorMovimientos.size()) {                
                 System.out.println("Recargo buffer....");
@@ -501,19 +552,13 @@ public class IndiceMovimientosContablesPaginado {
                 cargaJTable();
                 System.out.println("Adelante - Puntero Vector : " + punteroVector);
             }
-        }
     }
     
-    
-    class BotonPaginaAtrasListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent arg0) {
-
-            Object fila[] = {"", "", "", "", "", "", "", "", "", "", "", ""};
+    private void scrollUp(int lineas){
+        Object fila[] = {"", "", "", "", "", "", "", "", "", "", "", ""};
             FilaMovimiento filaMovimiento = new FilaMovimiento();
             
-            punteroVector -= LINEAS_POR_PANTALLA;
+            punteroVector -= lineas;
             if(punteroVector < 0){
                 System.out.println("Recargo buffer HACIA ATRAS....");
                 // Nos hemos salido del buffer de " REGISTROS_EN_BUFFER filas por abajo, tenemos que cargar otras REGISTROS_EN_BUFFER
@@ -538,9 +583,6 @@ public class IndiceMovimientosContablesPaginado {
                 cargaJTable();
                 System.out.println("Atras - Puntero Vector : " + punteroVector);                
             } 
-            
-            
-        }
     }
     
     private void cargaFila(Object fila[], FilaMovimiento fm) {
