@@ -522,11 +522,12 @@ public class IndiceMovimientosContablesPaginado {
     
     private void scrollDown(int lineas){
         Object fila[] = {"", "", "", "", "", "", "", "", "", "", "", ""};
+        String claveFechaAsientoApunte = "";
             FilaMovimiento filaMovimiento = new FilaMovimiento();
 
-            punteroVector += lineas;
+            //punteroVector += lineas;
             
-            if (punteroVector >= vectorMovimientos.size()) {                
+            if ((punteroVector + lineas) >= vectorMovimientos.size() || (punteroVector + LINEAS_POR_PANTALLA) > vectorMovimientos.size()) {                
                 System.out.println("Recargo buffer....");
                 // Nos hemos salido del buffer de REGISTROS_EN_BUFFER filas por abajo, tenemos que cargar otras REGISTROS_EN_BUFFER
                 // a partir de la última.
@@ -534,10 +535,16 @@ public class IndiceMovimientosContablesPaginado {
                 System.out.println("Número de filas en JTable: " + jtMovimientosContables.getRowCount());
                 int ultimaFila = jtMovimientosContables.getRowCount() - 1;
                 
-                String claveFechaAsientoApunte = Cadena.cadenaAfecha((String)jtMovimientosContables.getValueAt(ultimaFila, Columna.FECHA.value))
+                if((punteroVector + lineas)  > vectorMovimientos.size())
+                    claveFechaAsientoApunte = Cadena.cadenaAfecha((String)jtMovimientosContables.getValueAt(0, Columna.FECHA.value))
+                        + String.format("%05d", Integer.valueOf((String)jtMovimientosContables.getValueAt(0, Columna.ASIENTO.value)))
+                        + String.format("%05d", Integer.valueOf((String)jtMovimientosContables.getValueAt(0, Columna.APUNTE.value)));
+                else
+                    claveFechaAsientoApunte = Cadena.cadenaAfecha((String)jtMovimientosContables.getValueAt(ultimaFila, Columna.FECHA.value))
                         + String.format("%05d", Integer.valueOf((String)jtMovimientosContables.getValueAt(ultimaFila, Columna.ASIENTO.value)))
                         + String.format("%05d", Integer.valueOf((String)jtMovimientosContables.getValueAt(ultimaFila, Columna.APUNTE.value)));
 
+                
                 strSql = "SELECT * FROM MOVCON WHERE EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
                         + " MOVCON_CENTRO = " + DatosComunes.centroCont + " AND "
                         + " MOVCON_FECH_ASTO_APT > '" + claveFechaAsientoApunte + "' ORDER BY MOVCON_FECH_ASTO_APT ASC LIMIT " + REGISTROS_EN_BUFFER + " OFFSET 0";
@@ -547,11 +554,12 @@ public class IndiceMovimientosContablesPaginado {
                 System.out.println("Adelante Buffer - Puntero Vector : " + punteroVector);
             }
 
-            if (punteroVector < vectorMovimientos.size()) {
+            //if ((punteroVector + lineas <= vectorMovimientos.size()) && (punteroVector + LINEAS_POR_PANTALLA <= vectorMovimientos.size())) {                
+                punteroVector += lineas;
                 modeloTabla.setRowCount(0);
-                cargaJTable();
+                cargaJTable();                
                 System.out.println("Adelante - Puntero Vector : " + punteroVector);
-            }
+            //}
     }
     
     private void scrollUp(int lineas){
