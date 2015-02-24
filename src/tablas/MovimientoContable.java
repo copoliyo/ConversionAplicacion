@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
+import util.Apariencia;
+import util.BaseDatos;
 
 import util.Cadena;
 
@@ -105,6 +107,64 @@ public class MovimientoContable {
 		}
 	}
 
+        
+    // Leemos un apunde de un asiento, para ello pasamos como paraámetros
+    // la fecha, el asiento, el apunte y el centro
+    // Si lo hemos leido bien, devolvemos TRUE, en caso de problemas FALSE
+    /**
+     *
+     * @param centro
+     * @param fecha
+     * @param asiento
+     * @param apunte
+     * @return lecturaOk
+     */
+    public boolean read(int centro, int fecha, int asiento, int apunte) {
+
+        boolean lecturaOk = true;
+
+        String claveFechaAsientoApunte = String.valueOf(fecha)
+                + String.format("%05d", asiento)
+                + String.format("%05d", apunte);
+
+        String strSqlCuenta = "SELECT * FROM MOVCON WHERE "
+                + "EMPRESA = '" + DatosComunes.eEmpresa + "' "
+                + " AND MOVCON_CENTRO = " + centro
+                + " AND MOVCON_FECH_ASTO_APT = '" + claveFechaAsientoApunte + "' LIMIT 1";
+
+        ResultSet rsSql = null;
+        MysqlConnect m = null;
+
+        m = MysqlConnect.getDbCon();
+
+        if (BaseDatos.countRows(strSqlCuenta) != 0) {
+            try {
+                rsSql = m.query(strSqlCuenta);
+                // Como ya tenemos el ResultSet se lo pasamos al mñrodo 'read(ResultSet rs)'.
+                if (rsSql.next()) {
+                    this.read(rsSql);
+                    lecturaOk = true;
+                    // Cerramos para evitar gastar memoria
+                    rsSql.close();
+                }
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                lecturaOk = false;
+                if (DatosComunes.enDebug) {
+                    e.printStackTrace();
+                }
+                Apariencia.mensajeInformativo(5, "Error en lectura fichero de Movimientos Contables");
+            }
+        } else {
+            lecturaOk = false;
+        }
+
+        rsSql = null;
+        m = null;
+        
+        return lecturaOk;
+    }
+        
 	public void write(){
 		PreparedStatement ps = null;
    
