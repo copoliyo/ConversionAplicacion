@@ -7,7 +7,6 @@ package procesos;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JScrollPane;
@@ -16,7 +15,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import util.Apariencia;
 
@@ -66,15 +64,10 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         this.setVisible(true);
     }
 
-    
+    // Con esto conseguimos agregar componentes 'hechos a mano' a la
+    // pantalla que ya contiene los componentes generados por NetBeans
     private void initMisComponentes(){
-        /*
-        jbPrueba = new javax.swing.JButton();
-        jbPrueba.setBounds(200, 250, 100, 20);
-        //jbPrueba.setFont(Apariencia.cambiaFuente());
-        jbPrueba.setText("Prueba");
-        getContentPane().add(jbPrueba);
-        */
+
         
         // La tabla contendrá estas columnas
         modeloTabla.addColumn("Apunte");
@@ -119,7 +112,17 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         spApuntes.setFont(Apariencia.cambiaFuente());
         getContentPane().add(spApuntes);
         
+        
+    }
 
+    private void estableceVisibilidadInicial(){
+    
+        jlCuenta.setVisible(false);
+        jlDocumento.setVisible(false);
+        jlClave.setVisible(false);
+        jlConcepto.setVisible(false);
+        jlImporte.setVisible(false);
+        
     }
     
      class TableCellRenderer extends DefaultTableCellRenderer {
@@ -377,12 +380,13 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
                 .addGap(11, 11, 11)
                 .addComponent(jpPanelFechaAsiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(271, 271, 271)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlCuadre)
-                    .addComponent(jtfnf2DCuadre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jlNombreCuenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jlTituloSaldo)
-                    .addComponent(jlSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jlCuadre)
+                        .addComponent(jtfnf2DCuadre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jlTituloSaldo)
+                        .addComponent(jlSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jlCuenta)
@@ -406,11 +410,10 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jbAnularAsiento)
-                        .addComponent(jbIvaAutomatico)
-                        .addComponent(jbMovimientos)
-                        .addComponent(jbPrevisiones)))
+                    .addComponent(jbIvaAutomatico)
+                    .addComponent(jbMovimientos)
+                    .addComponent(jbPrevisiones)
+                    .addComponent(jbAnularAsiento))
                 .addGap(18, 18, 18))
         );
 

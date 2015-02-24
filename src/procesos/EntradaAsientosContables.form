@@ -122,12 +122,14 @@
               <EmptySpace min="11" pref="11" max="-2" attributes="0"/>
               <Component id="jpPanelFechaAsiento" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="271" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jlCuadre" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jtfnf2DCuadre" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jlNombreCuenta" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jlTituloSaldo" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jlSaldo" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jlCuadre" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jtfnf2DCuadre" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jlTituloSaldo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jlSaldo" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -157,12 +159,10 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jbSalir" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jbAnularAsiento" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jbIvaAutomatico" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jbMovimientos" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jbPrevisiones" alignment="0" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="jbIvaAutomatico" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jbMovimientos" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jbPrevisiones" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jbAnularAsiento" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
           </Group>
