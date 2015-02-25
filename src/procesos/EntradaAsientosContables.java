@@ -5,10 +5,14 @@
  */
 package procesos;
 
+import general.DatosComunes;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.FocusTraversalPolicy;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Vector;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
@@ -19,6 +23,8 @@ import javax.swing.table.TableColumn;
 import util.Apariencia;
 import util.Cadena;
 import util.Fecha;
+import util.LineaMovimientoContable;
+import util.MovimientosContables;
 
 /**
  *
@@ -30,6 +36,8 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
     JScrollPane spApuntes;
     DefaultTableCellRenderer tcr;
     TableCellRenderer tcr2;
+
+    Vector<LineaMovimientoContable> vectorLineaMovimientos;
     
     DefaultTableModel modeloTabla = new DefaultTableModel() {
         @Override
@@ -64,6 +72,16 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         initComponents();
         initMisComponentes();
         estableceVisibilidadInicial();
+        
+        Vector<Component> order;
+        order = new Vector<>(4);
+        order.add(jtffeFechaAsiento);
+        order.add(jtfnfAsiento);
+        order.add(jbOkAsiento);
+        
+        MyOFocusTraversalPolicy newPolicy = new MyOFocusTraversalPolicy(order);
+        this.setFocusTraversalPolicy(newPolicy);
+        
         jtffeFechaAsiento.setText(Cadena.fechaAcadena(Fecha.fechaDia()));
         this.setVisible(true);
     }
@@ -121,28 +139,28 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
 
     private void estableceVisibilidadInicial(){
     
-        jlCuenta.setVisible(false);
-        jlDocumento.setVisible(false);
-        jlClave.setVisible(false);
-        jlConcepto.setVisible(false);
-        jlImporte.setVisible(false);
-        jtfnfCuenta.setVisible(false);
-        jbBuscarCuenta.setVisible(false);
-        jtfnfDocumento.setVisible(false);
-        jtfnfClave.setVisible(false);
-        jbBuscarClave.setVisible(false);
-        jtffConcepto.setVisible(false);
-        jtfn2DImporte.setVisible(false);
-        jbOkApunte.setVisible(false);
-        jlNombreCuenta.setVisible(false);
-        jlTituloSaldo.setVisible(false);
-        jlSaldo.setVisible(false);
-        jlCuadre.setVisible(false);
-        jtfnf2DCuadre.setVisible(false);
-        jbAnularAsiento.setVisible(false);
-        jbIvaAutomatico.setVisible(false);
-        jbMovimientos.setVisible(false);
-        jbPrevisiones.setVisible(false);
+        jlCuenta.setEnabled(false);
+        jlDocumento.setEnabled(false);
+        jlClave.setEnabled(false);
+        jlConcepto.setEnabled(false);
+        jlImporte.setEnabled(false);
+        jtfnfCuenta.setEnabled(false);
+        jbBuscarCuenta.setEnabled(false);
+        jtfnfDocumento.setEnabled(false);
+        jtfnfClave.setEnabled(false);
+        jbBuscarClave.setEnabled(false);
+        jtffConcepto.setEnabled(false);
+        jtfn2DImporte.setEnabled(false);
+        jbOkApunte.setEnabled(false);
+        jlNombreCuenta.setEnabled(false);
+        jlTituloSaldo.setEnabled(false);
+        jlSaldo.setEnabled(false);
+        jlCuadre.setEnabled(false);
+        jtfnf2DCuadre.setEnabled(false);
+        jbAnularAsiento.setEnabled(false);
+        jbIvaAutomatico.setEnabled(false);
+        jbMovimientos.setEnabled(false);
+        jbPrevisiones.setEnabled(false);
         
         
     }
@@ -229,6 +247,12 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         jbBuscarAsiento.setPreferredSize(new java.awt.Dimension(30, 30));
 
         jtffeFechaAsiento.setText("00.00.00");
+
+        jtfnfAsiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfnfAsientoActionPerformed(evt);
+            }
+        });
 
         jbOkAsiento.setText("Ok");
 
@@ -435,6 +459,32 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
     private void jtfnf2DCuadreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnf2DCuadreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jtfnf2DCuadreActionPerformed
+
+    private void jtfnfAsientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnfAsientoActionPerformed
+        
+        int fecha = jtffeFechaAsiento.getFechaAAAAMMDD();
+        int asiento = Integer.valueOf(jtfnfAsiento.getText().trim());
+
+        // Si el campo de asiento está vacío o no existe el asiento que pretendemos visualizar, busca el primero libre.
+        if (jtfnfAsiento.getText().trim().length() == 0) {
+            jtfnfAsiento.setText(String.valueOf(util.MovimientosContables.buscaPrimeroLibreEnDia(DatosComunes.centroCont, fecha)));
+        } else {
+            if (util.MovimientosContables.existeMovimiento(DatosComunes.centroCont, fecha, asiento) == true) {
+                vectorLineaMovimientos = MovimientosContables.leeAsiento(DatosComunes.centroCont, fecha, asiento);
+                displayLineasAsiento();
+                System.out.println("Apuntes en el asiento: " + vectorLineaMovimientos.size());
+            }else{
+                jtfnfAsiento.setText(String.valueOf(util.MovimientosContables.buscaPrimeroLibreEnDia(DatosComunes.centroCont, fecha)));
+            }
+        }
+        
+    }//GEN-LAST:event_jtfnfAsientoActionPerformed
+    
+    private void displayLineasAsiento(){
+        
+        
+    }
+    
     
     // Mis variables de pantalla
     private javax.swing.JButton jbPrueba;
@@ -476,4 +526,46 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
     public void propertyChange(PropertyChangeEvent evt) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    public static class MyOFocusTraversalPolicy
+            extends FocusTraversalPolicy {
+
+        Vector<Component> order;
+
+        public MyOFocusTraversalPolicy(Vector<Component> order) {
+            this.order = new Vector<Component>(order.size());
+            this.order.addAll(order);
+        }
+
+        public Component getComponentAfter(Container focusCycleRoot,
+                Component aComponent) {
+            int idx = (order.indexOf(aComponent) + 1) % order.size();
+            return order.get(idx);
+        }
+
+        @Override
+        public Component getComponentBefore(Container focusCycleRoot,
+                Component aComponent) {
+            int idx = order.indexOf(aComponent) - 1;
+            if (idx < 0) {
+                idx = order.size() - 1;
+            }
+            return order.get(idx);
+        }
+
+        public Component getDefaultComponent(Container focusCycleRoot) {
+            return order.get(0);
+        }
+
+        public Component getLastComponent(Container focusCycleRoot) {
+            return order.lastElement();
+        }
+
+        public Component getFirstComponent(Container focusCycleRoot) {
+            return order.get(0);
+        }
+    }
+    
+    
+
 }
