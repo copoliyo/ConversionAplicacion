@@ -72,13 +72,15 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jlCodigo" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jbBuscarCuenta" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jtfnfCuenta" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jlCentro" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jtfnfCentro" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jcbActivado" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jlCodigo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jtfnfCuenta" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jlCentro" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jtfnfCentro" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jcbActivado" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -86,13 +88,15 @@
                   <Component id="jtffTitulo" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jbSalir" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jbPresupuesto" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                  <Component id="jbBorrar" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                  <Component id="jbGrabar" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jbAtras" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jbAdelante" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jbSalir" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jbPresupuesto" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="jbBorrar" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="jbGrabar" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace pref="28" max="32767" attributes="0"/>
           </Group>
