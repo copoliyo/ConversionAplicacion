@@ -27,7 +27,7 @@ public class LineaMovimientoContable {
 
 
     
-    LineaMovimientoContable(){
+    public LineaMovimientoContable(){
         empresa = DatosComunes.eEmpresa;
         centro = DatosComunes.centroCont;
         fechaAsientoApunte = 0L;
