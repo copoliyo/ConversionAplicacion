@@ -124,6 +124,9 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         tcr2 = new TableCellRenderer();
         jtApuntes.getColumn("Debe").setCellRenderer(tcr2);
         jtApuntes.getColumn("Haber").setCellRenderer(tcr2);
+
+        // Hace que el fondo sea completamente blanco
+        jtApuntes.setFillsViewportHeight(true);
         
         // Creamos un JscrollPane y le agregamos la JTable
         spApuntes = new JScrollPane(jtApuntes);
@@ -132,6 +135,7 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         // Agregamos el JScrollPane al contenedor
         spApuntes.setBounds(10, 80, 830, 250);
         spApuntes.setFont(Apariencia.cambiaFuente());
+        spApuntes.setBackground(Color.yellow);
         getContentPane().add(spApuntes);
         
         
@@ -482,7 +486,36 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
     
     private void displayLineasAsiento(){
         
+        Object fila[] = {"", "", "", "", "", "", ""};
+
+        double cuadre = 0.0;
         
+        LineaMovimientoContable lmc = new LineaMovimientoContable();
+        
+        modeloTabla.setRowCount(0);
+        if(vectorLineaMovimientos.size() > 0){
+            for(int i = 0; i < vectorLineaMovimientos.size(); i++){
+                lmc = vectorLineaMovimientos.elementAt(i);
+                
+                fila[Columna.APUNTE.value] = String.valueOf(lmc.getApunte());
+                fila[Columna.CUENTA.value] = Cadena.formateaCuentaContable(lmc.getCuenta());                
+                fila[Columna.DOCUMENTO.value] = String.valueOf(lmc.getDocumento());                
+                fila[Columna.CLAVE.value] = String.valueOf(lmc.getClave());
+                fila[Columna.CONCEPTO.value] = lmc.getConcepto();
+                if(lmc.getClave() < 50){
+                    fila[Columna.DEBE.value] = Cadena.formatoConComaDecimal(lmc.getImporte());
+                    fila[Columna.HABER.value] = "";
+                    cuadre += lmc.getImporte();
+                }else{
+                    fila[Columna.DEBE.value] = "";
+                    fila[Columna.HABER.value] = Cadena.formatoConComaDecimal(lmc.getImporte());                    
+                    cuadre -= lmc.getImporte();
+                }
+                modeloTabla.addRow(fila);
+            }
+        }
+        
+        jtfnf2DCuadre.setText(Cadena.formatoConComaDecimal(cuadre));
     }
     
     
