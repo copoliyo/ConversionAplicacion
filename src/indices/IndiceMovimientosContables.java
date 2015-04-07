@@ -455,7 +455,7 @@ public class IndiceMovimientosContables implements ActionListener, PropertyChang
                         }
 
                         modeloTabla.addRow(fila);
-                        
+                        //rs.close();
                                                 
                         
                         progress = (registrosLeidos * 100) / numeroRegistros;
