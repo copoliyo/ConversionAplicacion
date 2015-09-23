@@ -36,6 +36,8 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
     JScrollPane spApuntes;
     DefaultTableCellRenderer tcr;
     TableCellRenderer tcr2;
+    
+    int asiento, fecha;
 
     Vector<LineaMovimientoContable> vectorLineaMovimientos;
     
@@ -466,16 +468,15 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
 
     private void jtfnfAsientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnfAsientoActionPerformed
         
-        int fecha = jtffeFechaAsiento.getFechaAAAAMMDD();
-        int asiento;
-        
+        fecha = jtffeFechaAsiento.getFechaAAAAMMDD();
+                
         if(jtfnfAsiento.getText().trim().length() == 0)
             jtfnfAsiento.setText("0");
         
         asiento = Integer.valueOf(jtfnfAsiento.getText().trim());
 
         // Si el campo de asiento está vacío o no existe el asiento que pretendemos visualizar, busca el primero libre.
-        if (jtfnfAsiento.getText().trim().length() == 0) {
+        if (asiento == 0 || util.MovimientosContables.existeMovimiento(DatosComunes.centroCont, fecha, asiento) == false) {
             // Ponemos el número del primer asiento libre
             jtfnfAsiento.setText(String.valueOf(util.MovimientosContables.buscaPrimeroLibreEnDia(DatosComunes.centroCont, fecha)));
             // Borramos las lineas del asiento, está vacío
@@ -486,10 +487,6 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
                 vectorLineaMovimientos = MovimientosContables.leeAsiento(DatosComunes.centroCont, fecha, asiento);
                 displayLineasAsiento();
                 System.out.println("Apuntes en el asiento: " + vectorLineaMovimientos.size());
-            }else{
-                jtfnfAsiento.setText(String.valueOf(util.MovimientosContables.buscaPrimeroLibreEnDia(DatosComunes.centroCont, fecha)));
-                // Borramos las lineas del asiento, está vacío
-                modeloTabla.setRowCount(0);
             }
         }
         
