@@ -26,62 +26,80 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-              <Component id="jpPanelFechaAsiento" min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
-              <Component id="jlNombreCuenta" min="-2" pref="375" max="-2" attributes="0"/>
-              <EmptySpace min="26" pref="26" max="-2" attributes="0"/>
-              <Component id="jlTituloSaldo" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="29" pref="29" max="-2" attributes="0"/>
-              <Component id="jlSaldo" min="-2" pref="132" max="-2" attributes="0"/>
-              <EmptySpace min="51" pref="51" max="-2" attributes="0"/>
-              <Component id="jlCuadre" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-              <Component id="jtfnf2DCuadre" min="-2" pref="116" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
-              <Component id="jlCuenta" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="108" pref="108" max="-2" attributes="0"/>
-              <Component id="jlDocumento" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-              <Component id="jlClave" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="43" pref="43" max="-2" attributes="0"/>
-              <Component id="jlConcepto" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="340" pref="340" max="-2" attributes="0"/>
-              <Component id="jlImporte" min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="40" pref="40" max="-2" attributes="0"/>
-              <Component id="jtfnfCuenta" min="-2" pref="100" max="-2" attributes="0"/>
-              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-              <Component id="jbBuscarCuenta" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-              <Component id="jtfnfDocumento" min="-2" pref="54" max="-2" attributes="0"/>
-              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-              <Component id="jtfnfClave" min="-2" pref="37" max="-2" attributes="0"/>
-              <EmptySpace min="2" pref="2" max="-2" attributes="0"/>
-              <Component id="jbBuscarClave" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-              <Component id="jtffConcepto" min="-2" pref="377" max="-2" attributes="0"/>
-              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-              <Component id="jtfn2DImporte" min="-2" pref="110" max="-2" attributes="0"/>
-              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-              <Component id="jbOkApunte" min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-              <Component id="jbSalir" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="137" pref="137" max="-2" attributes="0"/>
-              <Component id="jbAnularAsiento" min="-2" pref="127" max="-2" attributes="0"/>
-              <EmptySpace min="29" pref="29" max="-2" attributes="0"/>
-              <Component id="jbIvaAutomatico" min="-2" pref="135" max="-2" attributes="0"/>
-              <EmptySpace min="74" pref="74" max="-2" attributes="0"/>
-              <Component id="jbMovimientos" min="-2" pref="125" max="-2" attributes="0"/>
-              <EmptySpace min="28" pref="28" max="-2" attributes="0"/>
-              <Component id="jbPrevisiones" min="-2" pref="126" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                      <Component id="jpPanelFechaAsiento" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
+                      <Component id="jlNombreCuenta" min="-2" pref="375" max="-2" attributes="0"/>
+                      <EmptySpace min="26" pref="26" max="-2" attributes="0"/>
+                      <Component id="jlTituloSaldo" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="29" pref="29" max="-2" attributes="0"/>
+                      <Component id="jlSaldo" min="-2" pref="132" max="-2" attributes="0"/>
+                      <EmptySpace min="51" pref="51" max="-2" attributes="0"/>
+                      <Component id="jlCuadre" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                      <Component id="jtfnf2DCuadre" min="-2" pref="116" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
+                      <Component id="jlCuenta" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="108" pref="108" max="-2" attributes="0"/>
+                      <Component id="jlDocumento" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                      <Component id="jlClave" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="43" pref="43" max="-2" attributes="0"/>
+                      <Component id="jlConcepto" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="340" pref="340" max="-2" attributes="0"/>
+                      <Component id="jlImporte" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="jbSalir" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="jbAnularAsiento" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jtfnfCuenta" min="-2" pref="100" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                              <Component id="jbBuscarCuenta" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                              <Component id="jtfnfDocumento" min="-2" pref="54" max="-2" attributes="0"/>
+                              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                              <Component id="jtfnfClave" min="-2" pref="37" max="-2" attributes="0"/>
+                              <EmptySpace min="2" pref="2" max="-2" attributes="0"/>
+                              <Component id="jbBuscarClave" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                              <Component id="jtffConcepto" min="-2" pref="377" max="-2" attributes="0"/>
+                              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                              <Component id="jtfn2DImporte" min="-2" pref="110" max="-2" attributes="0"/>
+                              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                              <Component id="jbOkApunte" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="jbIvaAutomatico" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="jbMasApuntes" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="jbAnularApunte" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="jbModificarApunte" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jbMovimientos" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="jbPrevisiones" min="-2" pref="99" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+              </Group>
+              <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -130,10 +148,15 @@
               <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jbSalir" min="-2" max="-2" attributes="0"/>
-                  <Component id="jbAnularAsiento" min="-2" max="-2" attributes="0"/>
-                  <Component id="jbIvaAutomatico" min="-2" max="-2" attributes="0"/>
-                  <Component id="jbMovimientos" min="-2" max="-2" attributes="0"/>
-                  <Component id="jbPrevisiones" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jbAnularAsiento" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jbIvaAutomatico" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jbMasApuntes" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jbAnularApunte" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jbModificarApunte" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jbMovimientos" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jbPrevisiones" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
           </Group>
       </Group>
@@ -238,6 +261,10 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Ok"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbOkAsientoActionPerformed"/>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jbOkAsientoKeyPressed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -370,6 +397,21 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jlSaldo">
+    </Component>
+    <Component class="javax.swing.JButton" name="jbMasApuntes">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="M&#xe1;s Apuntes"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jbAnularApunte">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Anular Apunte"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jbModificarApunte">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Modificar Apunte"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
