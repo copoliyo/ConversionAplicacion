@@ -534,7 +534,7 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         
     }//GEN-LAST:event_jtfnfAsientoActionPerformed
 
-    private void jbOkAsientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbOkAsientoActionPerformed
+    private void jbOkPulsadoOPinchado(){
         fecha = jtffeFechaAsiento.getFechaAAAAMMDD();
                 
         if(jtfnfAsiento.getText().trim().length() == 0)
@@ -564,38 +564,13 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         if(fecha == DatosComunes.fecUltRegpro && asiento != 99997){
            util.Apariencia.mensajeInformativo(9, "Fecha no permitida!!!"); 
         }
+    }
+    private void jbOkAsientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbOkAsientoActionPerformed
+        jbOkPulsadoOPinchado();
     }//GEN-LAST:event_jbOkAsientoActionPerformed
 
     private void jbOkAsientoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jbOkAsientoKeyPressed
-        fecha = jtffeFechaAsiento.getFechaAAAAMMDD();
-                
-        if(jtfnfAsiento.getText().trim().length() == 0)
-            jtfnfAsiento.setText("0");
-        
-        asiento = Integer.valueOf(jtfnfAsiento.getText().trim());
-
-        // Si el campo de asiento está vacío o no existe el asiento que pretendemos visualizar, busca el primero libre.
-        if (asiento == 0 || util.MovimientosContables.existeMovimiento(DatosComunes.centroCont, fecha, asiento) == false) {
-            // Ponemos el número del primer asiento libre
-            jtfnfAsiento.setText(String.valueOf(util.MovimientosContables.buscaPrimeroLibreEnDia(DatosComunes.centroCont, fecha)));
-            // Borramos las lineas del asiento, está vacío
-            modeloTabla.setRowCount(0);
-            
-        } else {
-            if (util.MovimientosContables.existeMovimiento(DatosComunes.centroCont, fecha, asiento) == true) {
-                vectorLineaMovimientos = MovimientosContables.leeAsiento(DatosComunes.centroCont, fecha, asiento);
-                displayLineasAsiento();
-                System.out.println("Apuntes en el asiento: " + vectorLineaMovimientos.size());
-            }
-        }
-        
-        if(fecha <= DatosComunes.fecUltCierre || fecha < DatosComunes.fecUltRegpro){
-           util.Apariencia.mensajeInformativo(9, "Fecha no permitida!!!");
-        }
-        
-        if(fecha == DatosComunes.fecUltRegpro && asiento != 99997){
-           util.Apariencia.mensajeInformativo(9, "Fecha no permitida!!!"); 
-        }
+        jbOkPulsadoOPinchado();
     }//GEN-LAST:event_jbOkAsientoKeyPressed
     
     private void displayLineasAsiento(){
