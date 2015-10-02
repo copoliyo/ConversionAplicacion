@@ -556,14 +556,21 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
                 System.out.println("Apuntes en el asiento: " + vectorLineaMovimientos.size());
             }
         }
-        
-        if(fecha <= DatosComunes.fecUltCierre || fecha < DatosComunes.fecUltRegpro){
-           util.Apariencia.mensajeInformativo(9, "Fecha no permitida!!!");
+
+        // Comprobamos que no queramos meter un asiento en una fecha anterior al cierre
+        if (fecha <= DatosComunes.fecUltCierre || fecha < DatosComunes.fecUltRegpro) {
+            util.Apariencia.mensajeInformativo(9, "Fecha no permitida!!!");
+        } else {
+            // Podemos meter/editar un asiento de Rgularización Provisional (99997) en la fecha de la
+            // última Regularización Provisional       
+            if (fecha == DatosComunes.fecUltRegpro && asiento != 99997) {
+                util.Apariencia.mensajeInformativo(9, "Fecha no permitida!!!");
+            }else{
+            // Llegados aquí, podemos empezar a meter apuntes nuevos.    
+            }
         }
         
-        if(fecha == DatosComunes.fecUltRegpro && asiento != 99997){
-           util.Apariencia.mensajeInformativo(9, "Fecha no permitida!!!"); 
-        }
+        
     }
     private void jbOkAsientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbOkAsientoActionPerformed
         jbOkPulsadoOPinchado();
