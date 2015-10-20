@@ -39,10 +39,12 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
     
     // Variables globales para cada asiento
     int asiento = 0;
-    int fecha = 0;
-    boolean asientoNuevo = true;
+    int fecha = 0;    
     int numeroApunte = 0;
     int numeroTotalApuntes = 0;
+    double cuadreAsiento = 0.0;
+    boolean asientoNuevo = true;
+    boolean asientoIvaAutomatico;
 
     Vector<LineaMovimientoContable> vectorLineaMovimientos;
     
