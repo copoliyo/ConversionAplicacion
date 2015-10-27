@@ -20,6 +20,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import tablas.Cuenta;
 import util.Apariencia;
 import util.Cadena;
 import util.Fecha;
@@ -45,7 +46,8 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
     double cuadreAsiento = 0.0;
     boolean asientoNuevo = true;
     boolean asientoIvaAutomatico;
-
+    Cuenta cuenta = new Cuenta();
+    
     Vector<LineaMovimientoContable> vectorLineaMovimientos;
     
     DefaultTableModel modeloTabla = new DefaultTableModel() {
@@ -83,10 +85,12 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         estableceVisibilidadInicial();
         
         Vector<Component> order;
-        order = new Vector<>(4);
+        order = new Vector<>(6);
         order.add(jtffeFechaAsiento);
         order.add(jtfnfAsiento);
         order.add(jbOkAsiento);
+        order.add(jtfnfCuenta);
+        order.add(jtfnfDocumento);
         
         MyOFocusTraversalPolicy newPolicy = new MyOFocusTraversalPolicy(order);
         this.setFocusTraversalPolicy(newPolicy);
@@ -165,9 +169,9 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         jtffConcepto.setEnabled(false);
         jtfn2DImporte.setEnabled(false);
         jbOkApunte.setEnabled(false);
-        jlNombreCuenta.setEnabled(false);
-        jlTituloSaldo.setEnabled(false);
-        jlSaldo.setEnabled(false);
+        jlNombreCuenta.setEnabled(true);
+        jlTituloSaldo.setEnabled(true);
+        jlSaldo.setEnabled(true);
         jlCuadre.setEnabled(false);
         jtfnf2DCuadre.setEnabled(false);
         jbAnularAsiento.setEnabled(false);
@@ -326,10 +330,22 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
 
         jlCuenta.setText("Cuenta");
 
+        jtfnfCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfnfCuentaActionPerformed(evt);
+            }
+        });
+
         jbBuscarCuenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BUSCAR.gif"))); // NOI18N
         jbBuscarCuenta.setPreferredSize(new java.awt.Dimension(25, 25));
 
         jlDocumento.setText("Documento");
+
+        jtfnfDocumento.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtfnfDocumentoFocusGained(evt);
+            }
+        });
 
         jlClave.setText("Clave");
 
@@ -402,9 +418,7 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
                         .addGap(10, 10, 10)
                         .addComponent(jtfnf2DCuadre, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(jlCuenta)
-                        .addGap(108, 108, 108)
+                        .addGap(177, 177, 177)
                         .addComponent(jlDocumento)
                         .addGap(10, 10, 10)
                         .addComponent(jlClave)
@@ -419,7 +433,9 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
                                 .addComponent(jbSalir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jbAnularAsiento))
-                            .addComponent(jtfnfCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jlCuenta)
+                                .addComponent(jtfnfCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
@@ -496,7 +512,8 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
                         .addComponent(jbAnularApunte)
                         .addComponent(jbModificarApunte)
                         .addComponent(jbMovimientos)
-                        .addComponent(jbPrevisiones))))
+                        .addComponent(jbPrevisiones)))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
@@ -537,6 +554,10 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
     }//GEN-LAST:event_jtfnfAsientoActionPerformed
 
     private void jbOkPulsadoOPinchado(){
+        
+        jbAnularAsiento.setEnabled(false);
+        jbAnularApunte.setEnabled(false);
+        
         fecha = jtffeFechaAsiento.getFechaAAAAMMDD();
                 
         if(jtfnfAsiento.getText().trim().length() == 0)
@@ -552,9 +573,12 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
             modeloTabla.setRowCount(0);
             
         } else {
+            // Si existe el asiento lo visualizamos
             if (util.MovimientosContables.existeMovimiento(DatosComunes.centroCont, fecha, asiento) == true) {
                 vectorLineaMovimientos = MovimientosContables.leeAsiento(DatosComunes.centroCont, fecha, asiento);
                 displayLineasAsiento();
+                jbAnularAsiento.setEnabled(true);
+                jbAnularApunte.setEnabled(true);
                 System.out.println("Apuntes en el asiento: " + vectorLineaMovimientos.size());
             }
         }
@@ -568,7 +592,25 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
             if (fecha == DatosComunes.fecUltRegpro && asiento != 99997) {
                 util.Apariencia.mensajeInformativo(9, "Fecha no permitida!!!");
             }else{
-            // Llegados aquí, podemos empezar a meter apuntes nuevos.    
+            // Llegados aquí, podemos empezar a meter apuntes nuevos. 
+                jbAnularAsiento.setEnabled(true);
+                jbAnularApunte.setEnabled(true);
+                
+                jlCuenta.setEnabled(true);
+                jlDocumento.setEnabled(true);
+                jlClave.setEnabled(true);
+                jlConcepto.setEnabled(true);
+                jlImporte.setEnabled(true);
+                jtfnfCuenta.setEnabled(true);
+                jbBuscarCuenta.setEnabled(true);
+                jtfnfDocumento.setEnabled(true);
+                jtfnfClave.setEnabled(true);
+                jbBuscarClave.setEnabled(true);
+                jtffConcepto.setEnabled(true);
+                jtfn2DImporte.setEnabled(true);
+                jbOkApunte.setEnabled(true);
+                
+                jtfnfCuenta.requestFocus();
             }
         }
         
@@ -581,6 +623,33 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
     private void jbOkAsientoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jbOkAsientoKeyPressed
         jbOkPulsadoOPinchado();
     }//GEN-LAST:event_jbOkAsientoKeyPressed
+
+    private void jtfnfCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnfCuentaActionPerformed
+        // TODO add your handling code here:
+        String strCuenta = "";       
+        
+        strCuenta = jtfnfCuenta.getText().trim();
+        if (strCuenta.length() > 0) {
+            if (cuenta.existeCuenta(strCuenta, DatosComunes.centroCont)) {
+                cuenta.read(strCuenta, DatosComunes.centroCont);
+                jlNombreCuenta.setText(cuenta.getTitulo());
+                jlSaldo.setText(String.valueOf(cuenta.getSaldo()));
+                jtfnfDocumento.requestFocus();
+            } else {
+                util.Apariencia.mensajeInformativo(5, "Cuenta inexistente!!!");
+                jtfnfCuenta.requestFocus();
+            }
+        }else{            
+            util.Apariencia.mensajeInformativo(5, "Cuenta requerida!!!");                        
+        }
+    }//GEN-LAST:event_jtfnfCuentaActionPerformed
+
+    private void jtfnfDocumentoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnfDocumentoFocusGained
+        System.out.println("Cuenta : '" + cuenta.getCuenta() + "'");
+        
+        if(cuenta.getCuenta().trim().length() == 0)
+            jtfnfCuenta.requestFocus();
+    }//GEN-LAST:event_jtfnfDocumentoFocusGained
     
     private void displayLineasAsiento(){
         

@@ -44,9 +44,7 @@
                       <Component id="jtfnf2DCuadre" min="-2" pref="116" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
-                      <Component id="jlCuenta" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="108" pref="108" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="177" max="-2" attributes="0"/>
                       <Component id="jlDocumento" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                       <Component id="jlClave" min="-2" max="-2" attributes="0"/>
@@ -63,7 +61,10 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jbAnularAsiento" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jtfnfCuenta" min="-2" pref="100" max="-2" attributes="0"/>
+                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                              <Component id="jlCuenta" min="-2" max="-2" attributes="0"/>
+                              <Component id="jtfnfCuenta" min="-2" pref="100" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
@@ -158,6 +159,7 @@
                       <Component id="jbPrevisiones" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
+              <EmptySpace pref="15" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -274,6 +276,9 @@
       </Properties>
     </Component>
     <Component class="util.JTextFieldNumeroFijo" name="jtfnfCuenta">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtfnfCuentaActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldNumeroFijo(9)"/>
       </AuxValues>
@@ -294,6 +299,9 @@
       </Properties>
     </Component>
     <Component class="util.JTextFieldNumeroFijo" name="jtfnfDocumento">
+      <Events>
+        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtfnfDocumentoFocusGained"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldNumeroFijo(5)"/>
       </AuxValues>
