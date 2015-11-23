@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import procesos.EntradaAsientosContables;
+import procesos.ReactualizacionContable;
 /**
  *
  * @author Txus
@@ -47,6 +48,7 @@ public class TestConsultasContables extends javax.swing.JFrame {
         jbIndiceMovimientosContables = new javax.swing.JButton();
         jbIndiceMovContablesPaginado = new javax.swing.JButton();
         jbEntradaAsientosContables = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -92,6 +94,13 @@ public class TestConsultasContables extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Reactualización Contable");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -114,7 +123,9 @@ public class TestConsultasContables extends javax.swing.JFrame {
                         .addComponent(jbSalir))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(111, 111, 111)
-                        .addComponent(jbEntradaAsientosContables)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton1)
+                            .addComponent(jbEntradaAsientosContables))))
                 .addContainerGap(97, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -130,7 +141,9 @@ public class TestConsultasContables extends javax.swing.JFrame {
                 .addComponent(jbIndiceMovContablesPaginado)
                 .addGap(18, 18, 18)
                 .addComponent(jbEntradaAsientosContables)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addGap(33, 33, 33)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
                 .addComponent(jbSalir)
                 .addGap(27, 27, 27))
         );
@@ -187,6 +200,12 @@ public class TestConsultasContables extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jbEntradaAsientosContablesActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        ReactualizacionContable rc = new ReactualizacionContable();
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -230,6 +249,7 @@ public class TestConsultasContables extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jbConsultaPlanContable;
     private javax.swing.JButton jbEntradaAsientosContables;
     private javax.swing.JButton jbIndiceMovContablesPaginado;
