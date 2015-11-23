@@ -16,11 +16,22 @@ public class Fecha{
 		dia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);			
 	}		
 	
-	public Fecha(String strFechaDDpMMpAA){
-		
+	public Fecha(String strFechaAAAAMMDD){
+            // Si pasamos una fecha en formato AAAAMMDD, la descomponemos e 
+            // inicializamos la clase
+            
+            if(strFechaAAAAMMDD.length() == 8){
+                anio = Integer.valueOf(strFechaAAAAMMDD.substring(0,4));
+                mes = Integer.valueOf(strFechaAAAAMMDD.substring(4, 6));
+                dia = Integer.valueOf(strFechaAAAAMMDD.substring(6, 8));
+            }else{
+                // No está en un formato AAAAMMDD válido
+                anio = 0;
+                mes = 0;
+                dia = 0;
+            }		
 	}
-	
-	
+		
         public int fechaDiaHoy(){
 		int fecha = 0;
 		int anio, mes, dia;
