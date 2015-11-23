@@ -6,6 +6,7 @@ import general.MysqlConnect;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 
@@ -97,6 +98,33 @@ public class DebeHaber {
 		}
 	}
 	
+        public int delete(String strClave) {
+            int registrosBorrados = 0;
+
+            Statement ps = null;
+
+            String sqlDelete = "DELETE FROM DEBHAB WHERE "
+                    + "EMPRESA = '" + DatosComunes.eEmpresa + "' AND "
+                    + "DEBHAB_CTA_ANYMES = '" + strClave + "'";                    
+
+            try {
+                ps = MysqlConnect.db.conn.createStatement();
+
+                registrosBorrados = ps.executeUpdate(sqlDelete);
+
+            } catch (SQLException e) {
+                registrosBorrados = -1;
+                if (DatosComunes.enDebug) {
+                    JOptionPane.showMessageDialog(null,
+                            "Error en borrado fichero de Debehaber!!!");
+                    e.printStackTrace();
+                }
+            }
+
+            return registrosBorrados;
+        }
+        
+        
 	public String getEmpresa() {
 		return empresa;
 	}
