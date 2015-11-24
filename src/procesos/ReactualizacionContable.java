@@ -26,11 +26,13 @@ public class ReactualizacionContable {
     public static ResultSet rs = null;
     public static MysqlConnect m = null;
     Fecha fechaInicio;
+    int anioHasta, mesHasta;
     
     public ReactualizacionContable(){
         mes = 1;
         anio = 1980;
         apunte = 1;
+        anioHasta = mesHasta = 0;
         // Si existe Fecha Ultima Depuracion Movimientos Contables, utilizamos esa
         // Si no, empezamos siempre desde 01/01/1980        
         if(DatosComunes.fecUltDepmoc != 0)
@@ -40,9 +42,10 @@ public class ReactualizacionContable {
         
         m = MysqlConnect.getDbCon();
         
-        PonerContabSaldoUltDepmov();
-        PonerGradosCuentasCorrectos();
-        BorraAcumuladosDebeHaber();
+        //PonerContabSaldoUltDepmov();
+        //PonerGradosCuentasCorrectos();
+        //BorraAcumuladosDebeHaber();
+        RecalculaDebHabDesdeMovcon();
     }
     
     private void PonerContabSaldoUltDepmov(){
@@ -144,6 +147,135 @@ public class ReactualizacionContable {
                 e1.printStackTrace();
             }
         }
+    }
+    
+    private void RecalculaDebHabDesdeMovcon(){
+        // Con esta sentencia obtendremos el último apunte contable
+        String strSql = "SELECT MAX(MOVCON_FECH_ASTO_APT) FROM MOVCON";
+        String claveFechaAsientoApunte;
+        int diaApunte;
+        
+        // Primero averiguamos el año y el mes del ultimo movimiento contable
+        int numeroDeFilas = BaseDatos.countRows(strSql);
+        if(numeroDeFilas == 1){
+            try {
+                rs = m.query(strSql);
+                rs.next();
+                claveFechaAsientoApunte = String.valueOf(rs.getLong(1));
+                anioHasta = Integer.valueOf(claveFechaAsientoApunte.substring(0, 4));
+                mesHasta = Integer.valueOf(claveFechaAsientoApunte.substring(4, 6));
+                diaApunte = Integer.valueOf(claveFechaAsientoApunte.substring(6, 8));
+                System.out.println("Clave : " + claveFechaAsientoApunte + " Año: " + anioHasta + "  Mes: " + mesHasta + "  Día: " + diaApunte);
+                rs.close();
+            } catch (SQLException e) {
+                                
+                if (DatosComunes.enDebug) {
+                    e.printStackTrace();
+                }
+                System.out.println("Error al leer el último movimiento contable.");
+            }
+        }else{
+            System.out.println("Fallo al leer el último registro de Movimientos Contables");
+        }
+        
+        // Vamos a ir totalizando mes a mes los movimientos contables en el DebHab correspondiente
+        anio = fechaInicio.getAnio();
+        mes = fechaInicio.getMes();
+        
+        // Vamos a recorrer todas las cuentas una a una y por cada una de ellas sumaremos 
+        // los movimientos contables mes a mes para el DEBE y el HABER, si los dos son 0 ->
+        // no hay que grabar nada en el DEBHAB
+        ResultSet rsCuentas = null;
+        ResultSet rsMovimiento = null;
+        Cuenta cuenta = new Cuenta();
+        String strSqlLeeCuentas = "SELECT * FROM CONTAB";
+        String strSqlLeeMoviento = "";
+        double debe, haber;
+        
+        numeroDeFilas = BaseDatos.countRows(strSqlLeeCuentas);
+        if (numeroDeFilas > 0) {
+            try {
+                rsCuentas = m.query(strSqlLeeCuentas);
+                // Recorremos cada cuenta
+                while (rsCuentas.next() == true) {
+                    
+                    cuenta.read(rsCuentas);
+
+                    System.out.println("Cuenta: " + cuenta.getCuenta());
+                    // Recorremos cada mes para esa cuenta
+                    while (anio <= anioHasta) {
+                        if ((anio == anioHasta && mes <= mesHasta) || anio < anioHasta) {
+                            debe = haber = 0.0;
+                            // DEBE cuentas de primer y segundo grado
+                            if (cuenta.getGrado().equalsIgnoreCase("1") || cuenta.getGrado().equalsIgnoreCase("2")) {
+                                strSqlLeeMoviento = "SELECT SUM(MOVCON_IMPORTE) FROM MOVCON WHERE "
+                                        + "MOVCON_CUENTA LIKE '" + cuenta.getCuenta() + "%' AND "
+                                        + "MOVCON_CLAVE < 50 AND "
+                                        + "MOVCON_FECH_ASTO_APT LIKE '" + String.format("%04d%02d", anio, mes) + "%'";
+                            }else{
+                                strSqlLeeMoviento = "SELECT SUM(MOVCON_IMPORTE) FROM MOVCON WHERE "
+                                        + "MOVCON_CUENTA LIKE '" + cuenta.getCuenta() + "' AND "
+                                        + "MOVCON_CLAVE < 50 AND "
+                                        + "MOVCON_FECH_ASTO_APT LIKE '" + String.format("%04d%02d", anio, mes) + "%'";
+                            }
+                                
+                            rsMovimiento = m.query(strSqlLeeMoviento);
+                            // Si tiene movimientos con esas condiciones
+                            if(rsMovimiento.next()){
+                                debe = rsMovimiento.getDouble(1);
+                            }else{
+                                // No tiene movimientos con esas condiciones
+                                debe = 0.0;
+                            }
+                            
+                            
+                            // HABER cuentas de primer y segundo grado
+                            if (cuenta.getGrado().equalsIgnoreCase("1") || cuenta.getGrado().equalsIgnoreCase("2")) {
+                                strSqlLeeMoviento = "SELECT SUM(MOVCON_IMPORTE) FROM MOVCON WHERE "
+                                        + "MOVCON_CUENTA LIKE '" + cuenta.getCuenta() + "%' AND "
+                                        + "MOVCON_CLAVE > 49 AND "
+                                        + "MOVCON_FECH_ASTO_APT LIKE '" + String.format("%04d%02d", anio, mes) + "%'";
+                            }else{
+                                strSqlLeeMoviento = "SELECT SUM(MOVCON_IMPORTE) FROM MOVCON WHERE "
+                                        + "MOVCON_CUENTA LIKE '" + cuenta.getCuenta() + "' AND "
+                                        + "MOVCON_CLAVE > 49 AND "
+                                        + "MOVCON_FECH_ASTO_APT LIKE '" + String.format("%04d%02d", anio, mes) + "%'";
+                            }
+                                
+                            rsMovimiento = m.query(strSqlLeeMoviento);
+                            // Si tiene movimientos con esas condiciones
+                            if(rsMovimiento.next()){
+                                haber = rsMovimiento.getDouble(1);
+                            }else{
+                                // No tiene movimientos con esas condiciones
+                                haber = 0.0;
+                            }
+                            
+                            System.out.println("Cuenta: " + cuenta.getCuenta() + " Año: " + anio + "  Mes: " + mes + "  Debe: " + debe + "  Haber: " + haber);
+                        }
+
+                        mes++;
+                        if (mes > 14) {
+                            anio++;
+                            mes = 1;
+                        }
+                    }
+                }
+
+            } catch (SQLException e) {
+
+                if (DatosComunes.enDebug) {
+                    e.printStackTrace();
+                }
+                System.out.println("Error al leer el último movimiento contable.");
+            }
+        } else {
+            System.out.println("Fallo al leer el último registro de Movimientos Contables");
+        }
+        
+        
+        
+         
     }
 }
 
