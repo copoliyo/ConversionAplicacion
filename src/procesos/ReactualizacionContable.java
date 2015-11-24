@@ -10,8 +10,11 @@ import general.MysqlConnect;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import tablas.Cuenta;
 import tablas.DebeHaber;
+import tablas.MovimientoContable;
 import util.Apariencia;
 import util.BaseDatos;
 import util.Fecha;
@@ -38,14 +41,14 @@ public class ReactualizacionContable {
         if(DatosComunes.fecUltDepmoc != 0)
             fechaInicio = new Fecha(String.valueOf(DatosComunes.fecUltDepmoc));
         else
-            fechaInicio = new Fecha("19800101");
+            fechaInicio = new Fecha("20050101");
         
         m = MysqlConnect.getDbCon();
         
-        //PonerContabSaldoUltDepmov();
-        //PonerGradosCuentasCorrectos();
-        //BorraAcumuladosDebeHaber();
-        RecalculaDebHabDesdeMovcon();
+        PonerContabSaldoUltDepmov();
+        PonerGradosCuentasCorrectos();
+        BorraAcumuladosDebeHaber();
+        recalculaDebHabDesdeMovcon();
     }
     
     private void PonerContabSaldoUltDepmov(){
@@ -54,9 +57,7 @@ public class ReactualizacionContable {
         String strSqlUpdate = "UPDATE CONTAB SET CONTAB_SALDO = CONTAB_SALDO_ULTDEPMOV";
         
         System.out.println("Procedemos a poner el Salde de Ultima depuración de moviemoentos en el Saldo");
-        System.out.println("SQL: '" + strSqlUpdate + "'");
-        
-        
+        System.out.println("SQL: '" + strSqlUpdate + "'");        
         
         int registrosAfectados = 0;
         
@@ -128,8 +129,9 @@ public class ReactualizacionContable {
                 while(rs.next() == true) {
                     dh.read(rs);                                        
                     
+                    System.out.println("'" + dh.getCuentaAñoMes() + "'");
                     anioDh = Integer.valueOf(dh.getCuentaAñoMes().substring(9, 13));
-                    mesDh  = Integer.valueOf(dh.getCuentaAñoMes().substring(13, 15));
+                    mesDh  = Integer.valueOf(dh.getCuentaAñoMes().substring(13, 14));
                     System.out.print("DH Clave: '" + dh.getCuentaAñoMes() + " Año: " + anioDh + "    Mes: " + mesDh);     
                     if(anioDh < fechaInicio.getAnio()){
                         System.out.println("   NO BORRAR");                        
@@ -149,7 +151,80 @@ public class ReactualizacionContable {
         }
     }
     
-    private void RecalculaDebHabDesdeMovcon(){
+    private void recalculaDebHabDesdeMovcon(){
+        
+        int i = 0;
+        String strCuenta, claveMovconFechaAstoApunte;
+        int anioMov, mesMov;
+        int numeroMovimientosLeidos = 0;
+        double movDebe, movHaber;
+        String strSqlMov, strSqlDebHab;
+        MovimientoContable mc = new MovimientoContable();
+        DebeHaber dh = new DebeHaber();
+        ResultSet rsDebHab = null;
+        
+        do{
+            strSqlMov = "SELECT * FROM MOVCON LIMIT 10000 OFFSET " + String.valueOf(i);
+            
+            //numeroMovimientosLeidos = BaseDatos.countRows(strSqlMov);
+            try {
+                System.out.println("i: " + i);
+                rs = m.query(strSqlMov); 
+                rs.last(); 
+                numeroMovimientosLeidos = rs.getRow(); 
+                rs.beforeFirst(); // esto te lo deja como al principio 
+                System.out.println("Registros leidos: " + numeroMovimientosLeidos);
+                // Recorremos el recodSet para ir rellenando la tabla de marcas
+                while (rs.next() == true) {
+                    mc.read(rs);
+                    strCuenta = mc.getCuenta();
+                    claveMovconFechaAstoApunte = String.valueOf(mc.getFechaAsientoApunte());
+                    anioMov = Integer.valueOf(claveMovconFechaAstoApunte.substring(0, 4));
+                    mesMov =  Integer.valueOf(claveMovconFechaAstoApunte.substring(4, 6));
+                    if(mc.getClave() < 50){
+                        movDebe = mc.getImporte();
+                        movHaber = 0.0;
+                    }else{
+                        movDebe = 0.0;
+                        movHaber = mc.getImporte();
+                    }
+                    // Comprobamos 1ue no empiece a procesar de fechas anteriores
+                    if (anioMov > fechaInicio.getAnio() || (anioMov == fechaInicio.getAnio() && mesMov >= fechaInicio.getMes())){
+                        strSqlDebHab = "SELECT * FROM DEBHAB WHERE EMPRESA =  '" + DatosComunes.eEmpresa + "' AND "
+                                + "DEBHAB_CTA_ANYMES = '" + String.format("%1$-9s", strCuenta) + 
+                                String.format("%04d%02d", anioMov, mesMov) + "'";
+                        rsDebHab = m.query(strSqlDebHab);
+                        if (rsDebHab.next()){                            
+                            dh.read(rsDebHab);
+                            dh.setDebe(dh.getDebe() + movDebe);
+                            dh.setHaber(dh.getHaber() + movHaber);
+                            dh.write();
+                            System.out.println("Clave DEBHAB existente: " + dh.getCuentaAñoMes() + "  Debe: " + dh.getDebe() + "  Haber: " + dh.getHaber());                        
+                        }else{
+                            dh.setEmpresa(DatosComunes.eEmpresa);
+                            dh.setCuentaAñoMes(String.format("%1$-9s", strCuenta) + 
+                                String.format("%04d%02d", anioMov, mesMov));
+                            dh.setDebe(dh.getDebe() + movDebe);
+                            dh.setHaber(dh.getHaber() + movHaber);
+                            dh.write();
+                            System.out.println("Clave DEBHAB nueva: " + dh.getCuentaAñoMes() + "  Debe: " + dh.getDebe() + "  Haber: " + dh.getHaber());
+                        }
+                    }
+                    //System.out.println("Movimiento: " + mc.getFechaAsientoApunte());
+                
+                }
+                rs.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ReactualizacionContable.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                                            
+            i = i + 10000;
+        } while (numeroMovimientosLeidos > 0);
+        
+    }
+    
+    
+    private void oldRecalculaDebHabDesdeMovcon(){
         // Con esta sentencia obtendremos el último apunte contable
         String strSql = "SELECT MAX(MOVCON_FECH_ASTO_APT) FROM MOVCON";
         String claveFechaAsientoApunte;
@@ -271,11 +346,9 @@ public class ReactualizacionContable {
             }
         } else {
             System.out.println("Fallo al leer el último registro de Movimientos Contables");
-        }
-        
-        
-        
-         
+        }                                 
     }
+    
+    
 }
 
