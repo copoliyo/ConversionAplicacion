@@ -72,7 +72,7 @@ public class MovimientoContable {
 				enviado = rs.getInt("MOVCON_ENVIADO");
 				fechaBanco = rs.getInt("MOVCON_FECH_BCO");
 				documentoBanco = rs.getInt("MOVCON_DOC_BCO");
-			}
+			}                      
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null,
 			"Error en lectura fichero de MovimientoContable!!!");

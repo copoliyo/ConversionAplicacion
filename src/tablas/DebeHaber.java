@@ -48,13 +48,13 @@ public class DebeHaber {
 			empresa = rs.getString("EMPRESA".trim());
 			cuentaAñoMes = rs.getString("DEBHAB_CTA_ANYMES").trim();
 			debe = rs.getDouble("DEBHAB_DEBE");
-			haber = rs.getDouble("DEBHAB_HABER");
+			haber = rs.getDouble("DEBHAB_HABER"); 
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null,
 			"Error en lectura fichero de DebeHaber!!!");
 			if(DatosComunes.enDebug)
 				e.printStackTrace();
-		}
+		}                                       
 	}
 	
 	public void write(){
