@@ -27,7 +27,7 @@ import util.JOptionPaneConTimeOut;
 public class ReactualizacionContable {
     int mes, anio, apunte;
     public static ResultSet rs = null;
-    public static MysqlConnect m = null;
+    public MysqlConnect m = null;
     Fecha fechaInicio;
     int anioHasta, mesHasta;
     
@@ -155,32 +155,56 @@ public class ReactualizacionContable {
         
         int i = 0;
         String strCuenta, claveMovconFechaAstoApunte;
-        int anioMov, mesMov;
+        int anioMov, mesMov, diaMov, asientoMov;
         int numeroMovimientosLeidos = 0;
         double movDebe, movHaber;
         String strSqlMov, strSqlDebHab;
         MovimientoContable mc = new MovimientoContable();
         DebeHaber dh = new DebeHaber();
         ResultSet rsDebHab = null;
+        anioMov = mesMov = 0;
+        
+        
         
         do{
-            strSqlMov = "SELECT * FROM MOVCON LIMIT 10000 OFFSET " + String.valueOf(i);
+            strSqlMov = "SELECT * FROM MOVCON LIMIT 100 OFFSET " + String.valueOf(i);
             
             //numeroMovimientosLeidos = BaseDatos.countRows(strSqlMov);
             try {
-                System.out.println("i: " + i);
+                m.conn.close();
+                while(!m.conn.isClosed()){
+                    i = i;
+                }
+                         
+                m.closeCon();
+                m = null;
+                m = MysqlConnect.getDbCon();
+                //while(m.conn.isClosed()){
+                //    i=i;
+                //}
+               
+                //System.out.println("i: " + i);
                 rs = m.query(strSqlMov); 
                 rs.last(); 
                 numeroMovimientosLeidos = rs.getRow(); 
                 rs.beforeFirst(); // esto te lo deja como al principio 
-                System.out.println("Registros leidos: " + numeroMovimientosLeidos);
+                //System.out.println("Registros leidos: " + numeroMovimientosLeidos);
                 // Recorremos el recodSet para ir rellenando la tabla de marcas
                 while (rs.next() == true) {
                     mc.read(rs);
                     strCuenta = mc.getCuenta();
                     claveMovconFechaAstoApunte = String.valueOf(mc.getFechaAsientoApunte());
                     anioMov = Integer.valueOf(claveMovconFechaAstoApunte.substring(0, 4));
-                    mesMov =  Integer.valueOf(claveMovconFechaAstoApunte.substring(4, 6));
+                    mesMov = Integer.valueOf(claveMovconFechaAstoApunte.substring(4, 6));
+                    diaMov = Integer.valueOf(claveMovconFechaAstoApunte.substring(6, 8));
+                    asientoMov = Integer.valueOf(claveMovconFechaAstoApunte.substring(8, 13));
+                    // Por los asientos de Regularizacion (13) y de Cierre (14)
+                    if(mesMov == 12 && diaMov == 31){
+                        if(asientoMov == 99998)
+                            mesMov = 13;
+                        if(asientoMov == 99999)
+                            mesMov = 14;
+                    }
                     if(mc.getClave() < 50){
                         movDebe = mc.getImporte();
                         movHaber = 0.0;
@@ -188,7 +212,7 @@ public class ReactualizacionContable {
                         movDebe = 0.0;
                         movHaber = mc.getImporte();
                     }
-                    // Comprobamos 1ue no empiece a procesar de fechas anteriores
+                    // Comprobamos que no empiece a procesar de fechas anteriores
                     if (anioMov > fechaInicio.getAnio() || (anioMov == fechaInicio.getAnio() && mesMov >= fechaInicio.getMes())){
                         strSqlDebHab = "SELECT * FROM DEBHAB WHERE EMPRESA =  '" + DatosComunes.eEmpresa + "' AND "
                                 + "DEBHAB_CTA_ANYMES = '" + String.format("%1$-9s", strCuenta) + 
@@ -199,26 +223,76 @@ public class ReactualizacionContable {
                             dh.setDebe(dh.getDebe() + movDebe);
                             dh.setHaber(dh.getHaber() + movHaber);
                             dh.write();
-                            System.out.println("Clave DEBHAB existente: " + dh.getCuentaAñoMes() + "  Debe: " + dh.getDebe() + "  Haber: " + dh.getHaber());                        
+                            //System.out.println("Clave DEBHAB existente: " + dh.getCuentaAñoMes() + "  Debe: " + dh.getDebe() + "  Haber: " + dh.getHaber());                        
                         }else{
                             dh.setEmpresa(DatosComunes.eEmpresa);
                             dh.setCuentaAñoMes(String.format("%1$-9s", strCuenta) + 
                                 String.format("%04d%02d", anioMov, mesMov));
+                            dh.setDebe(movDebe);
+                            dh.setHaber(movHaber);
+                            dh.write();
+                            //System.out.println("Clave DEBHAB nueva: " + dh.getCuentaAñoMes() + "  Debe: " + dh.getDebe() + "  Haber: " + dh.getHaber());
+                        }
+                        //rsDebHab.close();                        
+                        //rsDebHab = null;
+                        // Ahora hay que hacer las cuentas superiores
+                        // Segundo grado
+                        strCuenta = strCuenta.substring(0, 5);
+                        strSqlDebHab = "SELECT * FROM DEBHAB WHERE EMPRESA =  '" + DatosComunes.eEmpresa + "' AND "
+                                + "DEBHAB_CTA_ANYMES = '" + String.format("%1$-9s", strCuenta) + 
+                                String.format("%04d%02d", anioMov, mesMov) + "'";
+                        rsDebHab = m.query(strSqlDebHab);
+                        if (rsDebHab.next()){                            
+                            dh.read(rsDebHab);
                             dh.setDebe(dh.getDebe() + movDebe);
                             dh.setHaber(dh.getHaber() + movHaber);
                             dh.write();
-                            System.out.println("Clave DEBHAB nueva: " + dh.getCuentaAñoMes() + "  Debe: " + dh.getDebe() + "  Haber: " + dh.getHaber());
+                            //System.out.println("Clave DEBHAB existente: " + dh.getCuentaAñoMes() + "  Debe: " + dh.getDebe() + "  Haber: " + dh.getHaber());                        
+                        }else{
+                            dh.setEmpresa(DatosComunes.eEmpresa);
+                            dh.setCuentaAñoMes(String.format("%1$-9s", strCuenta) + 
+                                String.format("%04d%02d", anioMov, mesMov));
+                            dh.setDebe(movDebe);
+                            dh.setHaber(movHaber);
+                            dh.write();
+                            //System.out.println("Clave DEBHAB nueva: " + dh.getCuentaAñoMes() + "  Debe: " + dh.getDebe() + "  Haber: " + dh.getHaber());
                         }
+                        //rsDebHab.close();                        
+                        //rsDebHab = null;
+                        // Primer Grado
+                        strCuenta = strCuenta.substring(0, 3);
+                        strSqlDebHab = "SELECT * FROM DEBHAB WHERE EMPRESA =  '" + DatosComunes.eEmpresa + "' AND "
+                                + "DEBHAB_CTA_ANYMES = '" + String.format("%1$-9s", strCuenta) + 
+                                String.format("%04d%02d", anioMov, mesMov) + "'";
+                        rsDebHab = m.query(strSqlDebHab);
+                        if (rsDebHab.next()){                            
+                            dh.read(rsDebHab);
+                            dh.setDebe(dh.getDebe() + movDebe);
+                            dh.setHaber(dh.getHaber() + movHaber);
+                            dh.write();
+                            //System.out.println("Clave DEBHAB existente: " + dh.getCuentaAñoMes() + "  Debe: " + dh.getDebe() + "  Haber: " + dh.getHaber());                        
+                        }else{
+                            dh.setEmpresa(DatosComunes.eEmpresa);
+                            dh.setCuentaAñoMes(String.format("%1$-9s", strCuenta) + 
+                                String.format("%04d%02d", anioMov, mesMov));
+                            dh.setDebe(movDebe);
+                            dh.setHaber(movHaber);
+                            dh.write();
+                            //System.out.println("Clave DEBHAB nueva: " + dh.getCuentaAñoMes() + "  Debe: " + dh.getDebe() + "  Haber: " + dh.getHaber());
+                        }
+                        rsDebHab.close();                        
+                        rsDebHab = null;
                     }
                     //System.out.println("Movimiento: " + mc.getFechaAsientoApunte());
                 
                 }
                 rs.close();
+                rs = null;
             } catch (SQLException ex) {
                 Logger.getLogger(ReactualizacionContable.class.getName()).log(Level.SEVERE, null, ex);
             }
-                                            
-            i = i + 10000;
+            System.out.println("Año: " + anioMov + "  Mes: " + mesMov);
+            i = i + 100;
         } while (numeroMovimientosLeidos > 0);
         
     }
