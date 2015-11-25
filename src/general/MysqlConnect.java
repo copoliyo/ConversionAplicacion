@@ -2,6 +2,8 @@ package general;
 
 import com.mysql.jdbc.Connection;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
@@ -35,12 +37,24 @@ public final class MysqlConnect {
 	 * 
 	 * @return MysqlConnect Database connection object
 	 */
-	public static synchronized MysqlConnect getDbCon() {
+	public static synchronized MysqlConnect getDbCon() {            
 		if (db == null) {
 			db = new MysqlConnect();
 		}
 		return db;
 
+	}
+        
+        public void closeCon() {
+		if (db != null) {                                         
+                    try {
+                        db.conn.close();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(MysqlConnect.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    db = null;                        
+                    
+		}		
 	}
 
 	/**
