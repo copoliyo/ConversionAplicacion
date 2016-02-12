@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package procesos;
-//
+///
 
 import general.DatosComunes;
 import general.MysqlConnect;
