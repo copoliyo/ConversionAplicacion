@@ -2,7 +2,6 @@ package general;
 
 import javax.swing.*;
 
-import org.jvnet.substance.SubstanceLookAndFeel;
 
 import java.awt.*;
  

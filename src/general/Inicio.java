@@ -13,14 +13,11 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.jvnet.substance.SubstanceLookAndFeel;
 
 import consultasMantenimientos.ConManProveedor;
 
 
 import tablas.Acceso;
-import util.Apariencia;
-import util.BaseDatos;
 
 
 public class Inicio extends JFrame {
