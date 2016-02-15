@@ -314,6 +314,7 @@ public class ReactualizacionContableOptimizado {
             i = i + 10000;
         } while (numeroMovimientosLeidos > 0);
         
+         System.out.println("Guardando valosres de DebHab en BD");
         // Recorremos el mapa
         // de paso lo grabamos en DEBHAB y actualizamos los saldos de las cuentas
         Cuenta cuenta = new Cuenta();
@@ -331,11 +332,12 @@ public class ReactualizacionContableOptimizado {
             // Ahora ponemos el 
             
         
-            System.out.println(value.cuentaAñoMes + " " + value.debe + " " + value.haber);
+            //System.out.println(value.cuentaAñoMes + " " + value.debe + " " + value.haber);
         }
         
         // Intentamos recorrer el mapa por clave para grabar los saldos        
                         
+        System.out.println("Reactualizando desde DebHab");
         Map mapOrdenado = new TreeMap(mapaDh);
         Set ref = mapOrdenado.keySet();
         Iterator it = ref.iterator();
@@ -345,9 +347,24 @@ public class ReactualizacionContableOptimizado {
                 cuenta.read(auxDh.cuentaAñoMes.substring(0,9).trim(), DatosComunes.centroCont);
                 cuenta.setSaldo(cuenta.getSaldo() +  auxDh.debe - auxDh.haber);
                 cuenta.write();            
-                System.out.println((String)it.next() + " Saldo : " + cuenta.getSaldo());
+                //System.out.println(cuenta.getCuenta() + " Saldo : " + cuenta.getSaldo());
             }else{
-               System.out.println("No existe cuenta: " + auxDh.cuentaAñoMes.substring(0,9).trim());
+               System.out.println("No existe cuenta: " + auxDh.cuentaAñoMes.substring(0,9).trim() + " SE CREA!!!");
+               cuenta.setActivo(1);
+               cuenta.setCentro(DatosComunes.centroCont);
+               cuenta.setCuenta(auxDh.cuentaAñoMes.substring(0,9).trim());
+               cuenta.setEmpresa(DatosComunes.eEmpresa);
+               cuenta.setExtenOtroFichero(0);
+               if(cuenta.getCuenta().trim().length() == 3)
+                    cuenta.setGrado("1");
+               if(cuenta.getCuenta().trim().length() > 3 && cuenta.getCuenta().trim().length() < 8)
+                    cuenta.setGrado("2");
+               if(cuenta.getCuenta().trim().length() > 7)
+                    cuenta.setGrado("3");
+               cuenta.setSaldo(auxDh.debe - auxDh.haber);
+               cuenta.setSaldoUltimaDepuracion(0.0);
+               cuenta.setTitulo("Cuenta creada en React. Contable"); 
+               cuenta.write();
             }
             
         }
