@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.JFileChooser" name="jFileChooser1">
+    </Component>
+  </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -44,42 +48,59 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jlEmpresasDisponibles" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jScrollPane3" min="-2" pref="53" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="73" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jbIniciarConversion" min="-2" max="-2" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Component id="jlEmpresaAConvertir" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="jtffEmpresaAConvertir" min="-2" pref="32" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="jScrollPane3" min="-2" pref="196" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jbIniciarConversion" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <Component id="jlSchema" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                              <Component id="jtfSchema" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="jlEmpresaAConvertir" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Component id="jtffEmpresaAConvertir" min="-2" pref="32" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <EmptySpace min="0" pref="116" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="jlEmpresasDisponibles" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace pref="89" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jlFicherosPosibles" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jScrollPane1" min="-2" pref="125" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jbPasarTodos" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                   <Component id="jbQuitarTodos" max="32767" attributes="0"/>
-                                  <Component id="jbPasarUno" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jbQuitarUno" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jbPasarUno" alignment="1" max="32767" attributes="0"/>
+                                  <Component id="jbPasarTodos" alignment="1" max="32767" attributes="0"/>
+                                  <Component id="jbQuitarUno" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jlFicherosQueSeVanAConvertir" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                              <Component id="jbSalir" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
                               <Component id="jScrollPane2" min="-2" pref="136" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jbSalir" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="jlFicherosQueSeVanAConvertir" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -104,50 +125,61 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jlFicherosQueSeVanAConvertir" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jlEmpresasDisponibles" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jlEmpresasDisponibles" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jlFicherosPosibles" min="-2" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jlEmpresaAConvertir" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jtffEmpresaAConvertir" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jlFicherosPosibles" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jlFicherosQueSeVanAConvertir" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="jbPasarTodos" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jbQuitarTodos" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jbPasarUno" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jbQuitarUno" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jScrollPane1" max="32767" attributes="0"/>
-                                  <Component id="jScrollPane2" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jlEmpresaAConvertir" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jtffEmpresaAConvertir" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="jScrollPane3" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jlSchema" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jtfSchema" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Component id="jbPasarTodos" alignment="1" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jbQuitarTodos" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jbPasarUno" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="0" pref="13" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jbIniciarConversion" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jbSalir" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jbQuitarUno" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
-              </Group>
-              <EmptySpace pref="44" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jbIniciarConversion" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jbSalir" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jScrollPane3" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="jScrollPane2" alignment="0" pref="186" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
           </Group>
@@ -166,6 +198,9 @@
       </Properties>
     </Component>
     <Component class="util.JTextFieldFijo" name="jtffDirectorioFicherosDatos">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtffDirectorioFicherosDatosActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldFijo(255)"/>
       </AuxValues>
@@ -184,86 +219,10 @@
       <SubComponents>
         <Component class="javax.swing.JList" name="jListFicherosPosibles">
           <Properties>
-            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="76">
-                <StringItem index="0" value="CPCALL"/>
-                <StringItem index="1" value="CPPOST"/>
-                <StringItem index="2" value="CPPAIS"/>
-                <StringItem index="3" value="CPPOBL"/>
-                <StringItem index="4" value="CPPROV"/>
-                <StringItem index="5" value="2DADIR"/>
-                <StringItem index="6" value="ABNSTK"/>
-                <StringItem index="7" value="ACCCEN"/>
-                <StringItem index="8" value="ACCESO"/>
-                <StringItem index="9" value="ACCEST"/>
-                <StringItem index="10" value="ACCHST"/>
-                <StringItem index="11" value="ACCPRG"/>
-                <StringItem index="12" value="ACCUSU"/>
-                <StringItem index="13" value="AGENDA"/>
-                <StringItem index="14" value="ALBPRV"/>
-                <StringItem index="15" value="ARTCEN"/>
-                <StringItem index="16" value="ARTCLO"/>
-                <StringItem index="17" value="ARTEAN"/>
-                <StringItem index="18" value="ARTEQV"/>
-                <StringItem index="19" value="ASTAUC"/>
-                <StringItem index="20" value="ASTAUT"/>
-                <StringItem index="21" value="BANCOS"/>
-                <StringItem index="22" value="BCOIND"/>
-                <StringItem index="23" value="CACEST"/>
-                <StringItem index="24" value="CALVAR"/>
-                <StringItem index="25" value="CARTCA"/>
-                <StringItem index="26" value="CARTCD"/>
-                <StringItem index="27" value="CARTCF"/>
-                <StringItem index="28" value="CEMAGF"/>
-                <StringItem index="29" value="CEPTOS"/>
-                <StringItem index="30" value="CLCEPC"/>
-                <StringItem index="31" value="CLIENT"/>
-                <StringItem index="32" value="CLITES"/>
-                <StringItem index="33" value="COBROS"/>
-                <StringItem index="34" value="COMPON"/>
-                <StringItem index="35" value="CONTAB"/>
-                <StringItem index="36" value="CPZONA"/>
-                <StringItem index="37" value="DEBHAB"/>
-                <StringItem index="38" value="EFECOB"/>
-                <StringItem index="39" value="EFEPAG"/>
-                <StringItem index="40" value="EXTFIN"/>
-                <StringItem index="41" value="FACAUT"/>
-                <StringItem index="42" value="FACCEP"/>
-                <StringItem index="43" value="FACEMI"/>
-                <StringItem index="44" value="FACLIN"/>
-                <StringItem index="45" value="FACREC"/>
-                <StringItem index="46" value="FORCOB"/>
-                <StringItem index="47" value="GESCEP"/>
-                <StringItem index="48" value="GESCPN"/>
-                <StringItem index="49" value="INDCAR"/>
-                <StringItem index="50" value="INDCEN"/>
-                <StringItem index="51" value="INDINF"/>
-                <StringItem index="52" value="LINVAR"/>
-                <StringItem index="53" value="MGFGST"/>
-                <StringItem index="54" value="MOACEP"/>
-                <StringItem index="55" value="MOCCEP"/>
-                <StringItem index="56" value="MOVART"/>
-                <StringItem index="57" value="MOVCON"/>
-                <StringItem index="58" value="MOVIMP"/>
-                <StringItem index="59" value="NOTASF"/>
-                <StringItem index="60" value="OFERTA"/>
-                <StringItem index="61" value="PARTIE"/>
-                <StringItem index="62" value="PROVAC"/>
-                <StringItem index="63" value="REPRES"/>
-                <StringItem index="64" value="RUTCLI"/>
-                <StringItem index="65" value="SATREP"/>
-                <StringItem index="66" value="SATSAT"/>
-                <StringItem index="67" value="TICKET"/>
-                <StringItem index="68" value="TICKOT"/>
-                <StringItem index="69" value="TIPAGO"/>
-                <StringItem index="70" value="TIPCLI"/>
-                <StringItem index="71" value="TITCOB"/>
-                <StringItem index="72" value="TOTCOB"/>
-                <StringItem index="73" value="TOTPAG"/>
-                <StringItem index="74" value="ZONCLI"/>
-                <StringItem index="75" value="SISTEM"/>
-              </StringArray>
+            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="modeloFicherosPosibles" type="code"/>
             </Property>
+            <Property name="selectionMode" type="int" value="0"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -290,11 +249,13 @@
       <SubComponents>
         <Component class="javax.swing.JList" name="jListFicherosAConvertir">
           <Properties>
-            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="0"/>
+            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="modeloFicherosAConvertir" type="code"/>
             </Property>
+            <Property name="selectionMode" type="int" value="0"/>
           </Properties>
           <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JList&lt;&gt;(modeloFicherosAConvertir)"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
@@ -317,8 +278,18 @@
             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
               <StringArray count="0"/>
             </Property>
+            <Property name="selectionMode" type="int" value="0"/>
           </Properties>
+          <BindingProperties>
+            <BindingProperty name="selectedElement" source="jListEmpresasDisponibles" sourcePath="${selectedValue}" target="jListEmpresasDisponibles" targetPath="selectedElement" updateStrategy="0" immediately="false">
+              <BindingParameter name="IGNORE_ADJUSTING" value="N"/>
+            </BindingProperty>
+          </BindingProperties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jListEmpresasDisponiblesMouseClicked"/>
+          </Events>
           <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JList&lt;&gt;(modeloEmpresasDisponibles)"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
@@ -338,26 +309,41 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Pasar Todos -&gt;"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbPasarTodosActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbQuitarTodos">
       <Properties>
         <Property name="text" type="java.lang.String" value="Quitar Todos &lt;-"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbQuitarTodosActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbPasarUno">
       <Properties>
         <Property name="text" type="java.lang.String" value="Pasar Uno -&gt;"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbPasarUnoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbQuitarUno">
       <Properties>
         <Property name="text" type="java.lang.String" value="Quitar Uno &lt;-"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbQuitarUnoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbSalir">
       <Properties>
         <Property name="text" type="java.lang.String" value="Salir"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbSalirActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbIniciarConversion">
       <Properties>
@@ -373,6 +359,13 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="..."/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jlSchema">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Schema:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="jtfSchema">
     </Component>
   </SubComponents>
 </Form>

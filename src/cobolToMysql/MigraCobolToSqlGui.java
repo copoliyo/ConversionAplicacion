@@ -5,6 +5,10 @@
  */
 package cobolToMysql;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author Txus
@@ -14,9 +18,33 @@ public class MigraCobolToSqlGui extends javax.swing.JFrame {
     /**
      * Creates new form MigraCobolToSqlGui
      */
+    DefaultListModel modeloEmpresasDisponibles = new DefaultListModel();
+    DefaultListModel modeloFicherosPosibles = new DefaultListModel();
+    DefaultListModel modeloFicherosAConvertir = new DefaultListModel();
+    
     public MigraCobolToSqlGui() {
         initComponents();
+        jtffDirectorioFicherosDatos.setText("C:\\DENAORIGINAL");
+        jtffDirectorioFicherosXfXs.setText("C:\\CONVERSION");
+        cargaFicherosEnModeloFicherosPosibles(); 
+        cargaEmpresasDisponibles();
     }
+    
+    private void cargaFicherosEnModeloFicherosPosibles(){
+        String strFicherosPosibles[] = {"CPCALL", "CPPOST", "CPPAIS", "CPPOBL", "CPPROV", 
+            "2DADIR", "ABNSTK", "ACCCEN", "ACCESO", "ACCEST", "ACCHST", "ACCPRG", "ACCUSU", "AGENDA", "ALBPRV",
+            "ARTCEN", "ARTCLO", "ARTEAN", "ARTEQV", "ASTAUC", "ASTAUT", "BANCOS", "BCOIND", "CACEST", "CALVAR",
+            "CARTCA", "CARTCD", "CARTCF", "CEMAGF", "CEPTOS", "CLCEPC", "CLIENT", "CLITES", "COBROS", "COMPON",
+            "CONTAB", "CPZONA", "DEBHAB", "EFECOB", "EFEPAG", "EXTFIN", "FACAUT", "FACCEP", "FACEMI", "FACLIN",
+            "FACREC", "FORCOB", "GESCEP", "GESCPN", "INDCAR", "INDCEN", "INDINF", "LINVAR", "MGFGST", "MOACEP",
+            "MOCCEP", "MOVART", "MOVCON", "MOVIMP", "NOTASF", "OFERTA", "PARTIE", "PROVAC", "REPRES", "RUTCLI",
+            "SATREP", "SATSAT", "TICKET", "TICKOT", "TIPAGO", "TIPCLI", "TITCOB", "TOTCOB", "TOTPAG", "ZONCLI",
+            "SISTEM"};
+        
+        for(int i = 0; i < strFicherosPosibles.length; i++)
+            modeloFicherosPosibles.addElement(strFicherosPosibles[i]);
+        
+    };
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -26,7 +54,9 @@ public class MigraCobolToSqlGui extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        jFileChooser1 = new javax.swing.JFileChooser();
         jlDirectorioFicherosDatos = new javax.swing.JLabel();
         jlDirectorioFicherosXfXs = new javax.swing.JLabel();
         jtffDirectorioFicherosDatos = new util.JTextFieldFijo(255);
@@ -36,10 +66,10 @@ public class MigraCobolToSqlGui extends javax.swing.JFrame {
         jlFicherosPosibles = new javax.swing.JLabel();
         jlFicherosQueSeVanAConvertir = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jListFicherosAConvertir = new javax.swing.JList<>();
+        jListFicherosAConvertir = new javax.swing.JList<>(modeloFicherosAConvertir);
         jlEmpresasDisponibles = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jListEmpresasDisponibles = new javax.swing.JList<>();
+        jListEmpresasDisponibles = new javax.swing.JList<>(modeloEmpresasDisponibles);
         jlEmpresaAConvertir = new javax.swing.JLabel();
         jtffEmpresaAConvertir = new util.JTextFieldFijo(2);
         jbPasarTodos = new javax.swing.JButton();
@@ -50,6 +80,8 @@ public class MigraCobolToSqlGui extends javax.swing.JFrame {
         jbIniciarConversion = new javax.swing.JButton();
         jbFileChooserFicDatos = new javax.swing.JButton();
         jbFileChooserFicherosXfXs = new javax.swing.JButton();
+        jlSchema = new javax.swing.JLabel();
+        jtfSchema = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,40 +89,82 @@ public class MigraCobolToSqlGui extends javax.swing.JFrame {
 
         jlDirectorioFicherosXfXs.setText("Directorio Ficheros XF/XS");
 
-        jListFicherosPosibles.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "CPCALL", "CPPOST", "CPPAIS", "CPPOBL", "CPPROV", "2DADIR", "ABNSTK", "ACCCEN", "ACCESO", "ACCEST", "ACCHST", "ACCPRG", "ACCUSU", "AGENDA", "ALBPRV", "ARTCEN", "ARTCLO", "ARTEAN", "ARTEQV", "ASTAUC", "ASTAUT", "BANCOS", "BCOIND", "CACEST", "CALVAR", "CARTCA", "CARTCD", "CARTCF", "CEMAGF", "CEPTOS", "CLCEPC", "CLIENT", "CLITES", "COBROS", "COMPON", "CONTAB", "CPZONA", "DEBHAB", "EFECOB", "EFEPAG", "EXTFIN", "FACAUT", "FACCEP", "FACEMI", "FACLIN", "FACREC", "FORCOB", "GESCEP", "GESCPN", "INDCAR", "INDCEN", "INDINF", "LINVAR", "MGFGST", "MOACEP", "MOCCEP", "MOVART", "MOVCON", "MOVIMP", "NOTASF", "OFERTA", "PARTIE", "PROVAC", "REPRES", "RUTCLI", "SATREP", "SATSAT", "TICKET", "TICKOT", "TIPAGO", "TIPCLI", "TITCOB", "TOTCOB", "TOTPAG", "ZONCLI", "SISTEM" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        jtffDirectorioFicherosDatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtffDirectorioFicherosDatosActionPerformed(evt);
+            }
         });
+
+        jListFicherosPosibles.setModel(modeloFicherosPosibles);
+        jListFicherosPosibles.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jListFicherosPosibles);
 
         jlFicherosPosibles.setText("Ficheros que se pueden convertir");
 
         jlFicherosQueSeVanAConvertir.setText("Ficheros que se van a convertir");
 
+        jListFicherosAConvertir.setModel(modeloFicherosAConvertir);
+        jListFicherosAConvertir.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(jListFicherosAConvertir);
 
         jlEmpresasDisponibles.setText("Empresas Disponibles");
 
+        jListEmpresasDisponibles.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jListEmpresasDisponibles, org.jdesktop.beansbinding.ELProperty.create("${selectedValue}"), jListEmpresasDisponibles, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        bindingGroup.addBinding(binding);
+
+        jListEmpresasDisponibles.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jListEmpresasDisponiblesMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(jListEmpresasDisponibles);
 
         jlEmpresaAConvertir.setText("Empresa a Convertir:");
 
         jbPasarTodos.setText("Pasar Todos ->");
+        jbPasarTodos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbPasarTodosActionPerformed(evt);
+            }
+        });
 
         jbQuitarTodos.setText("Quitar Todos <-");
+        jbQuitarTodos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbQuitarTodosActionPerformed(evt);
+            }
+        });
 
         jbPasarUno.setText("Pasar Uno ->");
+        jbPasarUno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbPasarUnoActionPerformed(evt);
+            }
+        });
 
         jbQuitarUno.setText("Quitar Uno <-");
+        jbQuitarUno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbQuitarUnoActionPerformed(evt);
+            }
+        });
 
         jbSalir.setText("Salir");
+        jbSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSalirActionPerformed(evt);
+            }
+        });
 
         jbIniciarConversion.setText("Iniciar Conversión");
 
         jbFileChooserFicDatos.setText("...");
 
         jbFileChooserFicherosXfXs.setText("...");
+
+        jlSchema.setText("Schema:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -113,33 +187,45 @@ public class MigraCobolToSqlGui extends javax.swing.JFrame {
                             .addComponent(jtffDirectorioFicherosDatos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlEmpresasDisponibles)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(73, 73, 73)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jbIniciarConversion)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jlEmpresaAConvertir)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jtffEmpresaAConvertir, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(34, 34, 34)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jbIniciarConversion)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jlSchema)
+                                                .addGap(26, 26, 26)
+                                                .addComponent(jtfSchema))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                .addComponent(jlEmpresaAConvertir)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jtffEmpresaAConvertir, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(0, 116, Short.MAX_VALUE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jlEmpresasDisponibles)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jlFicherosPosibles)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(61, 61, 61)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jbPasarTodos)
+                                .addGap(39, 39, 39)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jbQuitarTodos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jbPasarUno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jbPasarTodos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jbQuitarUno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(83, 83, 83)
+                        .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlFicherosQueSeVanAConvertir)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jbSalir)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbSalir))
+                            .addComponent(jlFicherosQueSeVanAConvertir))
+                        .addGap(15, 15, 15)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -158,44 +244,124 @@ public class MigraCobolToSqlGui extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(39, 39, 39)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlFicherosQueSeVanAConvertir)
-                            .addComponent(jlEmpresasDisponibles)))
+                        .addComponent(jlEmpresasDisponibles))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jlFicherosPosibles)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jlFicherosPosibles)
+                            .addComponent(jlFicherosQueSeVanAConvertir))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlEmpresaAConvertir)
-                            .addComponent(jtffEmpresaAConvertir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jbPasarTodos)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jbQuitarTodos)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jbPasarUno)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jbQuitarUno))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jScrollPane1)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbIniciarConversion)
-                    .addComponent(jbSalir))
+                                .addGap(3, 3, 3)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jlEmpresaAConvertir)
+                                    .addComponent(jtffEmpresaAConvertir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jlSchema)
+                                    .addComponent(jtfSchema, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jbPasarTodos, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(18, 18, 18)
+                        .addComponent(jbQuitarTodos)
+                        .addGap(18, 18, 18)
+                        .addComponent(jbPasarUno)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 13, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jbIniciarConversion)
+                                    .addComponent(jbSalir)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jbQuitarUno)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addComponent(jScrollPane3)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(30, 30, 30))
         );
+
+        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jtffDirectorioFicherosDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtffDirectorioFicherosDatosActionPerformed
+        //String rutaFicherosCobol = jtffDirectorioFicherosDatos.getText().trim();
+        
+        cargaEmpresasDisponibles();                
+    }//GEN-LAST:event_jtffDirectorioFicherosDatosActionPerformed
+
+    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jbSalirActionPerformed
+
+    private void jListEmpresasDisponiblesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListEmpresasDisponiblesMouseClicked
+        jtffEmpresaAConvertir.setText(modeloEmpresasDisponibles.get(jListEmpresasDisponibles.getSelectedIndex()).toString());        
+    }//GEN-LAST:event_jListEmpresasDisponiblesMouseClicked
+
+    private void jbPasarTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPasarTodosActionPerformed
+        
+        modeloFicherosAConvertir.clear();
+        
+        for(int i = 0; i < modeloFicherosPosibles.size(); i++){
+            modeloFicherosAConvertir.addElement(modeloFicherosPosibles.get(i).toString());
+        }                
+    }//GEN-LAST:event_jbPasarTodosActionPerformed
+
+    private void jbQuitarTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQuitarTodosActionPerformed
+        
+        modeloFicherosAConvertir.clear();
+    }//GEN-LAST:event_jbQuitarTodosActionPerformed
+
+    private void jbPasarUnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPasarUnoActionPerformed
+        
+        String strFicheroAPasar = modeloFicherosPosibles.get(jListFicherosPosibles.getSelectedIndex()).toString();
+        
+        if(!modeloFicherosAConvertir.contains(strFicheroAPasar))
+            modeloFicherosAConvertir.addElement(strFicheroAPasar);
+    }//GEN-LAST:event_jbPasarUnoActionPerformed
+
+    private void jbQuitarUnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQuitarUnoActionPerformed
+        
+        int indiceSeleccionado = jListFicherosAConvertir.getSelectedIndex();
+        if(indiceSeleccionado != -1)
+            modeloFicherosAConvertir.removeElementAt(indiceSeleccionado);
+    }//GEN-LAST:event_jbQuitarUnoActionPerformed
+
+    private void cargaEmpresasDisponibles(){
+        String rutaFicherosCobol = jtffDirectorioFicherosDatos.getText().trim();
+    
+        String nombreFichero = "";
+        if (rutaFicherosCobol.length() > 0) {
+            File dir = new File(rutaFicherosCobol);
+            if (dir.exists()) {
+                File[] ficheros = dir.listFiles();
+
+                if (ficheros == null) {
+                    System.out.println("No hay ficheros en el directorio especificado");
+                } else {
+                    modeloEmpresasDisponibles.clear();
+                    for (int x = 0; x < ficheros.length; x++) {
+                        nombreFichero = ficheros[x].toString().toUpperCase();
+                        if (nombreFichero.endsWith("SISTEM")) {
+                            //System.out.println(ficheros[x]);                            
+                            modeloEmpresasDisponibles.addElement(nombreFichero.subSequence(nombreFichero.lastIndexOf("\\") + 1, nombreFichero.lastIndexOf("\\") + 3));
+                        }
+                    }
+                }
+            } else {
+                modeloEmpresasDisponibles.clear();
+                modeloEmpresasDisponibles.addElement("Directorio Inválido!!!");
+            }
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -232,6 +398,7 @@ public class MigraCobolToSqlGui extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JList<String> jListEmpresasDisponibles;
     private javax.swing.JList<String> jListFicherosAConvertir;
     private javax.swing.JList<String> jListFicherosPosibles;
@@ -252,8 +419,11 @@ public class MigraCobolToSqlGui extends javax.swing.JFrame {
     private javax.swing.JLabel jlEmpresasDisponibles;
     private javax.swing.JLabel jlFicherosPosibles;
     private javax.swing.JLabel jlFicherosQueSeVanAConvertir;
+    private javax.swing.JLabel jlSchema;
+    private javax.swing.JTextField jtfSchema;
     private util.JTextFieldFijo jtffDirectorioFicherosDatos;
     private util.JTextFieldFijo jtffDirectorioFicherosXfXs;
     private util.JTextFieldFijo jtffEmpresaAConvertir;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }
