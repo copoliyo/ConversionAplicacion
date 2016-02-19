@@ -1,3 +1,4 @@
+package cobolToMysql;
 
 public class SeparaPalabraCharDiff {
 	public String[] separa(String s){

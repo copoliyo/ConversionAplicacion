@@ -1,3 +1,5 @@
+package cobolToMysql;
+
 // Si la clave es la clave primaria, el primer nombre el el nombre de la clave primaria.
 // Si la clave no es primaria, es una clave alternativa y por tanto, otro indice
 // El nombre de este indice alternativo estará en nombre[0] y el nombre de los campos

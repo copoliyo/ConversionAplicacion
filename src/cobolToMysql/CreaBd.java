@@ -1,8 +1,10 @@
+package cobolToMysql;
+
 import java.sql.*;
 import java.util.StringTokenizer;
 
 public class CreaBd {
-	protected Connection abreBaseDeDatos(Campo c[]) throws SQLException{
+	protected Connection abreBaseDeDatos(Campo c[], String schema) throws SQLException{
 		int resultado = 0;
 		Connection conexion=null;
 		ResultSet rs = null;
@@ -21,7 +23,7 @@ public class CreaBd {
 		try
 		{
 			// Conectamos a la base de datos
-			conexion = DriverManager.getConnection ("jdbc:mysql://localhost:3306/test","root", "copoliyo");
+			conexion = DriverManager.getConnection ("jdbc:mysql://localhost:3306/" + schema, "root", "copoliyo");
 		} catch (Exception e)
 		{
 		   e.printStackTrace();
@@ -64,6 +66,11 @@ public class CreaBd {
 			Statement st = null;
 	        st = conexion.createStatement();
 	        
+                
+                ////////////////////////////////////////////////////////////////
+                // No deberíamos borrar las tablas!!!!!
+                ////////////////////////////////////////////////////////////////
+                
 	        try {
 				s.executeUpdate("DROP TABLE " + nombreTabla[0]);
 			} catch (SQLException e) {
@@ -118,7 +125,7 @@ public class CreaBd {
 	    	  if(DumpCobol.key[numeroClave].unica == true)
 	    		  table = "CREATE UNIQUE INDEX ";
 	    	  
-	    	  table = table + DumpCobol.key[numeroClave].nombre[0] + " ON " + nombreTabla[0] + " (";
+	    	  table = table + DumpCobol.key[numeroClave].nombre[0] + " ON " + nombreTabla[0] + " (EMPRESA, ";
 	    	  int i = 1;
 	    	  while(i < 10 && DumpCobol.key[numeroClave].nombre[i].length() > 0){
 	    		  table = table + xf.obtenClave(DumpCobol.key[numeroClave].nombre[i]) + ",";

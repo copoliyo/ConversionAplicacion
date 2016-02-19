@@ -1,3 +1,5 @@
+package cobolToMysql;
+
 import java.sql.*;
 
 public class DumpCobol {
@@ -9,7 +11,7 @@ public class DumpCobol {
 	 * @param args
 	 * @throws SQLException 
 	 */
-	public void migra(String fichero, String rutaFicheroDatos, String empresa) throws SQLException {
+	public void migra(String fichero, String rutaFicheroDatos, String rutaFicherosXfXs, String empresa, String schema) throws SQLException {
 		int longitudRegistro = 0;
 		//int resultado = 0;
 		
@@ -28,17 +30,17 @@ public class DumpCobol {
 		
 		// Leemos el XF para conocer como están compuestos los campos
 		LeeFicheroXF xf = new LeeFicheroXF();
-		xf.lee(fichero);
+		xf.lee(fichero, rutaFicherosXfXs);
 		// Leemos el XS para averiguar la clave principal y las alternativas.
 		LeeFicheroClaves fc = new LeeFicheroClaves();
-		fc.lee(fichero);
+		fc.lee(fichero, rutaFicherosXfXs);
 		// Leemos el fichero para insertar los valores
 		LeeFichero lf = new LeeFichero();
 		lf.lee(fichero);
 		
 		CreaBd bd = new CreaBd();
 		
-		conexion = bd.abreBaseDeDatos(ccc);
+		conexion = bd.abreBaseDeDatos(ccc, schema);
 		
 		// Preparamos la conexion
 		Statement s=null;
@@ -92,8 +94,8 @@ public class DumpCobol {
 			do{
 				lineaDatos = fd.leerLineaDatos(longitudRegistro);
 				if (lineaDatos != null)
-					ld.decodificaLinea(lineaDatos, conexion);
-				System.out.println("Registro : " + ++i);
+					ld.decodificaLinea(lineaDatos, conexion, empresa);
+				System.out.println("[" + fichero + "]Registro : " + ++i);
 			}while(lineaDatos != null);
 						
 			fd.cerrarFicheroDatos();

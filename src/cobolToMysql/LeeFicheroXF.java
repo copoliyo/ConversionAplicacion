@@ -1,3 +1,5 @@
+package cobolToMysql;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -15,7 +17,7 @@ public class LeeFicheroXF {
 		}
 	}
 	
-	public void lee(String fichero){
+	public void lee(String fichero, String rutaXfXs){
 		File archivo = null;
 		FileReader fr = null;
 		BufferedReader br = null;
@@ -28,7 +30,7 @@ public class LeeFicheroXF {
 		try {
 			// Apertura del fichero y creacion de BufferedReader para poder
 			// hacer una lectura comoda (disponer del metodo readLine()).
-			archivo = new File ("C:\\conversion\\xf" + fichero + ".cbl");
+			archivo = new File (rutaXfXs + "xf" + fichero + ".cbl");
 			fr = new FileReader (archivo);
 			br = new BufferedReader(fr);
 

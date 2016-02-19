@@ -1,3 +1,4 @@
+package cobolToMysql;
 
 public class EstructuraCamposXF {
 	int nivel;

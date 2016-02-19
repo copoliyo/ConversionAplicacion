@@ -1,3 +1,5 @@
+package cobolToMysql;
+
 import java.io.*;
 import java.util.StringTokenizer;
 
@@ -6,7 +8,7 @@ public class LeeFicheroClaves {
 	 * WITH DUPLICATES tiene que ir despues de el ultimo campo. Si no NO FUNCIONA.
 	 */
 	
-	public void lee(String fichero){
+	public void lee(String fichero, String ruta){
 		File archivo = null;
 		FileReader fr = null;
 		BufferedReader br = null;
@@ -20,7 +22,7 @@ public class LeeFicheroClaves {
 		try {
 			// Apertura del fichero y creacion de BufferedReader para poder
 			// hacer una lectura comoda (disponer del metodo readLine()).
-			archivo = new File ("C:\\conversion\\xs" + fichero + ".cbl");
+			archivo = new File (ruta + "xs" + fichero + ".cbl");
 			fr = new FileReader (archivo);
 			br = new BufferedReader(fr);
 

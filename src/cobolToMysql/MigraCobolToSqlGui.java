@@ -5,9 +5,16 @@
  */
 package cobolToMysql;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,6 +28,7 @@ public class MigraCobolToSqlGui extends javax.swing.JFrame {
     DefaultListModel modeloEmpresasDisponibles = new DefaultListModel();
     DefaultListModel modeloFicherosPosibles = new DefaultListModel();
     DefaultListModel modeloFicherosAConvertir = new DefaultListModel();
+    String schema = "test";
     
     public MigraCobolToSqlGui() {
         initComponents();
@@ -28,6 +36,7 @@ public class MigraCobolToSqlGui extends javax.swing.JFrame {
         jtffDirectorioFicherosXfXs.setText("C:\\CONVERSION");
         cargaFicherosEnModeloFicherosPosibles(); 
         cargaEmpresasDisponibles();
+        jtfSchema.setText(schema);
     }
     
     private void cargaFicherosEnModeloFicherosPosibles(){
@@ -159,6 +168,11 @@ public class MigraCobolToSqlGui extends javax.swing.JFrame {
         });
 
         jbIniciarConversion.setText("Iniciar Conversión");
+        jbIniciarConversion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbIniciarConversionActionPerformed(evt);
+            }
+        });
 
         jbFileChooserFicDatos.setText("...");
 
@@ -335,6 +349,61 @@ public class MigraCobolToSqlGui extends javax.swing.JFrame {
             modeloFicherosAConvertir.removeElementAt(indiceSeleccionado);
     }//GEN-LAST:event_jbQuitarUnoActionPerformed
 
+    private void jbIniciarConversionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbIniciarConversionActionPerformed
+        if (jtffEmpresaAConvertir.getText().trim().length() < 2) {
+            JOptionPane.showMessageDialog(null, "<html><font size='4'><strong>"
+                    + "Tienes que seleccionar una empresa válida para convertir!!!"
+                    + "</strong></font></html>");
+        } else {
+            if (jtfSchema.getText().trim().length() < 1) {
+                JOptionPane.showMessageDialog(null, "<html><font size='4'><strong>"
+                        + "Es obligatorio indicar un 'Schema' de BD."
+                        + "</strong></font></html>");
+            } else if (modeloFicherosAConvertir.size() < 1) {
+                JOptionPane.showMessageDialog(null, "<html><font size='4'><strong>"
+                        + "Hay que elegir por lo menos un fichero para convertir."
+                        + "</strong></font></html>");
+            } else {
+
+                String empresa = jtffEmpresaAConvertir.getText().trim();
+                String rutaDatos = jtffDirectorioFicherosDatos.getText().trim();
+                String rutaXfXs = jtffDirectorioFicherosXfXs.getText().trim();
+                String[] ficheros = new String[modeloFicherosPosibles.size()];
+                
+
+                for (int i = 0; i < modeloFicherosAConvertir.size(); i++) {
+                    ficheros[i] = modeloFicherosAConvertir.getElementAt(i).toString().trim();
+                }
+
+                if (!rutaDatos.endsWith("\\")) {
+                    rutaDatos = rutaDatos + "\\";
+                }
+                
+                if (!rutaXfXs.endsWith("\\")) {
+                    rutaXfXs = rutaXfXs + "\\";
+                }
+
+                DumpCobol dc = new DumpCobol();
+
+                for (int i = 0; i < ficheros.length; i++) {
+                    // Primero descargamos los datos a un fichero de texto Binario
+                    if (ficheros[i] != null) {
+                        unloadFicheroCobol(ficheros[i], empresa, rutaDatos);
+                        try {
+                            dc.migra(ficheros[i], rutaDatos, rutaXfXs, empresa, jtfSchema.getText().trim());
+                        } catch (SQLException ex) {
+                            Logger.getLogger(MigraCobolToSqlGui.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                
+                JOptionPane.showMessageDialog(null, "<html><font size='4'><strong>"
+                        + "Proceso Finalizado."
+                        + "</strong></font></html>");
+            }
+        }
+    }//GEN-LAST:event_jbIniciarConversionActionPerformed
+
     private void cargaEmpresasDisponibles(){
         String rutaFicherosCobol = jtffDirectorioFicherosDatos.getText().trim();
     
@@ -362,6 +431,42 @@ public class MigraCobolToSqlGui extends javax.swing.JFrame {
             }
         }
     }
+    
+    public int unloadFicheroCobol(String fichero, String empresa, String ruta) {
+
+        String comando = "";
+
+        comando = "vutil32 -unload -b " + ruta + empresa + fichero + " " + ruta + empresa + fichero + ".TXT";
+        String s = null;
+
+        try {
+
+            // run the Unix "ps -ef" command
+            // using the Runtime exec method:
+            Process p = Runtime.getRuntime().exec(comando);
+
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+            BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+
+            // read the output from the command
+            while ((s = stdInput.readLine()) != null) {
+                System.out.println(s);
+            }
+
+            // read any errors from the attempted command
+            while ((s = stdError.readLine()) != null) {
+                System.out.println(s);
+            }
+
+            return 0;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 1;
+        }
+
+    }
+    
     /**
      * @param args the command line arguments
      */

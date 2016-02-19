@@ -349,6 +349,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Iniciar Conversi&#xf3;n"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbIniciarConversionActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbFileChooserFicDatos">
       <Properties>

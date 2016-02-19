@@ -1,3 +1,5 @@
+package cobolToMysql;
+
 import java.io.UnsupportedEncodingException;
 import java.sql.*;
 
@@ -48,14 +50,14 @@ public class DecodificaLineaDatos {
 		return compDecodificado;
 	}
 	
-	public void decodificaLinea(byte[] lineaByte, Connection conexion){
+	public void decodificaLinea(byte[] lineaByte, Connection conexion, String empresa){
 		int offset = 0;
 		int bytesCampo = 0;		
 		String strDato = new String("");
 		String strDatoComp3 = new String("");
 		String linea = new String("");
 		String strInsertP1 = "INSERT INTO ";
-		String strInsertP2 = " VALUES('MV', ";
+		String strInsertP2 = " VALUES('" + empresa.trim().toUpperCase() + "', ";
 		String aux = null;
 		
 		// Preparamos la conexion
@@ -161,7 +163,7 @@ public class DecodificaLineaDatos {
 		}
 		//System.out.println("");
 		strInsertP1 = strInsertP1 + strInsertP2;
-		System.out.println("strInsertP1: " + strInsertP1);
+		//System.out.println("strInsertP1: " + strInsertP1);
 		
 		try {
 			s.executeUpdate(strInsertP1);

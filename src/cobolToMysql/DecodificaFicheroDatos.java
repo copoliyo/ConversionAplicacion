@@ -1,3 +1,5 @@
+package cobolToMysql;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,8 +11,10 @@ public class DecodificaFicheroDatos {
 	public File archivo = null;
 	public FileInputStream fr = null;
 	public BufferedInputStream br = null;
+        String eEmpresa = null;
 
 	public String abrirFicheroDatos(String fichero, String ruta, String empresa){
+                eEmpresa = empresa;
 		try {
 			// Apertura del fichero y creacion de BufferedReader para poder
 			// hacer una lectura comoda (disponer del metodo readLine()).
