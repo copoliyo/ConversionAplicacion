@@ -26,6 +26,7 @@ public class AbrirBD {
 			// Conectamos a la base de datos
 			conexion = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/test", "root", "copoliyo");
+                                        //"jdbc:mysql://192.168.1.99:3306/test", "root", "copoliyo");
 		} catch (Exception e) {
 			System.out.println("No se puede conectar a la base de datos!!!");
 			e.printStackTrace();
