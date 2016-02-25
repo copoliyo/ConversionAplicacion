@@ -144,6 +144,7 @@ public class DatosComunes {
 	public static int impresNegrita;
 	public static int impresDoblaltu;
 	public static int impresSubraya;
+        public static MysqlConnect mCon;
 
 	// Constructor
 
@@ -153,6 +154,7 @@ public class DatosComunes {
 		ResultSet rs = null;
 		MysqlConnect m = null;
 		m = MysqlConnect.getDbCon();
+                mCon = MysqlConnect.getDbCon();
 
 		boolean existeReg = false;
 
