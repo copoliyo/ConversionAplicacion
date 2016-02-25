@@ -203,7 +203,7 @@ public class IndiceCemagf {
 			case INDICE_CENTROS:
 				strSQL = "SELECT CEMAGF_CENTRO, " + "CEMAGF_DESCRIP, "
 						+ "CEMAGF_ACTIVO FROM CEMAGF "
-						+ "WHERE EMPRESA = 'MV' AND "
+						+ "WHERE EMPRESA = 'AL' AND "
 						+ "CEMAGF_MARCA = '' AND " + "CEMAGF_GAMA = 0 AND "
 						+ "CEMAGF_FAMILIA = 0";
 				if (inactivos == false)
@@ -219,7 +219,7 @@ public class IndiceCemagf {
 			case INDICE_MARCAS:
 				strSQL = "SELECT CEMAGF_MARCA, " + "CEMAGF_DESCRIP, "
 						+ "CEMAGF_ACTIVO FROM CEMAGF "
-						+ "WHERE EMPRESA = 'MV' AND " + "CEMAGF_GAMA = 0 AND "
+						+ "WHERE EMPRESA = 'AL' AND " + "CEMAGF_GAMA = 0 AND "
 						+ "CEMAGF_FAMILIA = 0 AND " + "CEMAGF_CENTRO = 0";
 				if (inactivos == false)
 					strSQL += " AND CEMAGF_ACTIVO = 1";
@@ -234,7 +234,7 @@ public class IndiceCemagf {
 			case INDICE_GAMAS:
 				strSQL = "SELECT CEMAGF_GAMA, " + "CEMAGF_DESCRIP, "
 						+ "CEMAGF_ACTIVO FROM CEMAGF "
-						+ "WHERE EMPRESA = 'MV' AND "
+						+ "WHERE EMPRESA = 'AL' AND "
 						+ "CEMAGF_MARCA = '' AND " + "CEMAGF_FAMILIA = 0 AND "
 						+ "CEMAGF_GAMA > 0 AND " + "CEMAGF_CENTRO = 0";
 				if (inactivos == false)
@@ -250,7 +250,7 @@ public class IndiceCemagf {
 			case INDICE_FAMILIAS:
 				strSQL = "SELECT CEMAGF_GAMA, " + "CEMAGF_FAMILIA, "
 						+ "CEMAGF_DESCRIP, " + "CEMAGF_ACTIVO FROM CEMAGF "
-						+ "WHERE EMPRESA = 'MV' AND "
+						+ "WHERE EMPRESA = 'AL' AND "
 						+ "CEMAGF_MARCA = '' AND " + "CEMAGF_GAMA > 0 AND "
 						+ "CEMAGF_FAMILIA > 0 AND " + "CEMAGF_CENTRO = 0";
 				if (inactivos == false)
