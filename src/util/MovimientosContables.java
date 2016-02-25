@@ -18,6 +18,12 @@ import tablas.MovimientoContable;
  */
 public class MovimientosContables {
     
+    ResultSet rsSql = null;
+    MysqlConnect m = null;
+    
+    public MovimientosContables(){
+        m = DatosComunes.mCon;
+    }
     public enum Columna {
 
         FECHA_ASIENTO_APUNTE(1),
@@ -35,24 +41,30 @@ public class MovimientosContables {
     }
     
     
-    public static int buscaPrimeroLibreEnDia(int centro, int fechaDia){
+    public int buscaPrimeroLibreEnDia(int centro, int fechaDia){
         int primeroLibre = -1;
         MovimientoContable movimientoContable = new MovimientoContable();
         
-        String claveFechaAsientoApunte = String.valueOf(fechaDia)
+        String claveFechaAsientoApunte = "";
+        String claveFechaAsientoApunte99999 = String.valueOf(fechaDia)
                 + String.format("%05d", 99999)
                 + String.format("%05d", 99999);
+        String claveFechaAsientoApunte00000 = String.valueOf(fechaDia)
+                + String.format("%05d", 00000)
+                + String.format("%05d", 00000);
+
 
         String strSqlCuenta = "SELECT * FROM MOVCON WHERE "
                 + "EMPRESA = '" + DatosComunes.eEmpresa + "' "
                 + " AND MOVCON_CENTRO = " + centro
-                + " AND MOVCON_FECH_ASTO_APT < '" + claveFechaAsientoApunte + "'"
+                + " AND MOVCON_FECH_ASTO_APT < '" + claveFechaAsientoApunte99999 + "'"
+                + " AND MOVCON_FECH_ASTO_APT > '" + claveFechaAsientoApunte00000 + "'"
                 + " ORDER BY MOVCON_FECH_ASTO_APT DESC LIMIT 1";
 
-        ResultSet rsSql = null;
-        MysqlConnect m = null;
+        //ResultSetrsSql = null;
+        //MysqlConnect m = null;
 
-        m = MysqlConnect.getDbCon();
+        //m = MysqlConnect.getDbCon();
 
         if (BaseDatos.countRows(strSqlCuenta) != 0) {
             try {
@@ -87,10 +99,12 @@ public class MovimientosContables {
                 }
                 Apariencia.mensajeInformativo(5, "Error en lectura fichero de Movimientos Contables");
             }
+        } else {
+            primeroLibre = 1;
         } 
 
-        rsSql = null;
-        m = null;
+        //rsSql = null;
+        //m = null;
                 
         return primeroLibre;
     }
@@ -105,7 +119,7 @@ public class MovimientosContables {
      * @param asiento
      * @return lecturaOk
      */
-    public static boolean existeMovimiento(int centro, int fecha, int asiento){
+    public boolean existeMovimiento(int centro, int fecha, int asiento){
     
         boolean lecturaOk = true;
         MovimientoContable movimientoContable = new MovimientoContable();
@@ -119,10 +133,10 @@ public class MovimientosContables {
                 + " AND MOVCON_CENTRO = " + centro
                 + " AND MOVCON_FECH_ASTO_APT = '" + claveFechaAsientoApunte + "' LIMIT 1";
 
-        ResultSet rsSql = null;
-        MysqlConnect m = null;
+        //ResultSet rsSql = null;
+        //MysqlConnect m = null;
 
-        m = MysqlConnect.getDbCon();
+        //m = MysqlConnect.getDbCon();
 
         if (BaseDatos.countRows(strSqlCuenta) != 0) {
             try {
@@ -146,21 +160,20 @@ public class MovimientosContables {
             lecturaOk = false;
         }
 
-        rsSql = null;
-        m = null;
+        //rsSql = null;
+        //m = null;
         
         return lecturaOk;
     }    
     
-    public static Vector<LineaMovimientoContable> leeAsiento(int centro, int fechaAsiento, int asiento){
+    public Vector<LineaMovimientoContable> leeAsiento(int centro, int fechaAsiento, int asiento){
                 
         Vector<LineaMovimientoContable> vectorLineaMovimientos = new Vector<>();
         boolean lecturaOk = true;
         
         
-         String claveFechaAsiento = String.valueOf(fechaAsiento)
-                + String.format("%05d", asiento)
-                + "%"; // Para el LIKE %
+        String claveFechaAsiento = String.valueOf(fechaAsiento)
+                + String.format("%05d", asiento);                
 
         String strSql = "SELECT "
                         + "MOVCON_FECH_ASTO_APT, " 
@@ -172,29 +185,30 @@ public class MovimientosContables {
                         + "FROM MOVCON, MOCCEP WHERE "
                         + "MOVCON.EMPRESA = '" + DatosComunes.eEmpresa + "' "
                         + "AND MOVCON_CENTRO = " + centro + " "
-                        + "AND MOVCON_FECH_ASTO_APT LIKE '" + claveFechaAsiento + "' "
+                        + "AND MOVCON_FECH_ASTO_APT >= '" + claveFechaAsiento + "00000' "
+                        + "AND MOVCON_FECH_ASTO_APT <= '" + claveFechaAsiento + "99999' "              
                         + "AND MOVCON_FECH_ASTO_APT = MOCCEP_FECH_ASTO_APT "
                         + "ORDER BY MOVCON_FECH_ASTO_APT ASC";
        
-        ResultSet rs = null;
-        MysqlConnect m = null;
+        //ResultSet rs = null;
+        //MysqlConnect m = null;
 
-        m = MysqlConnect.getDbCon();
+        //m = MysqlConnect.getDbCon();
 
         vectorLineaMovimientos.clear();
 
         try {
-            rs = m.query(strSql);
+            rsSql = m.query(strSql);
 
-            while (rs.next() || rs.isLast()) {
+            while (rsSql.next() || rsSql.isLast()) {
                 LineaMovimientoContable  lmc = new LineaMovimientoContable();
                                 
-                lmc.setFechaAsientoApunte(rs.getLong(Columna.FECHA_ASIENTO_APUNTE.value));
-                lmc.setCuenta(rs.getString(Columna.CUENTA.value));
-                lmc.setDocumento(rs.getInt(Columna.DOCUMENTO.value));
-                lmc.setClave(rs.getInt(Columna.CLAVE.value));
-                lmc.setConcepto(rs.getString(Columna.CONCEPTO.value));
-                lmc.setImporte(rs.getDouble(Columna.IMPORTE.value));
+                lmc.setFechaAsientoApunte(rsSql.getLong(Columna.FECHA_ASIENTO_APUNTE.value));
+                lmc.setCuenta(rsSql.getString(Columna.CUENTA.value));
+                lmc.setDocumento(rsSql.getInt(Columna.DOCUMENTO.value));
+                lmc.setClave(rsSql.getInt(Columna.CLAVE.value));
+                lmc.setConcepto(rsSql.getString(Columna.CONCEPTO.value));
+                lmc.setImporte(rsSql.getDouble(Columna.IMPORTE.value));
                 
                 vectorLineaMovimientos.add(lmc);                
             }

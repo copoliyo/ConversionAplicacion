@@ -24,7 +24,7 @@ public class BaseDatos {
 		int rowCount = -1;
                 String sqlQueryCount;
 
-		m = MysqlConnect.getDbCon();
+		m = MysqlConnect.getDbCon();                
                 
                 if(consulta.startsWith("SELECT *") == true)
                     sqlQueryCount = consulta.replaceFirst("\\*", "COUNT(*)");

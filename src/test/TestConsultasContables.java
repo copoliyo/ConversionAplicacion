@@ -228,7 +228,7 @@ public class TestConsultasContables extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        new DatosComunes("MV");
+        new DatosComunes("AL");
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {

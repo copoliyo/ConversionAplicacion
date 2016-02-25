@@ -27,6 +27,7 @@ import util.Fecha;
 import util.LineaMovimientoContable;
 import util.MovimientosContables;
 
+
 /**
  *
  * @author Txus
@@ -48,6 +49,7 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
     boolean asientoIvaAutomatico;
     Cuenta cuenta = new Cuenta();
     
+    MovimientosContables mcs = new MovimientosContables();
     Vector<LineaMovimientoContable> vectorLineaMovimientos;
     
     DefaultTableModel modeloTabla = new DefaultTableModel() {
@@ -537,15 +539,16 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         asiento = Integer.valueOf(jtfnfAsiento.getText().trim());
 
         // Si el campo de asiento está vacío o no existe el asiento que pretendemos visualizar, busca el primero libre.
-        if (asiento == 0 || util.MovimientosContables.existeMovimiento(DatosComunes.centroCont, fecha, asiento) == false) {
+        if (asiento == 0 || mcs.existeMovimiento(DatosComunes.centroCont, fecha, asiento) == false) {
             // Ponemos el número del primer asiento libre
-            jtfnfAsiento.setText(String.valueOf(util.MovimientosContables.buscaPrimeroLibreEnDia(DatosComunes.centroCont, fecha)));
+            asiento = mcs.buscaPrimeroLibreEnDia(DatosComunes.centroCont, fecha);
+            jtfnfAsiento.setText(String.valueOf(asiento));
             // Borramos las lineas del asiento, está vacío
             modeloTabla.setRowCount(0);
             
         } else {
-            if (util.MovimientosContables.existeMovimiento(DatosComunes.centroCont, fecha, asiento) == true) {
-                vectorLineaMovimientos = MovimientosContables.leeAsiento(DatosComunes.centroCont, fecha, asiento);
+            if (mcs.existeMovimiento(DatosComunes.centroCont, fecha, asiento) == true) {
+                vectorLineaMovimientos = mcs.leeAsiento(DatosComunes.centroCont, fecha, asiento);
                 displayLineasAsiento();
                 System.out.println("Apuntes en el asiento: " + vectorLineaMovimientos.size());
             }
@@ -566,16 +569,16 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         asiento = Integer.valueOf(jtfnfAsiento.getText().trim());
 
         // Si el campo de asiento está vacío o no existe el asiento que pretendemos visualizar, busca el primero libre.
-        if (asiento == 0 || util.MovimientosContables.existeMovimiento(DatosComunes.centroCont, fecha, asiento) == false) {
+        if (asiento == 0 || mcs.existeMovimiento(DatosComunes.centroCont, fecha, asiento) == false) {
             // Ponemos el número del primer asiento libre
-            jtfnfAsiento.setText(String.valueOf(util.MovimientosContables.buscaPrimeroLibreEnDia(DatosComunes.centroCont, fecha)));
+            jtfnfAsiento.setText(String.valueOf(mcs.buscaPrimeroLibreEnDia(DatosComunes.centroCont, fecha)));
             // Borramos las lineas del asiento, está vacío
             modeloTabla.setRowCount(0);
             
         } else {
             // Si existe el asiento lo visualizamos
-            if (util.MovimientosContables.existeMovimiento(DatosComunes.centroCont, fecha, asiento) == true) {
-                vectorLineaMovimientos = MovimientosContables.leeAsiento(DatosComunes.centroCont, fecha, asiento);
+            if (mcs.existeMovimiento(DatosComunes.centroCont, fecha, asiento) == true) {
+                vectorLineaMovimientos = mcs.leeAsiento(DatosComunes.centroCont, fecha, asiento);
                 displayLineasAsiento();
                 jbAnularAsiento.setEnabled(true);
                 jbAnularApunte.setEnabled(true);

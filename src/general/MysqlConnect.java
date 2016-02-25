@@ -18,6 +18,7 @@ public final class MysqlConnect {
 
 	private MysqlConnect() {
 		String url = "jdbc:mysql://localhost:3306/";
+                //String url = "jdbc:mysql://192.168.1.99:3306/";
 		String dbName = "test";
 		String driver = "com.mysql.jdbc.Driver";
 		String userName = "root";
