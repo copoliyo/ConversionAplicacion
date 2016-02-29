@@ -146,7 +146,7 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         // Creamos un JscrollPane y le agregamos la JTable
         spApuntes = new JScrollPane(jtApuntes);
         // Si quisieramos barra horizontal, descomentar la linea siguiente
-        spApuntes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        spApuntes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);        
         // Agregamos el JScrollPane al contenedor
         spApuntes.setBounds(10, 80, 830, 250);
         spApuntes.setFont(Apariencia.cambiaFuente());

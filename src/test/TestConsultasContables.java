@@ -10,9 +10,12 @@ import consultas.ConsultaPlanContable;
 import general.DatosComunes;
 import indices.IndiceMovimientosContables;
 import indices.IndiceMovimientosContablesPaginado;
+import java.awt.Dimension;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.LookAndFeel;
+import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import procesos.EntradaAsientosContables;
@@ -229,12 +232,16 @@ public class TestConsultasContables extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         new DatosComunes("AL");
-
+        
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
+                //if ("Windows Classic".equals(info.getName())) {    
                     try {
                         UIManager.setLookAndFeel(info.getClassName());
+                        LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+                        UIDefaults defaults = lookAndFeel.getDefaults();
+                        defaults.put("ScrollBar.minimumThumbSize", new Dimension(30, 30));
                     } catch (ClassNotFoundException ex) {
                         Logger.getLogger(TestMantenimentoFacturasEmitidas.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (InstantiationException ex) {
