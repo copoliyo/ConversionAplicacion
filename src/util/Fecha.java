@@ -54,7 +54,9 @@ public class Fecha{
 		mes = Calendar.getInstance().get(Calendar.MONTH) + 1;		
 		dia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);	
 		
-		String fechaStr = String.format("%04d%02d%02d", anio, mes + 1, dia);
+                // No se porqué estaba hecho para devolver el mes actual más uno. ????
+		//String fechaStr = String.format("%04d%02d%02d", anio, mes + 1, dia);
+                String fechaStr = String.format("%04d%02d%02d", anio, mes, dia);
 		fecha = Integer.valueOf(fechaStr);
 		
 		return fecha;
