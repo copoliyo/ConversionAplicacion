@@ -90,27 +90,27 @@ public class IndiceCuentas {
 
         cInactivos = new JCheckBox("Inactivos");
         cInactivos.setBounds(20, 5, 100, 20);
-        cInactivos.setFont(new Font("MS Reference Sans Serif", Font.BOLD, 14));
+        cInactivos.setFont(new Font("MS Reference Sans Serif", Font.PLAIN, 14));
         cInactivos.addActionListener(new CheckListener());
 
         lFiltro = new JLabel("Filtro: ");
         lFiltro.setBounds(150, 5, 80, 20);
-        lFiltro.setFont(new Font("MS Reference Sans Serif", Font.BOLD, 14));
+        lFiltro.setFont(new Font("MS Reference Sans Serif", Font.PLAIN, 14));
 
         tfBuscar = new JTextField();
-        tfBuscar.setBounds(210, 5, 120, 20);
-        tfBuscar.setFont(new Font("MS Reference Sans Serif", Font.BOLD, 14));
+        tfBuscar.setBounds(210, 5, 120, 25);
+        tfBuscar.setFont(new Font("MS Reference Sans Serif", Font.PLAIN, 12));
         tfBuscar.addKeyListener(new EscapeListener());
         tfBuscar.addKeyListener(new BuscarListener());
 
         bClientes = new JButton("Clientes");
         bClientes.setBounds(400, 490, 100, 20);
-        bClientes.setFont(new Font("MS Reference Sans Serif", Font.BOLD, 14));
+        bClientes.setFont(new Font("MS Reference Sans Serif", Font.PLAIN, 14));
         bClientes.addActionListener(new BClienteListener());
 
         bProvAcreed = new JButton("Prov/acrd");
         bProvAcreed.setBounds(510, 490, 120, 20);
-        bProvAcreed.setFont(new Font("MS Reference Sans Serif", Font.BOLD, 14));
+        bProvAcreed.setFont(new Font("MS Reference Sans Serif", Font.PLAIN, 14));
         bProvAcreed.addActionListener(new BProveedorListener());
 
         // Ponemos el botón de salir
@@ -136,7 +136,7 @@ public class IndiceCuentas {
 
         final JTable jtCuentas = new JTable(modeloTabla);
 
-        jtCuentas.setFont(new Font("MS Reference Sans Serif", Font.BOLD, 14));
+        jtCuentas.setFont(new Font("MS Reference Sans Serif", Font.PLAIN, 14));
 
         TableColumn columna = new TableColumn();
         // Establecemos el ancho
@@ -181,14 +181,14 @@ public class IndiceCuentas {
         });
 
         jtCuentas.setPreferredScrollableViewportSize(new Dimension(
-                380, 425));
+                380, 430));
 
         // Creamos un JscrollPane y le agregamos la JTable
         JScrollPane scrollPane = new JScrollPane(jtCuentas);
 		// Si quisieramos barra horizontal, descomentar la linea siguiente
         // scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         // Agregamos el JScrollPane al contenedor
-        scrollPane.setBounds(10, 30, 650, 425);
+        scrollPane.setBounds(10, 30, 650, 430);
         // Necesitamos saber si hacemos doble click en una fila
         jtCuentas.addMouseListener(new TablaListener());
 
