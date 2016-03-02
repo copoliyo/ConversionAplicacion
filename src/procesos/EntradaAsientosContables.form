@@ -292,6 +292,9 @@
           <Dimension value="[25, 25]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbBuscarCuentaActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jlDocumento">
       <Properties>
@@ -312,6 +315,12 @@
       </Properties>
     </Component>
     <Component class="util.JTextFieldNumeroFijo" name="jtfnfClave">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtfnfClaveActionPerformed"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldNumeroFijo(2)"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="jbBuscarClave">
       <Properties>
@@ -322,6 +331,9 @@
           <Dimension value="[25, 25]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbBuscarClaveActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jlConcepto">
       <Properties>
@@ -329,9 +341,18 @@
       </Properties>
     </Component>
     <Component class="util.JTextFieldFijo" name="jtffConcepto">
+      <Properties>
+        <Property name="highlighter" type="javax.swing.text.Highlighter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="null" type="code"/>
+        </Property>
+      </Properties>
       <Events>
+        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtffConceptoFocusGained"/>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtffConceptoActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new util.JTextFieldFijo(30)"/>
+      </AuxValues>
     </Component>
     <Component class="util.JTextFieldNumero2Decimales" name="jtfn2DImporte">
       <Properties>

@@ -6,6 +6,8 @@
 package procesos;
 
 import general.DatosComunes;
+import indices.IndiceClavesConceptos;
+import indices.IndiceCuentas;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -20,6 +22,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import tablas.ClaveContable;
 import tablas.Cuenta;
 import util.Apariencia;
 import util.Cadena;
@@ -39,6 +42,26 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
     DefaultTableCellRenderer tcr;
     TableCellRenderer tcr2;
     
+    IndiceCuentas indiceCuentas = null;
+    // Constantes para botones 
+    
+    final boolean SI_ANULAR_ASIENTO = true;
+    final boolean NO_ANULAR_ASIENTO = false;
+    final boolean SI_IVA_AUTOMATICO = true;
+    final boolean NO_IVA_AUTOMATICO = false;
+    final boolean SI_MAS_APUNTES = true;
+    final boolean NO_MAS_APUNTES = false;
+    final boolean SI_ANULAR_APUNTE = true;
+    final boolean NO_ANULAR_APUNTE = false;
+    final boolean SI_MODIFICAR_APUNTE = true;
+    final boolean NO_MODIFICAR_APUNTE = false;
+    final boolean SI_VER_MOVIMIENTOS = true;
+    final boolean NO_VER_MOVIMIENTOS = false;
+    final boolean SI_VER_PREVISIONES = true;
+    final boolean NO_VER_PREVISIONES = false;
+    final boolean SI_VER_LINEA_INPUT_APUNTE = true;
+    final boolean NO_VER_LINEA_INPUT_APUNTE = false;
+    
     // Variables globales para cada asiento
     int asiento = 0;
     int fecha = 0;    
@@ -48,6 +71,7 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
     boolean asientoNuevo = true;
     boolean asientoIvaAutomatico;
     Cuenta cuenta = new Cuenta();
+    ClaveContable cc = new ClaveContable();
     
     MovimientosContables mcs = new MovimientosContables();
     Vector<LineaMovimientoContable> vectorLineaMovimientos;
@@ -60,7 +84,10 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         }
     };
     
-     public enum Columna {
+    /**
+     *
+     */
+    public enum Columna {
 
         APUNTE(0),
         CUENTA(1),
@@ -87,12 +114,15 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         estableceVisibilidadInicial();
         
         Vector<Component> order;
-        order = new Vector<>(6);
+        order = new Vector<>(8);
         order.add(jtffeFechaAsiento);
         order.add(jtfnfAsiento);
         order.add(jbOkAsiento);
         order.add(jtfnfCuenta);
         order.add(jtfnfDocumento);
+        order.add(jtfnfClave);
+        order.add(jtffConcepto);
+        order.add(jtfn2DImporte);
         
         MyOFocusTraversalPolicy newPolicy = new MyOFocusTraversalPolicy(order);
         this.setFocusTraversalPolicy(newPolicy);
@@ -236,10 +266,10 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         jlDocumento = new javax.swing.JLabel();
         jtfnfDocumento = new util.JTextFieldNumeroFijo(5);
         jlClave = new javax.swing.JLabel();
-        jtfnfClave = new util.JTextFieldNumeroFijo();
+        jtfnfClave = new util.JTextFieldNumeroFijo(2);
         jbBuscarClave = new javax.swing.JButton();
         jlConcepto = new javax.swing.JLabel();
-        jtffConcepto = new util.JTextFieldFijo();
+        jtffConcepto = new util.JTextFieldFijo(30);
         jtfn2DImporte = new util.JTextFieldNumero2Decimales();
         jlImporte = new javax.swing.JLabel();
         jbOkApunte = new javax.swing.JButton();
@@ -340,6 +370,11 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
 
         jbBuscarCuenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BUSCAR.gif"))); // NOI18N
         jbBuscarCuenta.setPreferredSize(new java.awt.Dimension(25, 25));
+        jbBuscarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBuscarCuentaActionPerformed(evt);
+            }
+        });
 
         jlDocumento.setText("Documento");
 
@@ -351,11 +386,28 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
 
         jlClave.setText("Clave");
 
+        jtfnfClave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfnfClaveActionPerformed(evt);
+            }
+        });
+
         jbBuscarClave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BUSCAR.gif"))); // NOI18N
         jbBuscarClave.setPreferredSize(new java.awt.Dimension(25, 25));
+        jbBuscarClave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBuscarClaveActionPerformed(evt);
+            }
+        });
 
         jlConcepto.setText("Concepto");
 
+        jtffConcepto.setHighlighter(null);
+        jtffConcepto.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtffConceptoFocusGained(evt);
+            }
+        });
         jtffConcepto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtffConceptoActionPerformed(evt);
@@ -579,9 +631,7 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
             // Si existe el asiento lo visualizamos
             if (mcs.existeMovimiento(DatosComunes.centroCont, fecha, asiento) == true) {
                 vectorLineaMovimientos = mcs.leeAsiento(DatosComunes.centroCont, fecha, asiento);
-                displayLineasAsiento();
-                jbAnularAsiento.setEnabled(true);
-                jbAnularApunte.setEnabled(true);
+                displayLineasAsiento();                
                 System.out.println("Apuntes en el asiento: " + vectorLineaMovimientos.size());
             }
         }
@@ -589,36 +639,43 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         // Comprobamos que no queramos meter un asiento en una fecha anterior al cierre
         if (fecha <= DatosComunes.fecUltCierre || fecha < DatosComunes.fecUltRegpro) {
             util.Apariencia.mensajeInformativo(9, "Fecha no permitida!!!");
+            controlBotones(NO_ANULAR_ASIENTO, 
+                                NO_IVA_AUTOMATICO, 
+                                NO_MAS_APUNTES, 
+                                NO_ANULAR_APUNTE, 
+                                NO_MODIFICAR_APUNTE,
+                                NO_VER_MOVIMIENTOS,
+                                NO_VER_PREVISIONES,
+                                NO_VER_LINEA_INPUT_APUNTE);
         } else {
             // Podemos meter/editar un asiento de Rgularización Provisional (99997) en la fecha de la
             // última Regularización Provisional       
             if (fecha == DatosComunes.fecUltRegpro && asiento != 99997) {
                 util.Apariencia.mensajeInformativo(9, "Fecha no permitida!!!");
+                 controlBotones(NO_ANULAR_ASIENTO, 
+                                NO_IVA_AUTOMATICO, 
+                                NO_MAS_APUNTES, 
+                                NO_ANULAR_APUNTE, 
+                                NO_MODIFICAR_APUNTE,
+                                NO_VER_MOVIMIENTOS,
+                                NO_VER_PREVISIONES,
+                                NO_VER_LINEA_INPUT_APUNTE);
             }else{
             // Llegados aquí, podemos empezar a meter apuntes nuevos. 
-                jbAnularAsiento.setEnabled(true);
-                jbAnularApunte.setEnabled(true);
-                
-                jlCuenta.setEnabled(true);
-                jlDocumento.setEnabled(true);
-                jlClave.setEnabled(true);
-                jlConcepto.setEnabled(true);
-                jlImporte.setEnabled(true);
-                jtfnfCuenta.setEnabled(true);
-                jbBuscarCuenta.setEnabled(true);
-                jtfnfDocumento.setEnabled(true);
-                jtfnfClave.setEnabled(true);
-                jbBuscarClave.setEnabled(true);
-                jtffConcepto.setEnabled(true);
-                jtfn2DImporte.setEnabled(true);
-                jbOkApunte.setEnabled(true);
+                controlBotones(SI_ANULAR_ASIENTO, 
+                                NO_IVA_AUTOMATICO, 
+                                NO_MAS_APUNTES, 
+                                SI_ANULAR_APUNTE, 
+                                NO_MODIFICAR_APUNTE,
+                                NO_VER_MOVIMIENTOS,
+                                NO_VER_PREVISIONES,
+                                SI_VER_LINEA_INPUT_APUNTE);
                 
                 jtfnfCuenta.requestFocus();
             }
-        }
-        
-        
+        }                
     }
+    
     private void jbOkAsientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbOkAsientoActionPerformed
         jbOkPulsadoOPinchado();
     }//GEN-LAST:event_jbOkAsientoActionPerformed
@@ -635,24 +692,94 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         if (strCuenta.length() > 0) {
             if (cuenta.existeCuenta(strCuenta, DatosComunes.centroCont)) {
                 cuenta.read(strCuenta, DatosComunes.centroCont);
-                jlNombreCuenta.setText(cuenta.getTitulo());
-                jlSaldo.setText(String.valueOf(cuenta.getSaldo()));
-                jtfnfDocumento.requestFocus();
+                if (Integer.valueOf(cuenta.getGrado().trim()) == 3) {                    
+                    jtfnfCuenta.setText(cuenta.getCuenta().trim());
+                    jlNombreCuenta.setText(cuenta.getTitulo().trim());
+                    jlSaldo.setText(String.valueOf(cuenta.getSaldo()));
+                    jtfnfDocumento.requestFocusInWindow();
+                } else {
+                    util.Apariencia.mensajeInformativo(4, "Sólo se pueden utilizar cuantas de 3er grado!!!");
+                    jtfnfCuenta.setText("");
+                    jtfnfCuenta.requestFocusInWindow();
+                }
             } else {
-                util.Apariencia.mensajeInformativo(5, "Cuenta inexistente!!!");
-                jtfnfCuenta.requestFocus();
+                util.Apariencia.mensajeInformativo(4, "Cuenta inexistente!!!");
+                jtfnfCuenta.requestFocusInWindow();
             }
-        }else{            
-            util.Apariencia.mensajeInformativo(5, "Cuenta requerida!!!");                        
+        } else {
+            util.Apariencia.mensajeInformativo(4, "Cuenta requerida!!!");
         }
     }//GEN-LAST:event_jtfnfCuentaActionPerformed
 
     private void jtfnfDocumentoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnfDocumentoFocusGained
-        System.out.println("Cuenta : '" + cuenta.getCuenta() + "'");
+        //System.out.println("Cuenta : '" + cuenta.getCuenta() + "'");
         
-        if(cuenta.getCuenta().trim().length() == 0)
-            jtfnfCuenta.requestFocus();
+        if(cuenta.getCuenta().trim().length() == 0 || Integer.valueOf(cuenta.getGrado().trim()) < 3)
+            jtfnfCuenta.requestFocusInWindow();
     }//GEN-LAST:event_jtfnfDocumentoFocusGained
+
+    private void jbBuscarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarCuentaActionPerformed
+         if(indiceCuentas == null)
+            indiceCuentas = new IndiceCuentas();
+        else{
+            indiceCuentas.recargarTabla();
+            indiceCuentas.setVisible(true);
+        }
+        
+        // El indice de cuentas devuelve "" si hemos salido pulsando ESCAPE
+        if(indiceCuentas.getCuenta().length() > 1){
+            cuenta.read(indiceCuentas.getCuenta(), DatosComunes.centroCont);
+            if (Integer.valueOf(cuenta.getGrado().trim()) == 3) {
+                cuenta.read(indiceCuentas.getCuenta(), DatosComunes.centroCont);
+                jtfnfCuenta.setText(cuenta.getCuenta().trim());
+                jlNombreCuenta.setText(cuenta.getTitulo().trim());
+                jlSaldo.setText(String.valueOf(cuenta.getSaldo()));
+                jtfnfDocumento.requestFocusInWindow();
+            } else {
+                util.Apariencia.mensajeInformativo(4, "Sólo se pueden utilizar cuantas de 3er grado!!!");
+                jtfnfCuenta.setText("");
+                jtfnfCuenta.requestFocusInWindow();
+            }
+        }else{
+            jtfnfCuenta.setText("");
+            jtfnfCuenta.requestFocusInWindow();
+        }
+    }//GEN-LAST:event_jbBuscarCuentaActionPerformed
+
+    private void jbBuscarClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarClaveActionPerformed
+        IndiceClavesConceptos icc = new IndiceClavesConceptos(this, true);
+        icc.setVisible(true);
+
+        cc = icc.getClaveContable();
+        if (cc.getClave() != 0) {
+            jtfnfClave.setText(String.valueOf(cc.getClave()));   
+            jtffConcepto.setText(cc.getDescripcion());                       
+            jtffConcepto.requestFocusInWindow();                        
+        }else{
+            jtfnfClave.setText("");
+            cc.setClave(0);
+            jtfnfClave.requestFocusInWindow();
+        }
+            
+    }//GEN-LAST:event_jbBuscarClaveActionPerformed
+
+    private void jtffConceptoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtffConceptoFocusGained
+                jtffConcepto.setCaretPosition(jtffConcepto.getText().length());
+                if(jtfnfClave.getText().trim().length() == 0)
+                    jtfnfClave.requestFocusInWindow(); 
+    }//GEN-LAST:event_jtffConceptoFocusGained
+
+    private void jtfnfClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnfClaveActionPerformed
+        if(jtfnfClave.getText().trim().length() > 0){
+            if(cc.existe(Integer.valueOf(jtfnfClave.getText().trim()))){
+                cc.read(Integer.valueOf(jtfnfClave.getText().trim()));      
+            }else{
+                jtfnfClave.requestFocusInWindow();
+            }
+        }else{
+            jtfnfClave.requestFocusInWindow();
+        }
+    }//GEN-LAST:event_jtfnfClaveActionPerformed
     
     private void displayLineasAsiento(){
         
@@ -686,6 +813,48 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         }
         
         jtfnf2DCuadre.setText(Cadena.formatoConComaDecimal(cuadre));
+    }
+    
+    /**
+     * Establece que botones se pueden utilizar en cada momento de una manera centraklizada.
+     * @param anularAsiento mostrar el botón 'Anular Asiento'
+     * @return void
+     */
+    /*
+    controlBotones(SI_ANULAR_ASIENTO, 
+                   SI_IVA_AUTOMATICO, 
+                   SI_MAS_APUNTES, 
+                   SI_ANULAR_APUNTE, 
+                   SI_MODIFICAR_APUNTE,
+                   SI_VER_MOVIMIENTOS,
+                   SI_VER_PREVISIONES,
+                   SI_VER_LINEA_INPUT_APUNTE);
+    */
+    
+    private void controlBotones(boolean anularAsiento, boolean ivaAutomatico, boolean masApuntes, boolean anularApunte, boolean modificarApunte, boolean verMovimientos, boolean verPrevisiones, boolean verLineaInputApunte){
+        jbAnularAsiento.setEnabled(anularAsiento);
+        jbIvaAutomatico.setEnabled(ivaAutomatico);
+        jbMasApuntes.setEnabled(masApuntes);
+        jbAnularApunte.setEnabled(anularApunte);
+        jbModificarApunte.setEnabled(modificarApunte);
+        jbMovimientos.setEnabled(verMovimientos);
+        jbPrevisiones.setEnabled(verPrevisiones);
+        
+        if (verLineaInputApunte) {
+            jlCuenta.setEnabled(true);
+            jlDocumento.setEnabled(true);
+            jlClave.setEnabled(true);
+            jlConcepto.setEnabled(true);
+            jlImporte.setEnabled(true);
+            jtfnfCuenta.setEnabled(true);
+            jbBuscarCuenta.setEnabled(true);
+            jtfnfDocumento.setEnabled(true);
+            jtfnfClave.setEnabled(true);
+            jbBuscarClave.setEnabled(true);
+            jtffConcepto.setEnabled(true);
+            jtfn2DImporte.setEnabled(true);
+            jbOkApunte.setEnabled(true);
+        }
     }
     
     
