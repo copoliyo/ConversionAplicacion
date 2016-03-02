@@ -111,18 +111,18 @@ public class IndiceClavesConceptos extends util.EscapeDialog {
         
         TableColumn columna = new TableColumn();
         // Establecemos el ancho
-        jtClavesDebe.getColumn("Id").setMaxWidth(20);
+        jtClavesDebe.getColumn("Id").setMaxWidth(30);
         jtClavesDebe.getColumn("Descripción").setMaxWidth(120);
         jtClavesDebe.getColumn("Iva").setMaxWidth(30);
         jtClavesDebe.getColumn("Prev.").setMaxWidth(50);
-        jtClavesDebe.getColumn("Acumula").setMaxWidth(190);
+        jtClavesDebe.getColumn("Acumula").setMaxWidth(180);
         jtClavesDebe.setRowHeight(20);
         
-        jtClavesHaber.getColumn("Id").setMaxWidth(20);
+        jtClavesHaber.getColumn("Id").setMaxWidth(30);
         jtClavesHaber.getColumn("Descripción").setMaxWidth(120);
         jtClavesHaber.getColumn("Iva").setMaxWidth(30);
         jtClavesHaber.getColumn("Prev.").setMaxWidth(50);
-        jtClavesHaber.getColumn("Acumula").setMaxWidth(190);
+        jtClavesHaber.getColumn("Acumula").setMaxWidth(180);
         jtClavesHaber.setRowHeight(20);
 
         // Hacemos que las columnas se alineen a la IZQUIERDA
