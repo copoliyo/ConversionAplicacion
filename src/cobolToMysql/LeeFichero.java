@@ -99,7 +99,7 @@ public class LeeFichero {
 		try {
 			// Apertura del fichero y creacion de BufferedReader para poder
 			// hacer una lectura comoda (disponer del metodo readLine()).
-			archivo = new File ("C:\\conversion\\xf" + fichero + ".cbl");
+			archivo = new File ("E:\\conversion\\xf" + fichero + ".cbl");
 			fr = new FileReader (archivo);
 			br = new BufferedReader(fr);
 
