@@ -123,6 +123,26 @@ public class ClaveContable {
 
         return lecturaOk;
     }
+    
+    public boolean existe(int clave) {
+        boolean existe = false;
+
+        String strSql = "SELECT * FROM CLCEPC WHERE "
+                + "EMPRESA = '" + DatosComunes.eEmpresa + "' "
+                + " AND CLCEPC_KEY = " + clave
+                + " LIMIT 1";
+        
+        MysqlConnect m = null;
+
+        m = MysqlConnect.getDbCon();
+
+        if (BaseDatos.countRows(strSql) != 0) {
+           existe = true;
+        }
+        
+
+        return existe;
+    }
 
     /**
      *
