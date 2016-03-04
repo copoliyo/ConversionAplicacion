@@ -114,7 +114,7 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         estableceVisibilidadInicial();
         
         Vector<Component> order;
-        order = new Vector<>(8);
+        order = new Vector<>(9);
         order.add(jtffeFechaAsiento);
         order.add(jtfnfAsiento);
         order.add(jbOkAsiento);
@@ -123,6 +123,7 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         order.add(jtfnfClave);
         order.add(jtffConcepto);
         order.add(jtfn2DImporte);
+        order.add(jbOkApunte);
         
         MyOFocusTraversalPolicy newPolicy = new MyOFocusTraversalPolicy(order);
         this.setFocusTraversalPolicy(newPolicy);
@@ -751,12 +752,13 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         icc.setVisible(true);
 
         cc = icc.getClaveContable();
-        if (cc.getClave() != 0) {
+        if (cc.getClave() != 0 && cc.getClave() != 49 && cc.getClave() != 99) {
             jtfnfClave.setText(String.valueOf(cc.getClave()));   
-            jtffConcepto.setText(cc.getDescripcion());                       
+            jtffConcepto.setText(cc.getDescripcion() + " ");                       
             jtffConcepto.requestFocusInWindow();                        
         }else{
             jtfnfClave.setText("");
+            jtffConcepto.setText(""); 
             cc.setClave(0);
             jtfnfClave.requestFocusInWindow();
         }
@@ -764,21 +766,85 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
     }//GEN-LAST:event_jbBuscarClaveActionPerformed
 
     private void jtffConceptoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtffConceptoFocusGained
-                jtffConcepto.setCaretPosition(jtffConcepto.getText().length());
-                if(jtfnfClave.getText().trim().length() == 0)
-                    jtfnfClave.requestFocusInWindow(); 
+        
+        
+        int clave = 0;
+        
+        // Si hemos introducido la clave, obtenemos si valor
+        // en caso contrario, su valor sera 0.
+        if(jtfnfClave.getText().trim().length() != 0)
+            clave = Integer.valueOf(jtfnfClave.getText().trim());
+        
+        jtffConcepto.setCaretPosition(jtffConcepto.getText().length());
+        // Si no ponemos clave o la clave no exite, volvemos al campo de Clave
+        // Las claves 49 y 99 son especiales, son genericas y no existen en el 
+        // fichero de claves.
+        if (!cc.existe(clave) && clave != 49 && clave != 99) {
+            jtfnfClave.requestFocusInWindow();
+        }
+        
+        // Ahora hay que ver si las claves se pueden utilizar en combinación
+        // con la cuenta que hemos puesto. Extraído literal de programa COBOL
+        if (clave < 50) {
+            if (cuenta.getExtenOtroFichero() != 1) {
+                if (cc.getActualizaIva() == 1 || cc.getActualizaAcumulados() == 1 || cc.getActualizaAcumulados() == 4) {
+                    jtfnfClave.requestFocusInWindow();
+                }
+            }
+
+            if (cuenta.getExtenOtroFichero() != 3 && cc.getActualizaAcumulados() == 3) {
+                jtfnfClave.requestFocusInWindow();
+            }
+
+            if (cuenta.getExtenOtroFichero() != 4 && cc.getActualizaAcumulados() == 2) {
+                jtfnfClave.requestFocusInWindow();
+            }
+
+        } else {
+            if (cuenta.getExtenOtroFichero() != 3 && cc.getActualizaAcumulados() == 2) {
+                jtfnfClave.requestFocusInWindow();
+            }
+
+            if (cuenta.getExtenOtroFichero() != 4 && cc.getActualizaAcumulados() == 3) {
+                jtfnfClave.requestFocusInWindow();
+            }
+
+            if (cuenta.getExtenOtroFichero() != 4 && cc.getActualizaAcumulados() == 4) {
+                jtfnfClave.requestFocusInWindow();
+            }
+        }
+
+        // Control fecha declaracion Iva
+        if (cc.getActualizaIva() == 1 && jtffeFechaAsiento.getFechaAAAAMMDD() < DatosComunes.fecUltDecliva) {
+            jtfnfClave.requestFocusInWindow();
+            util.Apariencia.mensajeInformativo(4, "A esta fecha ya está hecha la declaración del IVA!!!");
+        }
     }//GEN-LAST:event_jtffConceptoFocusGained
 
     private void jtfnfClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnfClaveActionPerformed
-        if(jtfnfClave.getText().trim().length() > 0){
-            if(cc.existe(Integer.valueOf(jtfnfClave.getText().trim()))){
-                cc.read(Integer.valueOf(jtfnfClave.getText().trim()));      
-            }else{
+        
+        int clave = 0;
+        
+        if(jtfnfClave.getText().trim().length() > 0)
+            clave = Integer.valueOf(jtfnfClave.getText().trim());
+        
+        if(clave != 0 && clave != 49 && clave != 99){
+            if(cc.existe(clave)){
+                cc.read(clave);      
+                jtfnfClave.setText(String.valueOf(cc.getClave()));   
+                jtffConcepto.setText(cc.getDescripcion() + " ");    
+            }else{                
+                jtfnfClave.setText("");   
+                jtffConcepto.setText(""); 
+                cc.setClave(0);
                 jtfnfClave.requestFocusInWindow();
             }
         }else{
             jtfnfClave.requestFocusInWindow();
         }
+        
+        
+         
     }//GEN-LAST:event_jtfnfClaveActionPerformed
     
     private void displayLineasAsiento(){
