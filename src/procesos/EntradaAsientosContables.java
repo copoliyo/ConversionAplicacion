@@ -12,6 +12,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Vector;
@@ -69,7 +73,7 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
     int numeroTotalApuntes = 0;
     double cuadreAsiento = 0.0;
     boolean asientoNuevo = true;
-    boolean asientoIvaAutomatico;
+    boolean asientoActualizaIva;
     Cuenta cuenta = new Cuenta();
     ClaveContable cc = new ClaveContable();
     
@@ -173,6 +177,8 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
 
         // Hace que el fondo sea completamente blanco
         jtApuntes.setFillsViewportHeight(true);
+        
+        jtApuntes.addMouseListener(new TablaListener());
         
         // Creamos un JscrollPane y le agregamos la JTable
         spApuntes = new JScrollPane(jtApuntes);
@@ -633,7 +639,10 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
             if (mcs.existeMovimiento(DatosComunes.centroCont, fecha, asiento) == true) {
                 vectorLineaMovimientos = mcs.leeAsiento(DatosComunes.centroCont, fecha, asiento);
                 displayLineasAsiento();                
-                System.out.println("Apuntes en el asiento: " + vectorLineaMovimientos.size());
+                //System.out.println("Apuntes en el asiento: " + vectorLineaMovimientos.size());
+                asientoNuevo = false;
+            }else{
+                asientoNuevo = true;
             }
         }
 
@@ -653,9 +662,9 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
             // última Regularización Provisional       
             if (fecha == DatosComunes.fecUltRegpro && asiento != 99997) {
                 util.Apariencia.mensajeInformativo(9, "Fecha no permitida!!!");
-                 controlBotones(NO_ANULAR_ASIENTO, 
+                 controlBotones(SI_ANULAR_ASIENTO, 
                                 NO_IVA_AUTOMATICO, 
-                                NO_MAS_APUNTES, 
+                                SI_MAS_APUNTES, 
                                 NO_ANULAR_APUNTE, 
                                 NO_MODIFICAR_APUNTE,
                                 NO_VER_MOVIMIENTOS,
@@ -663,14 +672,24 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
                                 NO_VER_LINEA_INPUT_APUNTE);
             }else{
             // Llegados aquí, podemos empezar a meter apuntes nuevos. 
-                controlBotones(SI_ANULAR_ASIENTO, 
+                if(asientoNuevo)
+                    controlBotones(NO_ANULAR_ASIENTO, 
                                 NO_IVA_AUTOMATICO, 
                                 NO_MAS_APUNTES, 
-                                SI_ANULAR_APUNTE, 
+                                NO_ANULAR_APUNTE, 
                                 NO_MODIFICAR_APUNTE,
-                                NO_VER_MOVIMIENTOS,
+                                SI_VER_MOVIMIENTOS,
                                 NO_VER_PREVISIONES,
                                 SI_VER_LINEA_INPUT_APUNTE);
+                else
+                    controlBotones(SI_ANULAR_ASIENTO, 
+                                                NO_IVA_AUTOMATICO, 
+                                                SI_MAS_APUNTES, 
+                                                NO_ANULAR_APUNTE, 
+                                                NO_MODIFICAR_APUNTE,
+                                                NO_VER_MOVIMIENTOS,
+                                                NO_VER_PREVISIONES,
+                                                NO_VER_LINEA_INPUT_APUNTE);
                 
                 jtfnfCuenta.requestFocus();
             }
@@ -852,7 +871,7 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         Object fila[] = {"", "", "", "", "", "", ""};
 
         double cuadre = 0.0;
-        
+        asientoActualizaIva = false;
         LineaMovimientoContable lmc = new LineaMovimientoContable();
         
         modeloTabla.setRowCount(0);
@@ -864,6 +883,11 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
                 fila[Columna.CUENTA.value] = Cadena.formateaCuentaContable(lmc.getCuenta());                
                 fila[Columna.DOCUMENTO.value] = String.valueOf(lmc.getDocumento());                
                 fila[Columna.CLAVE.value] = String.valueOf(lmc.getClave());
+                // Tenemos que saber si el asiento, actualiza el registro del IVA
+                cc.read(lmc.getClave());
+                if(cc.getActualizaIva() == 1)
+                    asientoActualizaIva = true;
+                
                 fila[Columna.CONCEPTO.value] = lmc.getConcepto();
                 if(lmc.getClave() < 50){
                     fila[Columna.DEBE.value] = Cadena.formatoConComaDecimal(lmc.getImporte());
@@ -876,6 +900,29 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
                 }
                 modeloTabla.addRow(fila);
             }
+            numeroTotalApuntes = vectorLineaMovimientos.size();
+            numeroApunte = Integer.valueOf(fila[Columna.APUNTE.value].toString().trim()) + 1;
+            asientoNuevo = false;
+            controlBotones(SI_ANULAR_ASIENTO, 
+                   NO_IVA_AUTOMATICO, 
+                   SI_MAS_APUNTES, 
+                   NO_ANULAR_APUNTE, 
+                   NO_MODIFICAR_APUNTE,
+                   NO_VER_MOVIMIENTOS,
+                   NO_VER_PREVISIONES,
+                   NO_VER_LINEA_INPUT_APUNTE);
+        }else{
+            numeroTotalApuntes = 0;
+            numeroApunte = 1;
+            asientoNuevo = true;
+            controlBotones(NO_ANULAR_ASIENTO, 
+                   NO_IVA_AUTOMATICO, 
+                   NO_MAS_APUNTES, 
+                   NO_ANULAR_APUNTE, 
+                   NO_MODIFICAR_APUNTE,
+                   SI_VER_MOVIMIENTOS,
+                   NO_VER_PREVISIONES,
+                   SI_VER_LINEA_INPUT_APUNTE);
         }
         
         jtfnf2DCuadre.setText(Cadena.formatoConComaDecimal(cuadre));
@@ -920,9 +967,64 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
             jtffConcepto.setEnabled(true);
             jtfn2DImporte.setEnabled(true);
             jbOkApunte.setEnabled(true);
+        }else{
+            jlCuenta.setEnabled(false);
+            jlDocumento.setEnabled(false);
+            jlClave.setEnabled(false);
+            jlConcepto.setEnabled(false);
+            jlImporte.setEnabled(false);
+            jtfnfCuenta.setEnabled(false);
+            jbBuscarCuenta.setEnabled(false);
+            jtfnfDocumento.setEnabled(false);
+            jtfnfClave.setEnabled(false);
+            jbBuscarClave.setEnabled(false);
+            jtffConcepto.setEnabled(false);
+            jtfn2DImporte.setEnabled(false);
+            jbOkApunte.setEnabled(false);
         }
     }
     
+    class TablaListener implements ActionListener, MouseListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {			
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			// Si hacemos doble click obtenemos el número de apunte y salimos
+			if (arg0.getClickCount() == 1 && numeroTotalApuntes > 0) {
+				JTable target = (JTable) arg0.getSource();
+				int row = target.getSelectedRow();
+				numeroApunte = Integer.valueOf(target.getValueAt(row, 0).toString());	
+                                //util.Apariencia.mensajeInformativo(9, "Apunte: " + numeroApunte);
+                                controlBotones(SI_ANULAR_ASIENTO, 
+                                                NO_IVA_AUTOMATICO, 
+                                                SI_MAS_APUNTES, 
+                                                SI_ANULAR_APUNTE, 
+                                                SI_MODIFICAR_APUNTE,
+                                                NO_VER_MOVIMIENTOS,
+                                                NO_VER_PREVISIONES,
+                                                NO_VER_LINEA_INPUT_APUNTE);
+			}
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+		}	
+	}
     
     // Mis variables de pantalla
     private javax.swing.JButton jbPrueba;
