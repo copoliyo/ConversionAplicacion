@@ -19,8 +19,13 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Vector;
+import javax.swing.AbstractAction;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -678,7 +683,7 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
                                 NO_MAS_APUNTES, 
                                 NO_ANULAR_APUNTE, 
                                 NO_MODIFICAR_APUNTE,
-                                SI_VER_MOVIMIENTOS,
+                                NO_VER_MOVIMIENTOS,
                                 NO_VER_PREVISIONES,
                                 SI_VER_LINEA_INPUT_APUNTE);
                 else
@@ -920,11 +925,12 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
                    NO_MAS_APUNTES, 
                    NO_ANULAR_APUNTE, 
                    NO_MODIFICAR_APUNTE,
-                   SI_VER_MOVIMIENTOS,
+                   NO_VER_MOVIMIENTOS,
                    NO_VER_PREVISIONES,
                    SI_VER_LINEA_INPUT_APUNTE);
         }
         
+        cuadreAsiento = cuadre;
         jtfnf2DCuadre.setText(Cadena.formatoConComaDecimal(cuadre));
     }
     
@@ -981,6 +987,25 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
             jtffConcepto.setEnabled(false);
             jtfn2DImporte.setEnabled(false);
             jbOkApunte.setEnabled(false);
+        }
+    }
+    
+    private void pulsadoEscape() {
+        if (cuadreAsiento == 0.0) {
+            modeloTabla.setRowCount(0);
+            jtffeFechaAsiento.setText(Cadena.fechaAcadena(Fecha.fechaDia()));
+            jtffeFechaAsiento.requestFocusInWindow();
+            jtfnfAsiento.setText("");
+            controlBotones(NO_ANULAR_ASIENTO,
+                    NO_IVA_AUTOMATICO,
+                    NO_MAS_APUNTES,
+                    NO_ANULAR_APUNTE,
+                    NO_MODIFICAR_APUNTE,
+                    NO_VER_MOVIMIENTOS,
+                    NO_VER_PREVISIONES,
+                    NO_VER_LINEA_INPUT_APUNTE);
+        } else {
+            dispose();
         }
     }
     
@@ -1109,6 +1134,23 @@ public class EntradaAsientosContables extends util.EscapeDialog implements Prope
         }
     }
     
-    
+    @Override
+    protected JRootPane createRootPane() {
+        JRootPane rootPane = new JRootPane();
+        KeyStroke stroke = KeyStroke.getKeyStroke("ESCAPE");
+        javax.swing.Action actionListener = new AbstractAction() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                //setVisible(false);
+               //dispose();
+               pulsadoEscape();
+            }
+        };
+        InputMap inputMap = rootPane
+                .getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap.put(stroke, "ESCAPE");
+        rootPane.getActionMap().put("ESCAPE", actionListener);
+
+        return rootPane;
+    }
 
 }
